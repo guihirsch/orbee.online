@@ -47,6 +47,11 @@ class ObservationNotFoundError(OrBeeException):
     def __init__(self, message: str = "Observação não encontrada"):
         super().__init__(message, status.HTTP_404_NOT_FOUND)
 
+class ValidationNotFoundError(OrBeeException):
+    """Validação não encontrada"""
+    def __init__(self, message: str = "Validação não encontrada"):
+        super().__init__(message, status.HTTP_404_NOT_FOUND)
+
 class NDVIServiceError(OrBeeException):
     """Erro no serviço NDVI"""
     def __init__(self, message: str = "Erro ao obter dados NDVI"):

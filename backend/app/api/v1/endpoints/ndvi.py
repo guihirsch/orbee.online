@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 from app.models.schemas import NDVIRequest, NDVIResponse, User
 from app.services.ndvi_service import NDVIService
-from app.api.v1.endpoints.auth import get_current_user
+from app.api.deps import get_current_user
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")

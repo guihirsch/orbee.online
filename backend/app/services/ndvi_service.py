@@ -7,9 +7,7 @@ import io
 import base64
 
 from app.models.schemas import NDVIDataPoint, NDVIRequest, NDVIResponse
-from app.core.config import get_settings
-
-settings = get_settings()
+from app.core.config import settings
 
 
 class NDVIService:

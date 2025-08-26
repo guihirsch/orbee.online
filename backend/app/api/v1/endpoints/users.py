@@ -12,7 +12,7 @@ from app.models.user import (
     User, UserCreate, UserUpdate, UserProfile, UserStats
 )
 from app.services.user_service import UserService
-from app.api.v1.endpoints.auth import get_current_user
+from app.api.deps import get_current_user
 
 router = APIRouter()
 

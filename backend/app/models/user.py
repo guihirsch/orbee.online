@@ -86,7 +86,7 @@ class PasswordResetConfirm(BaseModel):
     new_password: str = Field(..., min_length=6)
 
 class SocialLoginRequest(BaseModel):
-    provider: str = Field(..., regex="^(google|facebook|github)$")
+    provider: str = Field(..., pattern="^(google|facebook|github)$")
     access_token: str
     
 class UserStats(BaseModel):

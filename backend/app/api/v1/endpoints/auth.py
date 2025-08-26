@@ -5,7 +5,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 from app.core.config import settings
-from app.core.database import get_supabase_client
+from app.core.database import get_supabase_client, get_db
 from app.core.exceptions import (
     UserAlreadyExistsError,
     InvalidCredentialsError,
@@ -22,6 +22,7 @@ from app.models.user import (
     RegisterRequest
 )
 from app.services.user_service import UserService
+from app.api.deps import get_current_user
 
 router = APIRouter()
 
@@ -29,20 +30,7 @@ router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login")
 
-# Dependência para obter usuário atual
-async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
-    """Obtém usuário atual baseado no token JWT"""
-    try:
-        user_service = UserService()
-        return await user_service.get_current_user(token)
-    except (InvalidTokenError, UserNotFoundError) as e:
-        raise to_http_exception(e)
-    except Exception:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token inválido",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+# get_current_user importado de app.api.deps
 
 @router.post("/register", response_model=Token)
 async def register(user_data: RegisterRequest):
@@ -142,127 +130,4 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     return encoded_jwt
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme), db = Depends(get_db)):
-    """Obtém o usuário atual baseado no token JWT"""
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    
-    try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
-            raise credentials_exception
-        token_data = TokenData(email=email)
-    except JWTError:
-        raise credentials_exception
-    
-    user_service = UserService(db)
-    user = await user_service.get_user_by_email(email=token_data.email)
-    if user is None:
-        raise credentials_exception
-    return user
-
-
-@router.post("/register", response_model=User, status_code=status.HTTP_201_CREATED)
-async def register_user(
-    user_data: UserCreate,
-    db = Depends(get_db)
-):
-    """Registra um novo usuário"""
-    user_service = UserService(db)
-    
-    # Verifica se usuário já existe
-    existing_user = await user_service.get_user_by_email(user_data.email)
-    if existing_user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email já está em uso"
-        )
-    
-    # Hash da senha
-    hashed_password = get_password_hash(user_data.password)
-    
-    # Cria usuário
-    user_dict = user_data.dict()
-    user_dict["password"] = hashed_password
-    del user_dict["password"]  # Remove password do dict para criar User
-    
-    new_user = await user_service.create_user(user_dict)
-    return new_user
-
-
-@router.post("/login", response_model=Token)
-async def login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    db = Depends(get_db)
-):
-    """Autentica usuário e retorna token JWT"""
-    user_service = UserService(db)
-    
-    # Busca usuário
-    user = await user_service.get_user_by_email(form_data.username)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Email ou senha incorretos",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    
-    # Verifica senha (simulado - em produção verificaria hash)
-    # if not verify_password(form_data.password, user.hashed_password):
-    #     raise HTTPException(
-    #         status_code=status.HTTP_401_UNAUTHORIZED,
-    #         detail="Email ou senha incorretos",
-    #         headers={"WWW-Authenticate": "Bearer"},
-    #     )
-    
-    # Cria token
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.email}, expires_delta=access_token_expires
-    )
-    
-    return {"access_token": access_token, "token_type": "bearer"}
-
-
-@router.post("/login-json", response_model=Token)
-async def login_json(
-    login_data: LoginRequest,
-    db = Depends(get_db)
-):
-    """Login alternativo com JSON"""
-    user_service = UserService(db)
-    
-    user = await user_service.get_user_by_email(login_data.email)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Email ou senha incorretos"
-        )
-    
-    # Cria token
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.email}, expires_delta=access_token_expires
-    )
-    
-    return {"access_token": access_token, "token_type": "bearer"}
-
-
-@router.get("/me", response_model=User)
-async def get_current_user_info(
-    current_user: User = Depends(get_current_user)
-):
-    """Retorna informações do usuário atual"""
-    return current_user
-
-
-@router.post("/logout", response_model=MessageResponse)
-async def logout():
-    """Logout do usuário (cliente deve descartar o token)"""
-    return MessageResponse(
-        message="Logout realizado com sucesso. Descarte o token no cliente."
-    )
+# Arquivo limpo - funções duplicadas removidas

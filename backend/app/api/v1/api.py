@@ -6,7 +6,6 @@ from app.api.v1.endpoints import (
     observations,
     validations,
     ndvi,
-    areas,
     recommendations
 )
 
@@ -41,12 +40,6 @@ api_router.include_router(
     ndvi.router, 
     prefix="/ndvi", 
     tags=["ndvi-data"]
-)
-
-api_router.include_router(
-    areas.router, 
-    prefix="/areas", 
-    tags=["monitored-areas"]
 )
 
 api_router.include_router(
