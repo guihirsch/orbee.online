@@ -4,13 +4,13 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { MapPin, Layers, Calendar, Info } from 'lucide-react';
 import ndviService from '../services/ndviService';
 
-// Token público do Mapbox (substitua pelo seu token)
+// Token público do Mapbox
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
 const NDVIMap = ({ 
-  latitude = -23.5505, 
-  longitude = -46.6333, 
-  zoom = 12,
+  latitude = -29.7175, 
+  longitude = -52.4264, 
+  zoom = 13,
   onLocationSelect,
   ndviData = null,
   showControls = true 
@@ -112,8 +112,8 @@ const NDVIMap = ({
     };
   }, []);
 
-  // Função para adicionar camada NDVI simulada
-  const addNDVILayer = () => {
+  // Função para adicionar camada NDVI com dados de Santa Cruz do Sul
+  const addNDVILayer = async () => {
     if (!map.current || !mapLoaded) return;
 
     // Remove camada existente se houver
@@ -124,113 +124,130 @@ const NDVIMap = ({
       map.current.removeSource('ndvi-source');
     }
 
-    // Dados NDVI simulados (em produção, viria da API)
-    const ndviGeoJSON = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: {
-            ndvi: 0.8,
-            status: 'excellent'
-          },
-          geometry: {
-            type: 'Polygon',
-            coordinates: [[
-              [longitude - 0.01, latitude - 0.01],
-              [longitude + 0.01, latitude - 0.01],
-              [longitude + 0.01, latitude + 0.01],
-              [longitude - 0.01, latitude + 0.01],
-              [longitude - 0.01, latitude - 0.01]
-            ]]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: {
-            ndvi: 0.6,
-            status: 'good'
-          },
-          geometry: {
-            type: 'Polygon',
-            coordinates: [[
-              [longitude - 0.02, latitude - 0.02],
-              [longitude - 0.01, latitude - 0.02],
-              [longitude - 0.01, latitude - 0.01],
-              [longitude - 0.02, latitude - 0.01],
-              [longitude - 0.02, latitude - 0.02]
-            ]]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: {
-            ndvi: 0.3,
-            status: 'moderate'
-          },
-          geometry: {
-            type: 'Polygon',
-            coordinates: [[
-              [longitude + 0.01, latitude - 0.02],
-              [longitude + 0.02, latitude - 0.02],
-              [longitude + 0.02, latitude - 0.01],
-              [longitude + 0.01, latitude - 0.01],
-              [longitude + 0.01, latitude - 0.02]
-            ]]
-          }
-        }
-      ]
-    };
-
-    // Adiciona fonte de dados
-    map.current.addSource('ndvi-source', {
-      type: 'geojson',
-      data: ndviGeoJSON
-    });
-
-    // Adiciona camada com cores baseadas no NDVI
-    map.current.addLayer({
-      id: 'ndvi-layer',
-      type: 'fill',
-      source: 'ndvi-source',
-      paint: {
-        'fill-color': [
-          'case',
-          ['>=', ['get', 'ndvi'], 0.7], '#2d5a27', // Verde escuro - Excelente
-          ['>=', ['get', 'ndvi'], 0.5], '#4a7c59', // Verde médio - Bom
-          ['>=', ['get', 'ndvi'], 0.3], '#8fbc8f', // Verde claro - Moderado
-          ['>=', ['get', 'ndvi'], 0.1], '#daa520', // Amarelo - Pobre
-          '#cd853f' // Marrom - Crítico
-        ],
-        'fill-opacity': 0.6
-      }
-    });
-
-    // Adiciona popup ao clicar na camada NDVI
-    map.current.on('click', 'ndvi-layer', (e) => {
-      const properties = e.features[0].properties;
+    try {
+      // Busca dados GeoJSON específicos para Santa Cruz do Sul
+      const ndviGeoJSON = ndviService.getSantaCruzDoSulGeoJSON();
       
-      new mapboxgl.Popup()
-        .setLngLat(e.lngLat)
-        .setHTML(`
-          <div class="p-2">
-            <h3 class="font-semibold text-sm mb-1">Dados NDVI</h3>
-            <p class="text-xs"><strong>Valor:</strong> ${properties.ndvi}</p>
-            <p class="text-xs"><strong>Status:</strong> ${properties.status}</p>
-            <p class="text-xs text-gray-600 mt-1">Clique para análise detalhada</p>
-          </div>
-        `)
-        .addTo(map.current);
-    });
+      // Adiciona fonte de dados
+      map.current.addSource('ndvi-source', {
+        type: 'geojson',
+        data: ndviGeoJSON
+      });
 
-    // Cursor pointer ao passar sobre a camada
-    map.current.on('mouseenter', 'ndvi-layer', () => {
-      map.current.getCanvas().style.cursor = 'pointer';
-    });
+      // Adiciona camada com cores baseadas no NDVI
+      map.current.addLayer({
+        id: 'ndvi-layer',
+        type: 'fill',
+        source: 'ndvi-source',
+        paint: {
+          'fill-color': [
+            'case',
+            ['>=', ['get', 'ndvi'], 0.7], '#2d5a27', // Verde escuro - Excelente
+            ['>=', ['get', 'ndvi'], 0.5], '#4a7c59', // Verde médio - Bom
+            ['>=', ['get', 'ndvi'], 0.3], '#8fbc8f', // Verde claro - Moderado
+            '#cd853f' // Marrom - Pobre
+          ],
+          'fill-opacity': 0.7
+        }
+      });
 
-    map.current.on('mouseleave', 'ndvi-layer', () => {
-      map.current.getCanvas().style.cursor = '';
-    });
+      // Adiciona camada de contorno
+      map.current.addLayer({
+        id: 'ndvi-outline',
+        type: 'line',
+        source: 'ndvi-source',
+        paint: {
+          'line-color': '#ffffff',
+          'line-width': 1,
+          'line-opacity': 0.8
+        }
+      });
+
+      // Adiciona popup ao clicar nas regiões
+      map.current.on('click', 'ndvi-layer', (e) => {
+        const properties = e.features[0].properties;
+        
+        new mapboxgl.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(`
+            <div class="p-3">
+              <h3 class="font-semibold text-gray-800">${properties.name}</h3>
+              <p class="text-sm text-gray-600 mb-2">${properties.description}</p>
+              <div class="space-y-1 text-sm">
+                <div class="flex justify-between">
+                  <span>NDVI:</span>
+                  <span class="font-medium">${properties.ndvi}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Status:</span>
+                  <span class="font-medium capitalize">${properties.status}</span>
+                </div>
+              </div>
+            </div>
+          `)
+          .addTo(map.current);
+      });
+
+      // Muda cursor ao passar sobre as regiões
+      map.current.on('mouseenter', 'ndvi-layer', () => {
+        map.current.getCanvas().style.cursor = 'pointer';
+      });
+
+      map.current.on('mouseleave', 'ndvi-layer', () => {
+        map.current.getCanvas().style.cursor = '';
+      });
+
+    } catch (error) {
+      console.error('Erro ao carregar dados NDVI:', error);
+      // Fallback para dados simulados básicos
+      const fallbackGeoJSON = {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {
+              ndvi: 0.6,
+              status: 'good',
+              name: 'Área Central',
+              description: 'Dados simulados'
+            },
+            geometry: {
+              type: 'Polygon',
+              coordinates: [[
+                [longitude - 0.01, latitude - 0.01],
+                [longitude + 0.01, latitude - 0.01],
+                [longitude + 0.01, latitude + 0.01],
+                [longitude - 0.01, latitude + 0.01],
+                [longitude - 0.01, latitude - 0.01]
+              ]]
+            }
+          }
+        ]
+      };
+      
+      // Adiciona fonte de dados
+      map.current.addSource('ndvi-source', {
+        type: 'geojson',
+        data: fallbackGeoJSON
+      });
+
+      // Adiciona camada com cores baseadas no NDVI
+      map.current.addLayer({
+        id: 'ndvi-layer',
+        type: 'fill',
+        source: 'ndvi-source',
+        paint: {
+          'fill-color': [
+            'case',
+            ['>=', ['get', 'ndvi'], 0.7], '#2d5a27', // Verde escuro - Excelente
+            ['>=', ['get', 'ndvi'], 0.5], '#4a7c59', // Verde médio - Bom
+            ['>=', ['get', 'ndvi'], 0.3], '#8fbc8f', // Verde claro - Moderado
+            '#cd853f' // Marrom - Pobre
+          ],
+          'fill-opacity': 0.7
+        }
+      });
+    }
   };
 
   // Função para adicionar marcador de localização

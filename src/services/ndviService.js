@@ -1,3 +1,5 @@
+import santaCruzDoSulData from '../data/santaCruzDoSul.js';
+
 // Serviço para integração com APIs de dados NDVI
 class NDVIService {
   constructor() {
@@ -5,6 +7,7 @@ class NDVIService {
     this.sentinelHubURL = 'https://services.sentinel-hub.com';
     this.accessToken = null;
     this.tokenExpiry = null;
+    this.useStaticData = import.meta.env.VITE_USE_STATIC_DATA === 'true' || true; // Flag para usar dados estáticos
   }
 
   // Obtém token de acesso para Sentinel Hub
@@ -73,6 +76,11 @@ class NDVIService {
 
   // Busca dados NDVI atuais para uma localização
   async getCurrentNDVI(latitude, longitude) {
+    // Verifica se está na região de Santa Cruz do Sul
+    if (this.useStaticData && this.isInSantaCruzDoSul(latitude, longitude)) {
+      return this.getSantaCruzDoSulNDVI(latitude, longitude);
+    }
+
     try {
       const response = await fetch(`${this.baseURL}/api/v1/ndvi/current`, {
         method: 'POST',
@@ -105,6 +113,11 @@ class NDVIService {
 
   // Busca série temporal de NDVI
   async getNDVITimeSeries(latitude, longitude, period = '90d') {
+    // Verifica se está na região de Santa Cruz do Sul
+    if (this.useStaticData && this.isInSantaCruzDoSul(latitude, longitude)) {
+      return this.getSantaCruzDoSulTimeSeries(period);
+    }
+
     try {
       const response = await fetch(`${this.baseURL}/api/v1/ndvi/timeseries`, {
         method: 'POST',
@@ -327,6 +340,117 @@ class NDVIService {
       latitude >= -90 && latitude <= 90 &&
       longitude >= -180 && longitude <= 180
     );
+  }
+
+  // Verifica se as coordenadas estão na região de Santa Cruz do Sul
+  isInSantaCruzDoSul(latitude, longitude) {
+    const santaCruzCenter = santaCruzDoSulData.city.coordinates;
+    const tolerance = 0.05; // ~5km de raio
+    
+    return (
+      Math.abs(latitude - santaCruzCenter.latitude) <= tolerance &&
+      Math.abs(longitude - santaCruzCenter.longitude) <= tolerance
+    );
+  }
+
+  // Retorna dados NDVI específicos para Santa Cruz do Sul
+  getSantaCruzDoSulNDVI(latitude, longitude) {
+    // Encontra a região mais próxima
+    let closestRegion = santaCruzDoSulData.ndviRegions[0];
+    let minDistance = this.calculateDistance(
+      latitude, longitude,
+      closestRegion.coordinates.latitude,
+      closestRegion.coordinates.longitude
+    );
+
+    for (const region of santaCruzDoSulData.ndviRegions) {
+      const distance = this.calculateDistance(
+        latitude, longitude,
+        region.coordinates.latitude,
+        region.coordinates.longitude
+      );
+      
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestRegion = region;
+      }
+    }
+
+    return {
+      ndvi: closestRegion.ndvi,
+      date: new Date().toISOString().split('T')[0],
+      quality: 'high',
+      cloud_coverage: Math.random() * 10, // Baixa cobertura de nuvens
+      region: closestRegion.name,
+      status: closestRegion.status,
+      description: closestRegion.description
+    };
+  }
+
+  // Retorna série temporal para Santa Cruz do Sul
+  getSantaCruzDoSulTimeSeries(period) {
+    const days = this.getPeriodDays(period);
+    const allData = santaCruzDoSulData.timeSeriesData;
+    
+    // Filtra dados baseado no período
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - days);
+    
+    const filteredData = allData.filter(item => {
+      const itemDate = new Date(item.date);
+      return itemDate >= cutoffDate;
+    });
+
+    return {
+      data: filteredData,
+      source: 'santa_cruz_do_sul_static',
+      statistics: this.calculateStatistics(filteredData),
+      city: santaCruzDoSulData.city.name
+    };
+  }
+
+  // Calcula distância entre duas coordenadas (fórmula de Haversine simplificada)
+  calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Raio da Terra em km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  }
+
+  // Retorna dados GeoJSON para Santa Cruz do Sul
+  getSantaCruzDoSulGeoJSON() {
+    return {
+      type: 'FeatureCollection',
+      features: santaCruzDoSulData.ndviRegions.map(region => ({
+        type: 'Feature',
+        properties: {
+          id: region.id,
+          name: region.name,
+          ndvi: region.ndvi,
+          status: region.status,
+          description: region.description
+        },
+        geometry: region.geometry
+      }))
+    };
+  }
+
+  // Retorna recomendações específicas para Santa Cruz do Sul
+  getSantaCruzDoSulRecommendations(status) {
+    return santaCruzDoSulData.recommendations[status] || [];
+  }
+
+  // Retorna alertas para Santa Cruz do Sul
+  getSantaCruzDoSulAlerts() {
+    return {
+      alerts: santaCruzDoSulData.alerts,
+      city: santaCruzDoSulData.city.name
+    };
   }
 }
 

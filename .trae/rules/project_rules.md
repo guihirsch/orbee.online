@@ -132,3 +132,9 @@ Dentro da pasta `/documentacao`, documentar três situações:
 3. **Explicação do código de cada fluxo**, de forma didática, para manter clareza sobre as decisões técnicas.
 
 > Esta documentação deve ser mantida **atualizada** a cada alteração de código e no formato **Markdown**.
+
+---
+
+## 12. Design System
+
+Dentro da pasta `/src`, manter o arquivo `design-system.md` atualizado sempre que houverem modificações no código.
