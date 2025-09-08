@@ -34,8 +34,9 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        'odor-mean-chey': ['"Odor Mean Chey"', 'cursive'],
       },
     },
   },
-  plugins: [],
+  plugins: [require('daisyui')],
 }

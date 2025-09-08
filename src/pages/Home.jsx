@@ -24,7 +24,7 @@ const Home = () => {
   const handleSubmitRequest = (e) => {
     e.preventDefault();
     // Aqui seria implementada a lógica de envio
-    alert('Solicitação enviada com sucesso!');
+    alert("Solicitação enviada com sucesso!");
     setShowRequestModal(false);
   };
 
@@ -34,13 +34,13 @@ const Home = () => {
       <section className="space-y-8 py-12 text-center">
         <div className="space-y-6">
           <h1 className="text-4xl font-bold text-gray-900 md:text-6xl">
-            <span className="text-green-600">Inteligência Coletiva</span>
-            <br />
-            para um Futuro Sustentável
+            <span className="text-green-600">Conectando ações locais</span>
+            <br />à vida das matas ciliares
           </h1>
           <p className="mx-auto max-w-4xl text-xl leading-relaxed text-gray-600 md:text-2xl">
-            Conectamos satélites, comunidades e governos para ações locais com
-            impacto global.
+            A Orbee é a plataforma de inteligência ambiental que acompanha a
+            saúde das matas ciliares e orienta ações locais de
+            recuperação e preservação.
           </p>
         </div>
 
@@ -266,7 +266,8 @@ const Home = () => {
             Municípios Monitorados
           </h2>
           <p className="mx-auto max-w-3xl text-lg text-gray-600">
-            Conheça as regiões que já estão sendo acompanhadas pela nossa plataforma
+            Conheça as regiões que já estão sendo acompanhadas pela nossa
+            plataforma
           </p>
         </div>
 
@@ -278,13 +279,19 @@ const Home = () => {
               <div className="flex items-center gap-4">
                 <Eye className="h-5 w-5 text-green-600" />
                 <div>
-                  <h3 className="font-semibold text-gray-900">Santa Cruz do Sul</h3>
-                  <p className="text-sm text-gray-500">Rio Pardinho e afluentes</p>
+                  <h3 className="font-semibold text-gray-900">
+                    Santa Cruz do Sul
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    Rio Pardinho e afluentes
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <div className="text-sm font-medium text-green-600">Saudável</div>
+                  <div className="text-sm font-medium text-green-600">
+                    Saudável
+                  </div>
                   <div className="text-xs text-gray-500">Atualizado hoje</div>
                 </div>
                 <Link
@@ -302,12 +309,16 @@ const Home = () => {
                 <Eye className="h-5 w-5 text-green-600" />
                 <div>
                   <h3 className="font-semibold text-gray-900">Sinimbu</h3>
-                  <p className="text-sm text-gray-500">Áreas de preservação permanente</p>
+                  <p className="text-sm text-gray-500">
+                    Áreas de preservação permanente
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <div className="text-sm font-medium text-green-600">Saudável</div>
+                  <div className="text-sm font-medium text-green-600">
+                    Saudável
+                  </div>
                   <div className="text-xs text-gray-500">Atualizado hoje</div>
                 </div>
                 <Link
@@ -325,12 +336,16 @@ const Home = () => {
                 <Eye className="h-5 w-5 text-amber-600" />
                 <div>
                   <h3 className="font-semibold text-gray-900">Lajeado</h3>
-                  <p className="text-sm text-gray-500">Rio Taquari e região metropolitana</p>
+                  <p className="text-sm text-gray-500">
+                    Rio Taquari e região metropolitana
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <div className="text-sm font-medium text-amber-600">Atenção</div>
+                  <div className="text-sm font-medium text-amber-600">
+                    Atenção
+                  </div>
                   <div className="text-xs text-gray-500">Atualizado hoje</div>
                 </div>
                 <Link

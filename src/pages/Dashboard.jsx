@@ -143,12 +143,12 @@ const Dashboard = () => {
                       NDVI Atual
                     </p>
                     <div className="relative">
-                      <Info 
-                        className="h-4 w-4 cursor-help text-gray-400 hover:text-gray-600" 
-                        onMouseEnter={() => setActiveTooltip('ndvi')}
+                      <Info
+                        className="h-4 w-4 cursor-help text-gray-400 hover:text-gray-600"
+                        onMouseEnter={() => setActiveTooltip("ndvi")}
                         onMouseLeave={() => setActiveTooltip(null)}
                       />
-                      {activeTooltip === 'ndvi' && (
+                      {activeTooltip === "ndvi" && (
                         <div className="absolute bottom-full left-1/2 z-10 mb-2 w-64 -translate-x-1/2 transform rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
                           Índice de Vegetação: 0-0.3 (solo/água), 0.3-0.6
                           (vegetação esparsa), 0.6+ (vegetação densa)
@@ -180,12 +180,12 @@ const Dashboard = () => {
                       Cobertura Vegetal
                     </p>
                     <div className="relative">
-                      <Info 
-                        className="h-4 w-4 cursor-help text-gray-400 hover:text-gray-600" 
-                        onMouseEnter={() => setActiveTooltip('coverage')}
+                      <Info
+                        className="h-4 w-4 cursor-help text-gray-400 hover:text-gray-600"
+                        onMouseEnter={() => setActiveTooltip("coverage")}
                         onMouseLeave={() => setActiveTooltip(null)}
                       />
-                      {activeTooltip === 'coverage' && (
+                      {activeTooltip === "coverage" && (
                         <div className="absolute bottom-full left-1/2 z-10 mb-2 w-64 -translate-x-1/2 transform rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
                           Percentual da área com vegetação ativa detectada por
                           satélite
@@ -217,12 +217,12 @@ const Dashboard = () => {
                       Qualidade dos Dados
                     </p>
                     <div className="relative">
-                      <Info 
-                        className="h-4 w-4 cursor-help text-gray-400 hover:text-gray-600" 
-                        onMouseEnter={() => setActiveTooltip('quality')}
+                      <Info
+                        className="h-4 w-4 cursor-help text-gray-400 hover:text-gray-600"
+                        onMouseEnter={() => setActiveTooltip("quality")}
                         onMouseLeave={() => setActiveTooltip(null)}
                       />
-                      {activeTooltip === 'quality' && (
+                      {activeTooltip === "quality" && (
                         <div className="absolute bottom-full left-1/2 z-10 mb-2 w-64 -translate-x-1/2 transform rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
                           Confiabilidade baseada em cobertura de nuvens e
                           resolução dos dados satelitais
@@ -254,12 +254,12 @@ const Dashboard = () => {
                       Engajamento
                     </p>
                     <div className="relative">
-                      <Info 
-                        className="h-4 w-4 cursor-help text-gray-400 hover:text-gray-600" 
-                        onMouseEnter={() => setActiveTooltip('engagement')}
+                      <Info
+                        className="h-4 w-4 cursor-help text-gray-400 hover:text-gray-600"
+                        onMouseEnter={() => setActiveTooltip("engagement")}
                         onMouseLeave={() => setActiveTooltip(null)}
                       />
-                      {activeTooltip === 'engagement' && (
+                      {activeTooltip === "engagement" && (
                         <div className="absolute bottom-full left-1/2 z-10 mb-2 w-64 -translate-x-1/2 transform rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
                           Relatórios e validações da comunidade local
                         </div>
@@ -306,12 +306,12 @@ const Dashboard = () => {
                     </span>
                   </div>
                   <div className="relative">
-                    <Info 
-                      className="h-4 w-4 cursor-help text-green-600 hover:text-green-800" 
-                      onMouseEnter={() => setActiveTooltip('biomass')}
+                    <Info
+                      className="h-4 w-4 cursor-help text-green-600 hover:text-green-800"
+                      onMouseEnter={() => setActiveTooltip("biomass")}
                       onMouseLeave={() => setActiveTooltip(null)}
                     />
-                    {activeTooltip === 'biomass' && (
+                    {activeTooltip === "biomass" && (
                       <div className="absolute bottom-full right-0 z-10 mb-2 w-64 rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
                         Densidade de matéria vegetal. Valores altos indicam
                         vegetação robusta e saudável.
@@ -341,12 +341,12 @@ const Dashboard = () => {
                     </span>
                   </div>
                   <div className="relative">
-                    <Info 
-                      className="h-4 w-4 cursor-help text-blue-600 hover:text-blue-800" 
-                      onMouseEnter={() => setActiveTooltip('moisture')}
+                    <Info
+                      className="h-4 w-4 cursor-help text-blue-600 hover:text-blue-800"
+                      onMouseEnter={() => setActiveTooltip("moisture")}
                       onMouseLeave={() => setActiveTooltip(null)}
                     />
-                    {activeTooltip === 'moisture' && (
+                    {activeTooltip === "moisture" && (
                       <div className="absolute bottom-full right-0 z-10 mb-2 w-64 rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
                         Nível de água na vegetação. Importante para detectar
                         estresse hídrico.
@@ -376,15 +376,15 @@ const Dashboard = () => {
                     </span>
                   </div>
                   <div className="relative">
-                    <Info 
-                      className="h-4 w-4 cursor-help text-orange-600 hover:text-orange-800" 
-                      onMouseEnter={() => setActiveTooltip('temperature')}
+                    <Info
+                      className="h-4 w-4 cursor-help text-orange-600 hover:text-orange-800"
+                      onMouseEnter={() => setActiveTooltip("temperature")}
                       onMouseLeave={() => setActiveTooltip(null)}
                     />
-                    {activeTooltip === 'temperature' && (
+                    {activeTooltip === "temperature" && (
                       <div className="absolute bottom-full right-0 z-10 mb-2 w-64 rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
-                        Temperatura da superfície terrestre. Afeta o crescimento e
-                        saúde da vegetação.
+                        Temperatura da superfície terrestre. Afeta o crescimento
+                        e saúde da vegetação.
                       </div>
                     )}
                   </div>
@@ -413,12 +413,12 @@ const Dashboard = () => {
                     </span>
                   </div>
                   <div className="relative">
-                    <Info 
-                      className="h-4 w-4 cursor-help text-purple-600 hover:text-purple-800" 
-                      onMouseEnter={() => setActiveTooltip('seasonal')}
+                    <Info
+                      className="h-4 w-4 cursor-help text-purple-600 hover:text-purple-800"
+                      onMouseEnter={() => setActiveTooltip("seasonal")}
                       onMouseLeave={() => setActiveTooltip(null)}
                     />
-                    {activeTooltip === 'seasonal' && (
+                    {activeTooltip === "seasonal" && (
                       <div className="absolute bottom-full right-0 z-10 mb-2 w-64 rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
                         Padrão de crescimento esperado para a época do ano na
                         região.
@@ -461,12 +461,12 @@ const Dashboard = () => {
                       NDVI - Últimos 12 meses
                     </span>
                     <div className="relative">
-                      <Info 
-                        className="h-4 w-4 cursor-help text-gray-400 hover:text-gray-600" 
-                        onMouseEnter={() => setActiveTooltip('historical')}
+                      <Info
+                        className="h-4 w-4 cursor-help text-gray-400 hover:text-gray-600"
+                        onMouseEnter={() => setActiveTooltip("historical")}
                         onMouseLeave={() => setActiveTooltip(null)}
                       />
-                      {activeTooltip === 'historical' && (
+                      {activeTooltip === "historical" && (
                         <div className="absolute bottom-full right-0 z-10 mb-2 w-64 rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
                           Comparação do NDVI atual com a média dos últimos 12
                           meses
@@ -680,12 +680,12 @@ const Dashboard = () => {
                     </span>
                   </div>
                   <div className="relative">
-                    <Info 
-                      className="h-4 w-4 cursor-help text-blue-600 hover:text-blue-800" 
-                      onMouseEnter={() => setActiveTooltip('resolution')}
+                    <Info
+                      className="h-4 w-4 cursor-help text-blue-600 hover:text-blue-800"
+                      onMouseEnter={() => setActiveTooltip("resolution")}
                       onMouseLeave={() => setActiveTooltip(null)}
                     />
-                    {activeTooltip === 'resolution' && (
+                    {activeTooltip === "resolution" && (
                       <div className="absolute bottom-full right-0 z-10 mb-2 w-64 rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
                         Resolução espacial dos dados Sentinel-2. Menor valor =
                         maior precisão.
@@ -711,12 +711,12 @@ const Dashboard = () => {
                     </span>
                   </div>
                   <div className="relative">
-                    <Info 
-                      className="h-4 w-4 cursor-help text-green-600 hover:text-green-800" 
-                      onMouseEnter={() => setActiveTooltip('frequency')}
+                    <Info
+                      className="h-4 w-4 cursor-help text-green-600 hover:text-green-800"
+                      onMouseEnter={() => setActiveTooltip("frequency")}
                       onMouseLeave={() => setActiveTooltip(null)}
                     />
-                    {activeTooltip === 'frequency' && (
+                    {activeTooltip === "frequency" && (
                       <div className="absolute bottom-full right-0 z-10 mb-2 w-64 rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
                         Frequência de passagem do satélite sobre a região
                         monitorada.
@@ -744,15 +744,15 @@ const Dashboard = () => {
                     </span>
                   </div>
                   <div className="relative">
-                    <Info 
-                      className="h-4 w-4 cursor-help text-gray-600 hover:text-gray-800" 
-                      onMouseEnter={() => setActiveTooltip('clouds')}
+                    <Info
+                      className="h-4 w-4 cursor-help text-gray-600 hover:text-gray-800"
+                      onMouseEnter={() => setActiveTooltip("clouds")}
                       onMouseLeave={() => setActiveTooltip(null)}
                     />
-                    {activeTooltip === 'clouds' && (
+                    {activeTooltip === "clouds" && (
                       <div className="absolute bottom-full right-0 z-10 mb-2 w-64 rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
-                        Percentual de cobertura de nuvens na última imagem. Afeta
-                        a qualidade dos dados.
+                        Percentual de cobertura de nuvens na última imagem.
+                        Afeta a qualidade dos dados.
                       </div>
                     )}
                   </div>
@@ -782,12 +782,12 @@ const Dashboard = () => {
                         Erro médio NDVI
                       </span>
                       <div className="relative">
-                        <Info 
-                          className="h-3 w-3 cursor-help text-gray-400 hover:text-gray-600" 
-                          onMouseEnter={() => setActiveTooltip('ndvi-error')}
+                        <Info
+                          className="h-3 w-3 cursor-help text-gray-400 hover:text-gray-600"
+                          onMouseEnter={() => setActiveTooltip("ndvi-error")}
                           onMouseLeave={() => setActiveTooltip(null)}
                         />
-                        {activeTooltip === 'ndvi-error' && (
+                        {activeTooltip === "ndvi-error" && (
                           <div className="absolute bottom-full left-1/2 z-10 mb-2 w-48 -translate-x-1/2 transform rounded bg-black border border-gray-600 px-2 py-1 text-xs text-white shadow-lg">
                             Margem de erro típica nas medições NDVI
                           </div>
@@ -805,12 +805,12 @@ const Dashboard = () => {
                         Calibração atmosférica
                       </span>
                       <div className="relative">
-                        <Info 
-                          className="h-3 w-3 cursor-help text-gray-400 hover:text-gray-600" 
-                          onMouseEnter={() => setActiveTooltip('atmospheric')}
+                        <Info
+                          className="h-3 w-3 cursor-help text-gray-400 hover:text-gray-600"
+                          onMouseEnter={() => setActiveTooltip("atmospheric")}
                           onMouseLeave={() => setActiveTooltip(null)}
                         />
-                        {activeTooltip === 'atmospheric' && (
+                        {activeTooltip === "atmospheric" && (
                           <div className="absolute bottom-full left-1/2 z-10 mb-2 w-48 -translate-x-1/2 transform rounded bg-black border border-gray-600 px-2 py-1 text-xs text-white shadow-lg">
                             Correção dos efeitos atmosféricos aplicada
                           </div>
@@ -831,12 +831,14 @@ const Dashboard = () => {
                         Validação de campo
                       </span>
                       <div className="relative">
-                        <Info 
-                          className="h-3 w-3 cursor-help text-gray-400 hover:text-gray-600" 
-                          onMouseEnter={() => setActiveTooltip('field-validation')}
+                        <Info
+                          className="h-3 w-3 cursor-help text-gray-400 hover:text-gray-600"
+                          onMouseEnter={() =>
+                            setActiveTooltip("field-validation")
+                          }
                           onMouseLeave={() => setActiveTooltip(null)}
                         />
-                        {activeTooltip === 'field-validation' && (
+                        {activeTooltip === "field-validation" && (
                           <div className="absolute bottom-full left-1/2 z-10 mb-2 w-48 -translate-x-1/2 transform rounded bg-black border border-gray-600 px-2 py-1 text-xs text-white shadow-lg">
                             Dados validados com observações locais
                           </div>
@@ -913,12 +915,12 @@ const Dashboard = () => {
                     {mockData.dataQuality}%
                   </div>
                   <div className="relative">
-                    <Info 
-                      className="h-4 w-4 cursor-help text-gray-400 hover:text-gray-600" 
-                      onMouseEnter={() => setActiveTooltip('reliability')}
+                    <Info
+                      className="h-4 w-4 cursor-help text-gray-400 hover:text-gray-600"
+                      onMouseEnter={() => setActiveTooltip("reliability")}
                       onMouseLeave={() => setActiveTooltip(null)}
                     />
-                    {activeTooltip === 'reliability' && (
+                    {activeTooltip === "reliability" && (
                       <div className="absolute bottom-full right-0 z-10 mb-2 w-64 rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
                         Índice calculado com base na qualidade dos dados,
                         cobertura de nuvens, calibração e validação
@@ -972,12 +974,12 @@ const Dashboard = () => {
                       </span>
                     </div>
                     <div className="relative">
-                      <Info 
-                        className="h-4 w-4 cursor-help text-green-600 hover:text-green-800" 
-                        onMouseEnter={() => setActiveTooltip('carbon')}
+                      <Info
+                        className="h-4 w-4 cursor-help text-green-600 hover:text-green-800"
+                        onMouseEnter={() => setActiveTooltip("carbon")}
                         onMouseLeave={() => setActiveTooltip(null)}
                       />
-                      {activeTooltip === 'carbon' && (
+                      {activeTooltip === "carbon" && (
                         <div className="absolute bottom-full right-0 z-10 mb-2 w-64 rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
                           Estimativa baseada na biomassa vegetal e área de
                           cobertura
@@ -1012,12 +1014,12 @@ const Dashboard = () => {
                       </span>
                     </div>
                     <div className="relative">
-                      <Info 
-                        className="h-4 w-4 cursor-help text-blue-600 hover:text-blue-800" 
-                        onMouseEnter={() => setActiveTooltip('thermal')}
+                      <Info
+                        className="h-4 w-4 cursor-help text-blue-600 hover:text-blue-800"
+                        onMouseEnter={() => setActiveTooltip("thermal")}
                         onMouseLeave={() => setActiveTooltip(null)}
                       />
-                      {activeTooltip === 'thermal' && (
+                      {activeTooltip === "thermal" && (
                         <div className="absolute bottom-full right-0 z-10 mb-2 w-64 rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
                           Redução de temperatura proporcionada pela vegetação
                         </div>
@@ -1048,12 +1050,12 @@ const Dashboard = () => {
                       </span>
                     </div>
                     <div className="relative">
-                      <Info 
-                        className="h-4 w-4 cursor-help text-cyan-600 hover:text-cyan-800" 
-                        onMouseEnter={() => setActiveTooltip('water')}
+                      <Info
+                        className="h-4 w-4 cursor-help text-cyan-600 hover:text-cyan-800"
+                        onMouseEnter={() => setActiveTooltip("water")}
                         onMouseLeave={() => setActiveTooltip(null)}
                       />
-                      {activeTooltip === 'water' && (
+                      {activeTooltip === "water" && (
                         <div className="absolute bottom-full right-0 z-10 mb-2 w-64 rounded-lg bg-black border border-gray-600 px-3 py-2 text-xs text-white shadow-lg">
                           Capacidade de retenção hídrica da vegetação
                         </div>

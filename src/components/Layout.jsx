@@ -18,30 +18,49 @@ const Layout = ({ children }) => {
   const navigation = [
     { name: "Início", href: "/", icon: MapPin },
     { name: "Dashboard", href: "/dashboard", icon: BarChart3 },
+    { name: "Plataforma", href: "/meadow-green", icon: Leaf },
     { name: "Comunidade", href: "/community", icon: Users },
     { name: "Perfil", href: "/profile", icon: User },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-[#D9ED92] via-[#B5E48C] to-[#99D98C]">
       {/* Header */}
       <header className="border-b bg-white shadow-sm">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
               <Link to="/" className="group flex items-center space-x-2">
-                <div className="h-9 w-9 overflow-hidden rounded-lg transition-opacity group-hover:opacity-90">
-                  <img
-                    src="/src/assets/logo.png"
-                    alt="OrBee Logo"
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-                <div>
-                  <span className="text-xl font-bold text-gray-900">
+                <div className="flex items-center gap-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="30"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-bee-icon lucide-bee"
+                  >
+                    <path d="m8 2 1.88 1.88" stroke="black" />
+                    <path d="M14.12 3.88 16 2" stroke="black" />
+                    <path d="M9 7V6a3 3 0 1 1 6 0v1" stroke="black" />
+                    <path
+                      d="M5 7a3 3 0 1 0 2.2 5.1C9.1 10 12 7 12 7s2.9 3 4.8 5.1A3 3 0 1 0 19 7Z"
+                      stroke="black"
+                    />
+                    <path d="M7.56 12h8.87" stroke="black" />
+                    <path d="M7.5 17h9" stroke="black" />
+                    <path
+                      d="M15.5 10.7c.9.9 1.4 2.1 1.5 3.3 0 5.8-5 8-5 8s-5-2.2-5-8c.1-1.2.6-2.4 1.5-3.3"
+                      stroke="black"
+                    />
+                  </svg>
+                  <span className="font-odor-mean-chey text-3xl font-bold text-black">
                     Orbee
                   </span>
-                  <span className="ml-1 text-sm text-gray-500">Online</span>
                 </div>
               </Link>
             </div>
@@ -102,12 +121,10 @@ const Layout = ({ children }) => {
       </header>
 
       {/* Main content */}
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {children}
-      </main>
+      <main className="mx-auto max-w-none flex-1">{children}</main>
 
       {/* Footer */}
-      <footer className="mt-16 border-t border-gray-200 bg-white">
+      <footer className="border-t border-gray-200 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
             {/* Logo e descrição */}

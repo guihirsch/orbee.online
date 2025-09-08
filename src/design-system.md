@@ -47,6 +47,19 @@ export default {
           800: "#1e293b",
           900: "#0f172a",
         },
+        // Paleta Meadow Green
+        meadow: {
+          50: "#D9ED92",   // Verde claro
+          100: "#B5E48C",  // Verde claro médio
+          200: "#99D98C",  // Verde médio
+          300: "#76C893",  // Verde
+          400: "#52B69A",  // Verde escuro
+          500: "#34A0A4",  // Verde azulado
+          600: "#168AAD",  // Azul esverdeado
+          700: "#1A759F",  // Azul médio
+          800: "#1E6091",  // Azul escuro
+          900: "#184E77",  // Azul muito escuro
+        },
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
@@ -342,6 +355,51 @@ const InfoTooltip = ({ content, children }) => {
 - Ajustar espaçamentos se necessário
 - Adicionar novos componentes seguindo os padrões
 - Manter consistência nos estados e transições
+
+## 11. Paleta Meadow Green
+
+### Cores da Paleta
+
+A paleta Meadow Green foi criada especificamente para o dashboard de mesmo nome, inspirada em tons naturais de vegetação e água:
+
+```css
+/* Tons Verdes Claros */
+--meadow-50: #D9ED92;   /* Verde claro - backgrounds principais */
+--meadow-100: #B5E48C;  /* Verde claro médio - gradientes */
+--meadow-200: #99D98C;  /* Verde médio - elementos secundários */
+--meadow-300: #76C893;  /* Verde - botões e acentos */
+--meadow-400: #52B69A;  /* Verde escuro - CTAs principais */
+
+/* Tons Azuis/Verdes Escuros */
+--meadow-500: #34A0A4;  /* Verde azulado - hover states */
+--meadow-600: #168AAD;  /* Azul esverdeado - textos secundários */
+--meadow-700: #1A759F;  /* Azul médio - elementos interativos */
+--meadow-800: #1E6091;  /* Azul escuro - textos importantes */
+--meadow-900: #184E77;  /* Azul muito escuro - títulos principais */
+```
+
+### Uso Recomendado
+
+```jsx
+// Backgrounds principais
+<div className="bg-[#D9ED92]">...</div>
+
+// Gradientes
+<div className="bg-gradient-to-br from-[#D9ED92] via-[#B5E48C] to-[#99D98C]">...</div>
+
+// Botões primários
+<button className="bg-[#52B69A] hover:bg-[#34A0A4] text-white">...</button>
+
+// Textos
+<h1 className="text-[#184E77]">Título Principal</h1>
+<p className="text-[#168AAD]">Texto secundário</p>
+```
+
+### Acessibilidade
+
+- Contraste adequado entre texto escuro (#184E77) e backgrounds claros
+- Gradientes suaves para melhor legibilidade
+- Estados de hover bem definidos para interatividade
 
 ---
 
