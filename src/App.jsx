@@ -11,9 +11,9 @@ import TestDashboard from "./teste/Dashboard";
 function App() {
   // Aplicar tema orbee globalmente
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'orbee';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    localStorage.setItem('theme', savedTheme);
+    const savedTheme = localStorage.getItem("theme") || "orbee";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    localStorage.setItem("theme", savedTheme);
   }, []);
 
   return (

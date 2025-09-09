@@ -49,16 +49,16 @@ export default {
         },
         // Paleta Meadow Green
         meadow: {
-          50: "#D9ED92",   // Verde claro
-          100: "#B5E48C",  // Verde claro médio
-          200: "#99D98C",  // Verde médio
-          300: "#76C893",  // Verde
-          400: "#52B69A",  // Verde escuro
-          500: "#34A0A4",  // Verde azulado
-          600: "#168AAD",  // Azul esverdeado
-          700: "#1A759F",  // Azul médio
-          800: "#1E6091",  // Azul escuro
-          900: "#184E77",  // Azul muito escuro
+          50: "#D9ED92", // Verde claro
+          100: "#B5E48C", // Verde claro médio
+          200: "#99D98C", // Verde médio
+          300: "#76C893", // Verde
+          400: "#52B69A", // Verde escuro
+          500: "#34A0A4", // Verde azulado
+          600: "#168AAD", // Azul esverdeado
+          700: "#1A759F", // Azul médio
+          800: "#1E6091", // Azul escuro
+          900: "#184E77", // Azul muito escuro
         },
       },
       fontFamily: {
@@ -364,18 +364,18 @@ A paleta Meadow Green foi criada especificamente para o dashboard de mesmo nome,
 
 ```css
 /* Tons Verdes Claros */
---meadow-50: #D9ED92;   /* Verde claro - backgrounds principais */
---meadow-100: #B5E48C;  /* Verde claro médio - gradientes */
---meadow-200: #99D98C;  /* Verde médio - elementos secundários */
---meadow-300: #76C893;  /* Verde - botões e acentos */
---meadow-400: #52B69A;  /* Verde escuro - CTAs principais */
+--meadow-50: #d9ed92; /* Verde claro - backgrounds principais */
+--meadow-100: #b5e48c; /* Verde claro médio - gradientes */
+--meadow-200: #99d98c; /* Verde médio - elementos secundários */
+--meadow-300: #76c893; /* Verde - botões e acentos */
+--meadow-400: #52b69a; /* Verde escuro - CTAs principais */
 
 /* Tons Azuis/Verdes Escuros */
---meadow-500: #34A0A4;  /* Verde azulado - hover states */
---meadow-600: #168AAD;  /* Azul esverdeado - textos secundários */
---meadow-700: #1A759F;  /* Azul médio - elementos interativos */
---meadow-800: #1E6091;  /* Azul escuro - textos importantes */
---meadow-900: #184E77;  /* Azul muito escuro - títulos principais */
+--meadow-500: #34a0a4; /* Verde azulado - hover states */
+--meadow-600: #168aad; /* Azul esverdeado - textos secundários */
+--meadow-700: #1a759f; /* Azul médio - elementos interativos */
+--meadow-800: #1e6091; /* Azul escuro - textos importantes */
+--meadow-900: #184e77; /* Azul muito escuro - títulos principais */
 ```
 
 ### Uso Recomendado

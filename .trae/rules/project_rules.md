@@ -137,4 +137,4 @@ Dentro da pasta `/documentacao`, documentar três situações:
 
 ## 12. Design System
 
-Dentro da pasta `/src`, manter o arquivo `design-system.md` atualizado sempre que houverem modificações no código.
+Dentro da pasta `/src`, manter o arquivo `design-system-guide.md` atualizado sempre que houverem modificações no código.
