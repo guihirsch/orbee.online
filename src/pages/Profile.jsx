@@ -31,7 +31,7 @@ const Profile = () => {
       id: 1,
       title: 'Primeiro Observador',
       description: 'Fez sua primeira observação comunitária',
-      icon: '🌱',
+      icon: Leaf,
       earned: true,
       date: '2024-01-05'
     },
@@ -47,7 +47,7 @@ const Profile = () => {
       id: 3,
       title: 'Explorador de Dados',
       description: 'Visualizou dados NDVI por 30 dias consecutivos',
-      icon: '📊',
+      icon: BarChart3,
       earned: false,
       progress: 15
     },

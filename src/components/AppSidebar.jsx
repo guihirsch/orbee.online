@@ -14,7 +14,7 @@ import {
 import { TooltipProvider } from "./ui/tooltip";
 
 const AppSidebar = ({ selectedSubSection, setSelectedSubSection }) => {
-  const { open: sidebarExpanded, toggleSidebar, state } = useSidebar();
+  const { open: sidebarExpanded, toggleSidebar, state, isMobile } = useSidebar();
 
   const menuItems = [
     {
@@ -22,18 +22,21 @@ const AppSidebar = ({ selectedSubSection, setSelectedSubSection }) => {
       title: "Características",
       icon: Globe,
       tooltip: "Características da região",
+      description: "Localização e dados da região"
     },
     {
       id: "saude",
       title: "Situação",
       icon: Leaf,
       tooltip: "Saúde da mata ciliar",
+      description: "Estado atual da vegetação"
     },
     {
       id: "acoes",
       title: "Ações",
       icon: Target,
       tooltip: "Ações necessárias",
+      description: "Recomendações e próximos passos"
     },
   ];
 
@@ -50,7 +53,9 @@ const AppSidebar = ({ selectedSubSection, setSelectedSubSection }) => {
         >
           {/* Header with Logo and Toggle */}
           <div
-            className={`flex items-center gap-3 mb-6 ${
+            className={`flex items-center gap-3 ${
+              isMobile ? "mb-8" : "mb-6"
+            } ${
               state === "collapsed" ? "justify-center" : "justify-between"
             }`}
           >
@@ -110,7 +115,9 @@ const AppSidebar = ({ selectedSubSection, setSelectedSubSection }) => {
             {/* Menu Toggle Button */}
             <motion.button
               onClick={toggleSidebar}
-              className="group relative h-[50px] w-[50px] overflow-hidden rounded-xl border border-emerald-400/30 bg-emerald-600/20 backdrop-blur-sm transition-all duration-200 hover:border-emerald-400/50 hover:bg-emerald-600/30 hover:shadow-lg hover:shadow-emerald-400/20"
+              className={`group relative overflow-hidden rounded-xl border border-emerald-400/30 bg-emerald-600/20 backdrop-blur-sm transition-all duration-200 hover:border-emerald-400/50 hover:bg-emerald-600/30 hover:shadow-lg hover:shadow-emerald-400/20 ${
+                isMobile ? "h-[56px] w-[56px]" : "h-[50px] w-[50px]"
+              }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -123,11 +130,11 @@ const AppSidebar = ({ selectedSubSection, setSelectedSubSection }) => {
                 }}
               />
               <div className="relative z-10 flex items-center justify-center text-emerald-300 transition-all duration-200 group-hover:scale-110 group-hover:text-white">
-                <ChevronLeft
-                  className={`h-5 w-5 transition-transform duration-200 ${
-                    state === "collapsed" ? "rotate-180" : ""
-                  }`}
-                />
+                  <ChevronLeft
+                    className={`h-5 w-5 transition-transform duration-200 ${
+                      state === "collapsed" ? "rotate-180" : ""
+                    }`}
+                  />
               </div>
             </motion.button>
           </div>
@@ -137,7 +144,7 @@ const AppSidebar = ({ selectedSubSection, setSelectedSubSection }) => {
             <SidebarGroupContent>
               <SidebarMenu
                 className={`transition-all duration-200 ${
-                  state === "collapsed" ? "space-y-2" : "space-y-3"
+                  state === "collapsed" ? "space-y-2" : isMobile ? "space-y-4" : "space-y-3"
                 }`}
               >
                 {menuItems.map((item) => {
@@ -151,10 +158,10 @@ const AppSidebar = ({ selectedSubSection, setSelectedSubSection }) => {
                           backgroundColor: isActive
                             ? "rgba(16, 185, 129, 0.3)"
                             : "rgba(16, 185, 129, 0.1)",
-                          padding: state === "collapsed" ? "8px" : "12px",
+                          padding: state === "collapsed" ? "8px" : isMobile ? "16px" : "12px",
                         }}
                         whileHover={{
-                          scale: state === "collapsed" ? 1.05 : 1.01,
+                          scale: state === "collapsed" ? 1.05 : isMobile ? 1.02 : 1.01,
                           backgroundColor: isActive
                             ? "rgba(16, 185, 129, 0.35)"
                             : "rgba(16, 185, 129, 0.15)",
@@ -168,6 +175,8 @@ const AppSidebar = ({ selectedSubSection, setSelectedSubSection }) => {
                         } ${
                           state === "collapsed"
                             ? "justify-center items-center min-h-[50px] w-[50px] mx-auto"
+                            : isMobile
+                            ? "justify-start items-center min-h-[60px]"
                             : "justify-start items-center min-h-[50px]"
                         }`}
                       >
@@ -196,26 +205,41 @@ const AppSidebar = ({ selectedSubSection, setSelectedSubSection }) => {
                               : "justify-start"
                           }`}
                         >
-                          <Icon
-                            className={`relative z-10 text-emerald-300 transition-all duration-200 group-hover:text-white group-hover:scale-110 ${
-                              state === "collapsed"
-                                ? "h-[50px] w-[50px]"
-                                : "h-[50px]"
-                            }`}
-                          />
-                          <AnimatePresence>
-                            {state === "expanded" && (
-                              <motion.span
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -10 }}
-                                transition={{ duration: 0.15, delay: 0.05 }}
-                                className="relative z-10 ml-2 text-emerald-300 transition-colors group-hover:text-white"
-                              >
-                                {item.title}
-                              </motion.span>
-                            )}
-                          </AnimatePresence>
+                          <div className={`flex items-center ${
+                            state === "collapsed" ? "justify-center" : "justify-start w-full"
+                          }`}>
+                            <Icon
+                              className={`relative z-10 text-emerald-300 transition-all duration-200 group-hover:text-white group-hover:scale-110 flex-shrink-0 ${
+                                state === "collapsed"
+                                  ? "h-6 w-6"
+                                  : isMobile
+                                  ? "h-6 w-6"
+                                  : "h-5 w-5"
+                              }`}
+                            />
+                            <AnimatePresence>
+                              {state === "expanded" && (
+                                <motion.div
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -10 }}
+                                  transition={{ duration: 0.15, delay: 0.05 }}
+                                  className="relative z-10 ml-3 flex flex-col"
+                                >
+                                  <span className={`text-emerald-300 transition-colors group-hover:text-white font-medium ${
+                                    isMobile ? "text-base" : "text-sm"
+                                  }`}>
+                                    {item.title}
+                                  </span>
+                                  {isMobile && (
+                                    <span className="text-xs text-emerald-400/70 transition-colors group-hover:text-emerald-200/80 mt-0.5">
+                                      {item.description}
+                                    </span>
+                                  )}
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
                         </SidebarMenuButton>
                       </motion.div>
                     </SidebarMenuItem>

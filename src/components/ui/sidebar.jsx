@@ -48,6 +48,9 @@ const SidebarProvider = React.forwardRef(
     ref
   ) => {
     const [_open, _setOpen] = React.useState(defaultOpen);
+    const [isMobile, setIsMobile] = React.useState(false);
+    const [openMobile, setOpenMobile] = React.useState(false);
+    
     const open = openProp ?? _open;
     const setOpen = React.useCallback(
       (value) => {
@@ -66,8 +69,23 @@ const SidebarProvider = React.forwardRef(
 
     // Helper to toggle the sidebar.
     const toggleSidebar = React.useCallback(() => {
+      if (isMobile) {
+        return setOpenMobile((open) => !open);
+      }
       return setOpen((open) => !open);
-    }, [setOpen]);
+    }, [setOpen, setOpenMobile, isMobile]);
+
+    // Mobile detection
+    React.useEffect(() => {
+      const checkScreenSize = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+
+      checkScreenSize();
+      window.addEventListener('resize', checkScreenSize);
+
+      return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
 
     // Adds a keyboard shortcut to toggle the sidebar.
     React.useEffect(() => {
@@ -92,12 +110,12 @@ const SidebarProvider = React.forwardRef(
         state,
         open,
         setOpen,
-        isMobile: false,
-        openMobile: false,
-        setOpenMobile: () => {},
+        isMobile,
+        openMobile,
+        setOpenMobile,
         toggleSidebar,
       }),
-      [state, open, setOpen, toggleSidebar]
+      [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
     );
 
     return (
