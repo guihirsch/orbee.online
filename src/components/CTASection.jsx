@@ -15,36 +15,11 @@ const CTASection = () => {
 
   return (
     <section className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      {/* Background with animated gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-green-600 via-emerald-600 to-teal-700 animate-gradient-shift"></div>
-      
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-white/5 rounded-full animate-blob animation-delay-4000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/5 rounded-full animate-float"></div>
-      </div>
-
-      {/* Particle effects */}
-      <div className="absolute inset-0">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-2 h-2 bg-white/20 rounded-full animate-particle"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 6}s`,
-              animationDuration: `${6 + Math.random() * 4}s`
-            }}
-          ></div>
-        ))}
-      </div>
 
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Main CTA Content */}
         <div className={`text-center mb-16 fade-in-on-scroll ${ctaVisible ? 'visible' : ''}`} ref={ctaRef}>
-          <div className="inline-flex items-center px-6 py-3 rounded-full bg-white/20 backdrop-blur-sm text-white text-sm font-medium mb-8 hover-glow">
+          <div className="inline-flex items-center px-6 py-3 rounded-full bg-emerald-500/20 backdrop-blur-sm text-emerald-300 text-sm font-medium mb-8 border border-emerald-400/30">
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
@@ -53,12 +28,12 @@ const CTASection = () => {
           
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight">
             Transforme Dados em
-            <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent animate-pulse-glow">
+            <span className="block bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent">
               Impacto Real
             </span>
           </h2>
           
-          <p className="text-xl md:text-2xl text-green-100 max-w-4xl mx-auto leading-relaxed mb-12">
+          <p className="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed mb-12">
             Junte-se a milhares de pessoas que já estão usando o OrBee para 
             <span className="font-semibold text-white"> monitorar, proteger e restaurar </span>
             nossos ecossistemas.
@@ -68,7 +43,7 @@ const CTASection = () => {
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
             <Link 
               to="/dashboard" 
-              className="group relative bg-white text-green-700 hover:bg-gray-50 px-10 py-5 rounded-2xl font-bold text-lg shadow-2xl transition-all duration-300 hover:shadow-3xl hover:scale-105 hover-lift"
+              className="group relative bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700 px-10 py-5 rounded-2xl font-bold text-lg shadow-2xl transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/25 hover:scale-105 border border-emerald-400/30"
             >
               <span className="relative z-10 flex items-center">
                 <svg className="w-6 h-6 mr-3 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,12 +51,12 @@ const CTASection = () => {
                 </svg>
                 Explorar Dashboard
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+
             </Link>
             
             <Link 
               to="/community" 
-              className="group border-3 border-white text-white hover:bg-white hover:text-green-700 px-10 py-5 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 backdrop-blur-sm bg-white/10"
+              className="group border-2 border-emerald-400/50 text-emerald-300 hover:bg-emerald-500/20 hover:text-emerald-200 px-10 py-5 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 backdrop-blur-sm"
             >
               <span className="flex items-center">
                 <svg className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -101,14 +76,14 @@ const CTASection = () => {
               className="text-center group hover-lift"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="bg-white/20 backdrop-blur-sm rounded-3xl p-6 border border-white/30 group-hover:bg-white/30 transition-all duration-300">
+              <div className="bg-slate-900/60 backdrop-blur-sm rounded-3xl p-6 border border-emerald-400/30 group-hover:bg-slate-900/80 transition-all duration-300">
                 <div className="text-4xl mb-2 group-hover:scale-110 transition-transform duration-300">
                   {stat.icon}
                 </div>
-                <div className="text-3xl md:text-4xl font-bold text-white mb-2 group-hover:text-yellow-300 transition-colors duration-300">
+                <div className="text-3xl md:text-4xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors duration-300">
                   {stat.number}
                 </div>
-                <div className="text-green-100 font-medium group-hover:text-white transition-colors duration-300">
+                <div className="text-slate-300 font-medium group-hover:text-white transition-colors duration-300">
                   {stat.label}
                 </div>
               </div>
@@ -118,7 +93,7 @@ const CTASection = () => {
 
         {/* Bottom Message */}
         <div className="text-center mt-16">
-          <p className="text-green-100 text-lg">
+          <p className="text-slate-300 text-lg">
             <span className="font-semibold text-white">Gratuito para começar.</span> Sem compromisso. Cancele quando quiser.
           </p>
         </div>

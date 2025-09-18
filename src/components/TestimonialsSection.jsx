@@ -78,7 +78,7 @@ const TestimonialsSection = () => {
   ];
 
   return (
-    <section className="bg-gradient-to-br from-green-50 to-emerald-50 px-4 py-20 sm:px-6 lg:px-8">
+    <section className="px-4 py-20 sm:px-6 lg:px-8">
       <div className="max-w-8xl mx-auto">
         {/* Header */}
         <div
@@ -87,7 +87,7 @@ const TestimonialsSection = () => {
           }`}
           ref={headerRef}
         >
-          <div className="mb-6 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-800">
+          <div className="mb-6 inline-flex items-center rounded-full bg-emerald-500/20 px-4 py-2 text-sm font-medium text-emerald-300 border border-emerald-400/30 backdrop-blur-sm">
             <svg
               className="mr-2 h-4 w-4"
               fill="none"
@@ -103,13 +103,13 @@ const TestimonialsSection = () => {
             </svg>
             Depoimentos
           </div>
-          <h2 className="mb-6 text-4xl font-bold leading-tight text-gray-900 md:text-5xl lg:text-6xl">
+          <h2 className="mb-6 text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl">
             Histórias de
-            <span className="block bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent">
               Impacto Real
             </span>
           </h2>
-          <p className="mx-auto max-w-3xl text-xl leading-relaxed text-gray-600">
+          <p className="mx-auto max-w-3xl text-xl leading-relaxed text-slate-300">
             Descubra como comunidades, pesquisadores e organizações estão usando
             o OrBee para criar um futuro mais sustentável.
           </p>
@@ -124,10 +124,10 @@ const TestimonialsSection = () => {
         >
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
-              <div className="mb-2 text-3xl font-bold text-green-600 md:text-4xl">
+              <div className="mb-2 text-3xl font-bold text-emerald-400 md:text-4xl">
                 {stat.number}
               </div>
-              <div className="text-sm font-medium text-gray-600">
+              <div className="text-sm font-medium text-slate-300">
                 {stat.label}
               </div>
             </div>
@@ -141,19 +141,19 @@ const TestimonialsSection = () => {
           }`}
           ref={ctaRef}
         >
-          <div className="mx-auto max-w-2xl rounded-3xl border border-green-100 bg-white p-8 shadow-lg">
-            <h3 className="mb-4 text-2xl font-bold text-gray-900">
+          <div className="mx-auto max-w-2xl rounded-3xl border border-emerald-400/30 bg-slate-900/60 backdrop-blur-md p-8 shadow-lg">
+            <h3 className="mb-4 text-2xl font-bold text-white">
               Faça Parte da Nossa Comunidade
             </h3>
-            <p className="mb-6 text-gray-600">
+            <p className="mb-6 text-slate-300">
               Junte-se a centenas de organizações que já estão fazendo a
               diferença com o OrBee.
             </p>
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
-              <button className="rounded-2xl bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:from-green-700 hover:to-emerald-700 hover:shadow-xl">
+              <button className="rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 px-6 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:from-emerald-600 hover:to-green-700 hover:shadow-xl hover:shadow-emerald-500/25 border border-emerald-400/30">
                 Começar Agora
               </button>
-              <button className="rounded-2xl border-2 border-green-600 px-6 py-3 font-semibold text-green-600 transition-all duration-300 hover:bg-green-600 hover:text-white">
+              <button className="rounded-2xl border-2 border-emerald-400/50 px-6 py-3 font-semibold text-emerald-300 transition-all duration-300 hover:bg-emerald-500/20 hover:text-emerald-200 backdrop-blur-sm">
                 Agendar Demo
               </button>
             </div>

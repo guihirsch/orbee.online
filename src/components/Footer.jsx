@@ -69,14 +69,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative bg-gray-900 text-white overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          backgroundSize: '60px 60px'
-        }}></div>
-      </div>
+    <footer className="relative text-white overflow-hidden">
 
       <div className={`relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 fade-in-on-scroll ${footerVisible ? 'visible' : ''}`} ref={footerRef}>
         {/* Main Footer Content */}
@@ -84,28 +77,28 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-600 rounded-2xl flex items-center justify-center hover-glow">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-green-600 rounded-2xl flex items-center justify-center">
                 <span className="text-white font-bold text-xl">🐝</span>
               </div>
-              <span className="text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+              <span className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent">
                 OrBee
               </span>
             </div>
-            <p className="text-gray-300 mb-6 max-w-md leading-relaxed">
+            <p className="text-slate-300 mb-6 max-w-md leading-relaxed">
               <span className="font-semibold text-white">Inteligência coletiva para um futuro sustentável.</span>
               <br />Conectamos satélites, comunidades e governos para ações locais com impacto global.
             </p>
             
             {/* Newsletter Signup */}
             <div className="mb-6">
-              <h4 className="text-lg font-semibold mb-3 text-green-400">Fique por dentro das novidades</h4>
+              <h4 className="text-lg font-semibold mb-3 text-emerald-400">Fique por dentro das novidades</h4>
               <div className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="email"
                   placeholder="Seu melhor e-mail"
-                  className="flex-1 px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+                  className="flex-1 px-4 py-3 bg-slate-900/60 border border-emerald-400/30 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300 backdrop-blur-sm"
                 />
-                <button className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                <button className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-semibold rounded-xl hover:from-emerald-600 hover:to-green-700 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25 border border-emerald-400/30">
                   Inscrever
                 </button>
               </div>
@@ -117,7 +110,7 @@ const Footer = () => {
                 <a
                   key={index}
                   href={social.href}
-                  className="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-green-600 transition-all duration-300 hover:scale-110 hover:shadow-lg"
+                  className="w-12 h-12 bg-slate-900/60 rounded-xl flex items-center justify-center text-slate-400 hover:text-white hover:bg-emerald-600 transition-all duration-300 hover:scale-110 hover:shadow-lg backdrop-blur-sm border border-emerald-400/20"
                   aria-label={social.name}
                 >
                   {social.icon}
@@ -128,13 +121,13 @@ const Footer = () => {
 
           {/* Navigation Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-6 text-green-400">Navegação</h3>
+            <h3 className="text-lg font-semibold mb-6 text-emerald-400">Navegação</h3>
             <ul className="space-y-3">
               {navigationLinks.map((link, index) => (
                 <li key={index}>
                   <Link
                     to={link.href}
-                    className="text-gray-300 hover:text-white hover:translate-x-2 transition-all duration-300 flex items-center group"
+                    className="text-slate-300 hover:text-white hover:translate-x-2 transition-all duration-300 flex items-center group"
                   >
                     <svg className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -148,13 +141,13 @@ const Footer = () => {
 
           {/* Resources */}
           <div>
-            <h3 className="text-lg font-semibold mb-6 text-green-400">Recursos</h3>
+            <h3 className="text-lg font-semibold mb-6 text-emerald-400">Recursos</h3>
             <ul className="space-y-3">
               {resourceLinks.map((link, index) => (
                 <li key={index}>
                   <Link
                     to={link.href}
-                    className="text-gray-300 hover:text-white hover:translate-x-2 transition-all duration-300 flex items-center group"
+                    className="text-slate-300 hover:text-white hover:translate-x-2 transition-all duration-300 flex items-center group"
                   >
                     <svg className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -168,13 +161,13 @@ const Footer = () => {
 
           {/* Legal */}
           <div>
-            <h3 className="text-lg font-semibold mb-6 text-green-400">Legal</h3>
+            <h3 className="text-lg font-semibold mb-6 text-emerald-400">Legal</h3>
             <ul className="space-y-3">
               {legalLinks.map((link, index) => (
                 <li key={index}>
                   <Link
                     to={link.href}
-                    className="text-gray-300 hover:text-white hover:translate-x-2 transition-all duration-300 flex items-center group"
+                    className="text-slate-300 hover:text-white hover:translate-x-2 transition-all duration-300 flex items-center group"
                   >
                     <svg className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -188,15 +181,15 @@ const Footer = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-800 pt-8">
+        <div className="border-t border-emerald-400/30 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex flex-col md:flex-row items-center gap-6">
-              <p className="text-gray-400 text-sm">
+              <p className="text-slate-400 text-sm">
                 © {currentYear} OrBee. Todos os direitos reservados.
               </p>
-              <div className="flex items-center gap-4 text-sm text-gray-400">
+              <div className="flex items-center gap-4 text-sm text-slate-400">
                 <span className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
                   Sistema operacional
                 </span>
                 <span>•</span>
@@ -205,10 +198,10 @@ const Footer = () => {
             </div>
             
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-400">Feito com</span>
+              <span className="text-sm text-slate-400">Feito com</span>
               <span className="text-red-500 animate-pulse">❤️</span>
-              <span className="text-sm text-gray-400">no Brasil</span>
-              <span className="text-green-500">🇧🇷</span>
+              <span className="text-sm text-slate-400">no Brasil</span>
+              <span className="text-emerald-500">🇧🇷</span>
             </div>
           </div>
         </div>
