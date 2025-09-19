@@ -13,14 +13,18 @@ Esta pasta contém a documentação específica do projeto OrBee.Online, incluin
 ## 📁 Arquivos Disponíveis
 
 ### 🔧 Configuração e Setup
+
 - **[setup.md](./setup.md)** - Guia de configuração inicial do projeto
 - **[deployment.md](./deployment.md)** - Instruções de deploy na Railway
 
 ### 🎨 Design e Componentes
+
 - **[design-system.md](./design-system.md)** - Design system específico do OrBee
 - **[components.md](./components.md)** - Documentação dos componentes React implementados
+- **[storybook.md](./storybook.md)** - Documentação completa do Storybook e stories
 
 ### 🤝 Contribuição
+
 - **[contributing.md](./contributing.md)** - Guia para contribuidores do projeto
 
 ---
@@ -28,11 +32,13 @@ Esta pasta contém a documentação específica do projeto OrBee.Online, incluin
 ## 🎯 Sobre o OrBee.Online
 
 ### Missão
+
 **"Inteligência coletiva para um futuro sustentável"**
 
 Plataforma que combina dados satelitais NDVI com validação comunitária para monitoramento da saúde da mata ciliar e outros ecossistemas.
 
 ### Tecnologias Principais
+
 - **Frontend**: React 18 + Vite + Tailwind CSS + DaisyUI
 - **Backend**: FastAPI (em desenvolvimento)
 - **Banco de Dados**: Supabase
@@ -40,6 +46,7 @@ Plataforma que combina dados satelitais NDVI com validação comunitária para m
 - **Deploy**: Railway
 
 ### Funcionalidades Implementadas
+
 - ✅ Landing page responsiva
 - ✅ Dashboard de monitoramento NDVI
 - ✅ Sistema de comunidade e gamificação
@@ -60,6 +67,7 @@ Plataforma que combina dados satelitais NDVI com validação comunitária para m
 ## 📊 Status do Desenvolvimento
 
 ### ✅ Concluído
+
 - [x] Estrutura inicial do frontend React
 - [x] Layout responsivo com Tailwind CSS
 - [x] Páginas principais (Home, Dashboard, Community, Profile)
@@ -70,6 +78,7 @@ Plataforma que combina dados satelitais NDVI com validação comunitária para m
 - [x] Design system consistente
 
 ### 🔄 Em Desenvolvimento
+
 - [ ] Integração com Mapbox para visualização de mapas
 - [ ] Conexão com API Copernicus/Sentinel Hub
 - [ ] Backend FastAPI
@@ -77,6 +86,7 @@ Plataforma que combina dados satelitais NDVI com validação comunitária para m
 - [ ] Sistema de upload de imagens
 
 ### 📋 Próximos Passos
+
 - [ ] Implementação de gráficos temporais
 - [ ] Sistema de alertas e notificações
 - [ ] Deploy na Railway

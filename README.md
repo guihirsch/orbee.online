@@ -19,6 +19,7 @@ OrBee.Online é uma plataforma de monitoramento ambiental que combina dados sate
 ## 🚀 Tecnologias Utilizadas
 
 ### Frontend
+
 - **React 18** com Vite
 - **Tailwind CSS** para estilização
 - **React Router** para navegação
@@ -27,38 +28,52 @@ OrBee.Online é uma plataforma de monitoramento ambiental que combina dados sate
 - **Lucide React** para ícones
 
 ### Backend (Planejado)
+
 - **FastAPI** com padrão Service-Repository
 - **Supabase** como banco de dados
 - **Copernicus/Sentinel Hub API** para dados NDVI
 
 ### Infraestrutura
+
 - **Railway** para deploy
+
+### Desenvolvimento e Documentação
+
+- **Storybook** para desenvolvimento isolado de componentes
+- **Documentação interativa** com stories completas
+- **Testes visuais** em múltiplos viewports
+- **Design system** padronizado e reutilizável
 
 ## 📦 Instalação e Execução
 
 ### Pré-requisitos
-- Node.js 18+ 
+
+- Node.js 18+
 - npm ou yarn
 
 ### Passos para Execução
 
 1. **Clone o repositório**
+
 ```bash
 git clone https://github.com/seu-usuario/orbee.online.git
 cd orbee.online
 ```
 
 2. **Instale as dependências**
+
 ```bash
 npm install
 ```
 
 3. **Execute o projeto em modo de desenvolvimento**
+
 ```bash
 npm run dev
 ```
 
 4. **Acesse a aplicação**
+
 ```
 http://localhost:3000
 ```
@@ -69,6 +84,8 @@ http://localhost:3000
 - `npm run build` - Gera build de produção
 - `npm run preview` - Visualiza build de produção
 - `npm run lint` - Executa linting do código
+- `npm run storybook` - Executa Storybook para desenvolvimento de componentes
+- `npm run build-storybook` - Gera build do Storybook para produção
 
 ## 🎯 Público-Alvo
 
@@ -98,14 +115,19 @@ http://localhost:3000
 ## 🚧 Status do Desenvolvimento
 
 ### ✅ Concluído
+
 - [x] Estrutura inicial do frontend React
 - [x] Layout responsivo com Tailwind CSS
 - [x] Páginas principais (Home, Dashboard, Community, Profile)
 - [x] Sistema de navegação e roteamento
 - [x] Interface para validação comunitária
 - [x] Sistema básico de gamificação
+- [x] **Storybook completo** com 15+ componentes documentados
+- [x] **Stories interativas** com variações responsivas
+- [x] **Design system** padronizado e documentado
 
 ### 🔄 Em Desenvolvimento
+
 - [ ] Integração com Mapbox para visualização de mapas
 - [ ] Conexão com API Copernicus/Sentinel Hub
 - [ ] Backend FastAPI
@@ -113,6 +135,7 @@ http://localhost:3000
 - [ ] Sistema de upload de imagens
 
 ### 📋 Próximos Passos
+
 - [ ] Implementação de gráficos temporais
 - [ ] Sistema de alertas e notificações
 - [ ] Deploy na Railway
@@ -135,6 +158,26 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 ## 📞 Contato
 
 Para dúvidas ou sugestões, entre em contato através dos issues do GitHub.
+
+---
+
+## 📚 Estrutura da Documentação
+
+A documentação do projeto está organizada na pasta `/docs/`:
+
+### Documentação do Projeto (`/docs/projeto/`)
+
+- **[README.md](./docs/projeto/README.md)** - Visão geral da documentação específica
+- **[setup.md](./docs/projeto/setup.md)** - Configuração inicial do projeto
+- **[components.md](./docs/projeto/components.md)** - Documentação dos componentes React
+- **[storybook.md](./docs/projeto/storybook.md)** - Guia completo do Storybook
+- **[design-system.md](./docs/projeto/design-system.md)** - Design system implementado
+- **[deployment.md](./docs/projeto/deployment.md)** - Guia de deploy na Railway
+- **[contributing.md](./docs/projeto/contributing.md)** - Guia de contribuição
+
+### Histórico de Alterações
+
+- **[CHANGELOG.md](./docs/CHANGELOG.md)** - Registro detalhado de todas as alterações
 
 ---
 

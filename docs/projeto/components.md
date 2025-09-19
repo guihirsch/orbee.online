@@ -532,3 +532,284 @@ const fetchData = async () => {
 - [ ] DataExport - Exportação de dados
 - [ ] OfflineMode - Modo offline
 - [ ] PWAFeatures - Funcionalidades PWA
+
+---
+
+## Storybook - Documentação Interativa dos Componentes
+
+### Visão Geral
+
+O OrBee.Online utiliza o Storybook para documentação interativa e desenvolvimento isolado de componentes. Cada componente principal possui stories que demonstram suas variações, estados e funcionalidades.
+
+### Executando o Storybook
+
+```bash
+# Desenvolvimento
+npm run storybook
+
+# Build para produção
+npm run build-storybook
+```
+
+### Stories Implementadas
+
+#### Componentes de Landing Page
+
+**AchievementsSection.stories.jsx**
+
+- Default: Exibição padrão com métricas
+- WithCustomBackground: Fundo personalizado
+- MobileView: Visualização mobile
+- TabletView: Visualização tablet
+- InteractiveDemo: Demonstração interativa
+- MetricsShowcase: Showcase das métricas
+- AchievementLevels: Diferentes níveis de conquista
+- ResponsiveDemo: Demonstração responsiva
+
+**CTASection.stories.jsx**
+
+- Default: Call-to-action padrão
+- WithCustomBackground: Fundo personalizado
+- MobileView: Visualização mobile
+- InteractiveDemo: Demonstração interativa
+- ElementsShowcase: Showcase dos elementos
+- ButtonVariations: Variações de botões
+- ResponsiveDemo: Demonstração responsiva
+- ConversionDemo: Demonstração de conversão
+
+**FAQSection.stories.jsx**
+
+- Default: FAQ padrão
+- DarkBackground: Fundo escuro
+- MobileView: Visualização mobile
+- TabletView: Visualização tablet
+- InteractiveDemo: Demonstração interativa
+- ElementsShowcase: Showcase dos elementos
+- FAQStates: Estados das perguntas
+- CompactVersion: Versão compacta
+- ResponsiveDemo: Demonstração responsiva
+
+**HowItWorksSection.stories.jsx**
+
+- Default: Seção padrão
+- WithCustomBackground: Fundo personalizado
+- MobileView: Visualização mobile
+- TabletView: Visualização tablet
+- InteractiveDemo: Demonstração interativa
+- StepsShowcase: Showcase dos passos
+- CompactVersion: Versão compacta
+- ResponsiveDemo: Demonstração responsiva
+
+**ProblemSection.stories.jsx**
+
+- Default: Seção padrão
+- LightBackground: Fundo claro
+- MobileView: Visualização mobile
+- TabletView: Visualização tablet
+- InteractiveDemo: Demonstração interativa
+- ElementsShowcase: Showcase dos elementos
+- ImpactComparison: Comparação de impacto
+- CompactVersion: Versão compacta
+- ResponsiveDemo: Demonstração responsiva
+
+**SolutionSection.stories.jsx**
+
+- Default: Seção padrão
+- LightBackground: Fundo claro
+- MobileView: Visualização mobile
+- TabletView: Visualização tablet
+- InteractiveDemo: Demonstração interativa
+- ElementsShowcase: Showcase dos elementos
+- ColorVariations: Variações de cor
+- CompactVersion: Versão compacta
+- ResponsiveDemo: Demonstração responsiva
+
+**TestimonialsSection.stories.jsx**
+
+- Default: Depoimentos padrão
+- WithCustomBackground: Fundo personalizado
+- MobileView: Visualização mobile
+- TabletView: Visualização tablet
+- InteractiveDemo: Demonstração interativa
+- ElementsShowcase: Showcase dos elementos
+- ResponsiveDemo: Demonstração responsiva
+- AccessibilityDemo: Demonstração de acessibilidade
+
+#### Componentes de Interface
+
+**Header.stories.jsx**
+
+- Default: Cabeçalho padrão
+- WithPageContent: Com conteúdo da página
+- MobileView: Visualização mobile
+- TabletView: Visualização tablet
+- NavigationDemo: Demonstração de navegação
+- ResponsiveDemo: Demonstração responsiva
+
+**Footer.stories.jsx**
+
+- Default: Rodapé padrão
+- LightBackground: Fundo claro
+- MobileView: Visualização mobile
+- TabletView: Visualização tablet
+- InteractiveDemo: Demonstração interativa
+- ElementsShowcase: Showcase dos elementos
+- SectionsBreakdown: Breakdown das seções
+- CompactVersion: Versão compacta
+- ResponsiveDemo: Demonstração responsiva
+
+**Layout.stories.jsx**
+
+- Default: Layout padrão
+- WithPageContent: Com conteúdo da página
+- MobileView: Visualização mobile
+- TabletView: Visualização tablet
+- ResponsiveDemo: Demonstração responsiva
+
+**AppSidebar.stories.jsx**
+
+- Default: Sidebar padrão
+- WithContent: Com conteúdo
+- MobileView: Visualização mobile
+- CollapsedState: Estado colapsado
+- InteractiveDemo: Demonstração interativa
+- ResponsiveDemo: Demonstração responsiva
+
+#### Componentes de Dados NDVI
+
+**NDVIMap.stories.jsx**
+
+- Default: Mapa padrão
+- WithData: Com dados NDVI
+- MobileView: Visualização mobile
+- TabletView: Visualização tablet
+- InteractiveDemo: Demonstração interativa
+- LayersShowcase: Showcase das camadas
+- ResponsiveDemo: Demonstração responsiva
+
+**NDVIChart.stories.jsx**
+
+- Default: Gráfico padrão
+- WithData: Com dados temporais
+- MobileView: Visualização mobile
+- TabletView: Visualização tablet
+- InteractiveDemo: Demonstração interativa
+- PeriodsShowcase: Showcase dos períodos
+- ResponsiveDemo: Demonstração responsiva
+
+**ZoneCard.stories.jsx**
+
+- Default: Card padrão
+- WithData: Com dados da zona
+- MobileView: Visualização mobile
+- TabletView: Visualização tablet
+- InteractiveDemo: Demonstração interativa
+- StatesShowcase: Showcase dos estados
+- ResponsiveDemo: Demonstração responsiva
+
+#### Componentes de UI Base
+
+**FeaturesSection.stories.jsx**
+
+- Default: Seção padrão
+- WithCustomBackground: Fundo personalizado
+- MobileView: Visualização mobile
+- TabletView: Visualização tablet
+- InteractiveDemo: Demonstração interativa
+- FeaturesShowcase: Showcase das funcionalidades
+- ResponsiveDemo: Demonstração responsiva
+
+**HeroSection.stories.jsx**
+
+- Default: Hero padrão
+- WithCustomBackground: Fundo personalizado
+- MobileView: Visualização mobile
+- TabletView: Visualização tablet
+- InteractiveDemo: Demonstração interativa
+- ElementsShowcase: Showcase dos elementos
+- ResponsiveDemo: Demonstração responsiva
+
+### Configurações do Storybook
+
+#### Addons Configurados
+
+- **Controls**: Controles interativos para props
+- **Docs**: Documentação automática
+- **Viewport**: Simulação de diferentes dispositivos
+- **Essentials**: Conjunto essencial de addons
+
+#### Decorators Padrão
+
+- **BrowserRouter**: Para componentes que usam roteamento
+- **Backgrounds**: Fundos personalizados para testes visuais
+- **Themes**: Aplicação do tema OrBee
+
+#### Parâmetros Globais
+
+- **Layout**: Configuração de layout (centered, fullscreen, padded)
+- **Viewport**: Breakpoints responsivos (mobile, tablet, desktop)
+- **Backgrounds**: Gradientes e cores do sistema OrBee
+
+### Padrões de Nomenclatura
+
+#### Variações Padrão
+
+- `Default`: Implementação padrão do componente
+- `MobileView`: Otimizado para dispositivos móveis
+- `TabletView`: Otimizado para tablets
+- `InteractiveDemo`: Demonstração com controles interativos
+- `ElementsShowcase`: Showcase de elementos individuais
+- `ResponsiveDemo`: Demonstração de responsividade
+- `WithCustomBackground`: Com fundo personalizado
+- `CompactVersion`: Versão compacta do componente
+
+#### ArgTypes Comuns
+
+- `backgroundColor`: Cor de fundo
+- `textColor`: Cor do texto
+- `showElements`: Exibir/ocultar elementos
+- `isInteractive`: Habilitar interatividade
+- `size`: Tamanho do componente
+- `variant`: Variação do componente
+
+### Boas Práticas
+
+#### Estrutura das Stories
+
+1. **Configuração padrão** com título e componente
+2. **Parâmetros globais** para layout e documentação
+3. **Tags autodocs** para documentação automática
+4. **Decorators** para contexto necessário
+5. **Variações** organizadas por funcionalidade
+
+#### Controles Interativos
+
+- Usar `argTypes` para definir controles
+- Implementar `args` para valores padrão
+- Criar `actions` para callbacks
+- Documentar props com descrições claras
+
+#### Responsividade
+
+- Testar em múltiplos viewports
+- Criar variações específicas para mobile/tablet
+- Usar parâmetros de viewport para demonstrações
+- Validar comportamento em diferentes tamanhos
+
+### Integração com Desenvolvimento
+
+#### Fluxo de Trabalho
+
+1. **Desenvolvimento**: Criar componente isoladamente
+2. **Stories**: Documentar variações e estados
+3. **Testes**: Validar comportamento visual
+4. **Integração**: Incorporar na aplicação principal
+5. **Documentação**: Atualizar docs com exemplos
+
+#### Benefícios
+
+- **Desenvolvimento isolado** de componentes
+- **Documentação viva** sempre atualizada
+- **Testes visuais** automatizados
+- **Colaboração** entre design e desenvolvimento
+- **Reutilização** de componentes padronizados
