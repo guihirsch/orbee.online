@@ -2,17 +2,10 @@ import { useState } from "react";
 import ZoneCard from "./ZoneCard";
 
 export default {
-  title: "OrBee/ZoneCard",
+  title: "Data/ZoneCard",
   component: ZoneCard,
   parameters: {
     layout: "padded",
-    backgrounds: {
-      default: "dark",
-      values: [
-        { name: "dark", value: "#0f172a" },
-        { name: "light", value: "#ffffff" },
-      ],
-    },
   },
   tags: ["autodocs"],
   argTypes: {
@@ -27,6 +20,10 @@ export default {
     selectedZone: {
       control: "text",
       description: "ID da zona atualmente selecionada",
+    },
+    backgroundColor: {
+      control: { type: "color" },
+      description: "Cor de fundo do componente",
     },
     selectedZones: {
       control: "object",

@@ -3,32 +3,18 @@ import { BrowserRouter } from "react-router-dom";
 import HeroSection from "./HeroSection";
 
 export default {
-  title: "OrBee/Landing Page/HeroSection",
+  title: "Landing/HeroSection",
   component: HeroSection,
   parameters: {
     layout: "fullscreen",
-    backgrounds: {
-      default: "dark",
-      values: [
-        { name: "dark", value: "#0f172a" },
-        {
-          name: "gradient",
-          value:
-            "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)",
-        },
-      ],
+  },
+  tags: ["autodocs"],
+  argTypes: {
+    backgroundColor: {
+      control: { type: "color" },
+      description: "Cor de fundo do componente",
     },
   },
-  decorators: [
-    (Story) => (
-      <BrowserRouter>
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
-          <Story />
-        </div>
-      </BrowserRouter>
-    ),
-  ],
-  tags: ["autodocs"],
 };
 
 export const Default = {
@@ -53,15 +39,6 @@ export const MobileView = {
       defaultViewport: "mobile1",
     },
   },
-  decorators: [
-    (Story) => (
-      <BrowserRouter>
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
-          <Story />
-        </div>
-      </BrowserRouter>
-    ),
-  ],
 };
 
 export const TabletView = {
@@ -70,15 +47,6 @@ export const TabletView = {
       defaultViewport: "tablet",
     },
   },
-  decorators: [
-    (Story) => (
-      <BrowserRouter>
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
-          <Story />
-        </div>
-      </BrowserRouter>
-    ),
-  ],
 };
 
 // Demonstração interativa com diferentes backgrounds

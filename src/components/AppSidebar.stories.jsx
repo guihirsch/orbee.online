@@ -10,15 +10,12 @@ export default {
     layout: "fullscreen",
   },
   tags: ["autodocs"],
-  decorators: [
-    (Story) => (
-      <BrowserRouter>
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
-          <Story />
-        </div>
-      </BrowserRouter>
-    ),
-  ],
+  argTypes: {
+    backgroundColor: {
+      control: { type: "color" },
+      description: "Cor de fundo do componente",
+    },
+  },
 };
 
 // Template base para as stories

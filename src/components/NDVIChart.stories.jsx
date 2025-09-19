@@ -2,7 +2,7 @@ import { useState } from "react";
 import NDVIChart from "./NDVIChart";
 
 export default {
-  title: "OrBee/NDVIChart",
+  title: "Data/NDVIChart",
   component: NDVIChart,
   parameters: {
     layout: "padded",
@@ -27,6 +27,10 @@ export default {
     showControls: {
       control: "boolean",
       description: "Mostrar controles do gráfico",
+    },
+    backgroundColor: {
+      control: { type: "color" },
+      description: "Cor de fundo do componente",
     },
   },
 };

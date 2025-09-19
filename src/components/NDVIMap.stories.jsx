@@ -2,7 +2,7 @@ import { useState } from "react";
 import NDVIMap from "./NDVIMap";
 
 export default {
-  title: "OrBee/NDVIMap",
+  title: "Data/NDVIMap",
   component: NDVIMap,
   parameters: {
     layout: "fullscreen",
@@ -24,6 +24,10 @@ export default {
     showControls: {
       control: "boolean",
       description: "Mostrar controles personalizados",
+    },
+    backgroundColor: {
+      control: { type: "color" },
+      description: "Cor de fundo do componente",
     },
   },
 };
@@ -52,6 +56,63 @@ export const SantaCruzDoSul = {
   render: (args) => (
     <div className="h-screen w-full">
       <NDVIMap {...args} />
+    </div>
+  ),
+};
+
+export const MobileView = {
+  parameters: {
+    viewport: {
+      defaultViewport: "mobile1",
+    },
+  },
+  args: {
+    latitude: -29.7175,
+    longitude: -52.4264,
+    zoom: 12,
+    showControls: true,
+  },
+  render: (args) => (
+    <div className="h-screen w-full">
+      <NDVIMap {...args} />
+    </div>
+  ),
+};
+
+export const TabletView = {
+  parameters: {
+    viewport: {
+      defaultViewport: "tablet",
+    },
+  },
+  args: {
+    latitude: -29.7175,
+    longitude: -52.4264,
+    zoom: 13,
+    showControls: true,
+  },
+  render: (args) => (
+    <div className="h-screen w-full">
+      <NDVIMap {...args} />
+    </div>
+  ),
+};
+
+export const ResponsiveDemo = {
+  parameters: {
+    viewport: {
+      defaultViewport: "desktop",
+    },
+  },
+  render: () => (
+    <div className="space-y-4">
+      <div className="text-center text-white p-4">
+        <h3 className="text-lg font-semibold mb-2">Mapa NDVI Responsivo</h3>
+        <p className="text-sm text-gray-300">Adaptação automática para diferentes tamanhos de tela</p>
+      </div>
+      <div className="h-96 w-full">
+        <NDVIMap latitude={-29.7175} longitude={-52.4264} zoom={13} showControls={true} />
+      </div>
     </div>
   ),
 };

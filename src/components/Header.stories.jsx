@@ -8,15 +8,29 @@ export default {
     layout: "fullscreen",
   },
   tags: ["autodocs"],
-  decorators: [
-    (Story) => (
-      <BrowserRouter>
-        <div className="min-h-screen bg-gradient-to-br from-[#D9ED92] via-[#B5E48C] to-[#99D98C]">
-          <Story />
-        </div>
-      </BrowserRouter>
-    ),
-  ],
+  argTypes: {
+    backgroundColor: {
+      control: { type: "color" },
+      description: "Cor de fundo do componente",
+    },
+    textColor: {
+      control: { type: "color" },
+      description: "Cor do texto",
+    },
+    variant: {
+      control: { type: "radio" },
+      options: ["default", "transparent", "solid"],
+      description: "Variação do header",
+    },
+    showLogo: {
+      control: { type: "boolean" },
+      description: "Mostrar logo",
+    },
+    isFixed: {
+      control: { type: "boolean" },
+      description: "Header fixo no topo",
+    },
+  },
 };
 
 export const Default = {

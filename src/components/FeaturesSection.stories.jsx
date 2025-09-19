@@ -3,20 +3,16 @@ import { BrowserRouter } from "react-router-dom";
 import FeaturesSection from "./FeaturesSection";
 
 export default {
-  title: "OrBee/Landing Page/FeaturesSection",
+  title: "UI/FeaturesSection",
   component: FeaturesSection,
   parameters: {
     layout: "fullscreen",
-    backgrounds: {
-      default: "dark",
-      values: [
-        { name: "dark", value: "#0f172a" },
-        {
-          name: "gradient",
-          value:
-            "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)",
-        },
-      ],
+  },
+  tags: ["autodocs"],
+  argTypes: {
+    backgroundColor: {
+      control: { type: "color" },
+      description: "Cor de fundo do componente",
     },
   },
   decorators: [

@@ -8,15 +8,29 @@ export default {
     layout: "fullscreen",
   },
   tags: ["autodocs"],
-  decorators: [
-    (Story) => (
-      <BrowserRouter>
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
-          <Story />
-        </div>
-      </BrowserRouter>
-    ),
-  ],
+  argTypes: {
+    backgroundColor: {
+      control: { type: "color" },
+      description: "Cor de fundo do componente",
+    },
+    textColor: {
+      control: { type: "color" },
+      description: "Cor do texto",
+    },
+    showSocialLinks: {
+      control: { type: "boolean" },
+      description: "Mostrar links sociais",
+    },
+    showNewsletter: {
+      control: { type: "boolean" },
+      description: "Mostrar seção de newsletter",
+    },
+    variant: {
+      control: { type: "select" },
+      options: ["default", "minimal", "extended"],
+      description: "Variação do footer",
+    },
+  },
 };
 
 export const Default = {

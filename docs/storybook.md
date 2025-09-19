@@ -136,7 +136,7 @@ src/components/
 
 ### Configuração Atual
 
-A configuração foi simplificada para máxima compatibilidade:
+A configuração foi otimizada com os addons disponíveis:
 
 **main.js:**
 ```javascript
@@ -146,18 +146,27 @@ const config = {
   addons: [
     '@storybook/addon-onboarding',
     '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    '@chromatic-com/storybook',
+    '@storybook/addon-essentials', // Inclui: controls, docs, viewport, backgrounds, actions
     '@storybook/addon-interactions',
   ],
   framework: {
     name: '@storybook/react-vite',
     options: {},
   },
+  docs: {
+    autodocs: 'tag',
+  },
 };
 
 export default config;
 ```
+
+**Nota:** O addon `@storybook/addon-essentials` já inclui os principais addons necessários:
+- `@storybook/addon-controls` - Controles interativos
+- `@storybook/addon-docs` - Documentação automática
+- `@storybook/addon-viewport` - Testes de viewport
+- `@storybook/addon-backgrounds` - Backgrounds personalizados
+- `@storybook/addon-actions` - Actions para callbacks
 
 **vite.config.js:**
 ```javascript
@@ -209,33 +218,31 @@ export const Default = {
 
 #### 1. Landing Page Components
 
-- `Landing/AchievementsSection`
-- `Landing/CTASection`
-- `Landing/FAQSection`
-- `Landing/HowItWorksSection`
-- `Landing/ProblemSection`
-- `Landing/SolutionSection`
-- `Landing/TestimonialsSection`
+- `Landing/AchievementsSection` - Seção de conquistas e métricas
+- `Landing/CTASection` - Call-to-action principal
+- `Landing/FAQSection` - Perguntas frequentes
+- `Landing/HowItWorksSection` - Como funciona a plataforma
+- `Landing/ProblemSection` - Apresentação do problema
+- `Landing/SolutionSection` - Nossa solução
+- `Landing/TestimonialsSection` - Depoimentos de usuários
 
 #### 2. Layout Components
 
-- `Layout/Header`
-- `Layout/Footer`
-- `Layout/Layout`
-- `Layout/AppSidebar`
+- `Layout/Header` - Cabeçalho da aplicação
+- `Layout/Footer` - Rodapé com links e informações
+- `Layout/Layout` - Layout base da aplicação
+- `Layout/AppSidebar` - Barra lateral do dashboard
 
 #### 3. Data Components
 
-- `Data/NDVIMap`
-- `Data/NDVIChart`
-- `Data/ZoneCard`
+- `Data/NDVIMap` - Mapa interativo com dados NDVI
+- `Data/NDVIChart` - Gráfico de evolução temporal NDVI
+- `Data/ZoneCard` - Card de zona de monitoramento
 
 #### 4. UI Components
 
-- `UI/FeaturesSection`
-- `UI/HeroSection`
-- `UI/Input`
-- `UI/Sidebar`
+- `UI/FeaturesSection` - Seção de funcionalidades
+- `UI/HeroSection` - Seção hero da landing page
 
 ## Padrões de Variações
 
@@ -263,6 +270,7 @@ Toda story deve incluir pelo menos:
 ```jsx
 // .storybook/preview.js
 import { BrowserRouter } from "react-router-dom";
+import '../src/index.css';
 
 export const decorators = [
   (Story) => (
@@ -294,6 +302,30 @@ export const parameters = {
         styles: { width: "1200px", height: "800px" },
       },
     },
+    defaultViewport: 'desktop',
+  },
+  backgrounds: {
+    default: 'orbee-gradient',
+    values: [
+      {
+        name: 'orbee-gradient',
+        value: 'linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #064e3b 100%)',
+      },
+      {
+        name: 'light',
+        value: '#ffffff',
+      },
+      {
+        name: 'dark',
+        value: '#1a1a1a',
+      },
+    ],
+  },
+  controls: {
+    matchers: {
+      color: /(background|color)$/i,
+      date: /Date$/,
+    },
   },
 };
 ```
@@ -324,8 +356,23 @@ export const parameters = {
 
 ## Controles Interativos
 
-### ArgTypes Comuns
+### ArgTypes Implementados
 
+Todas as stories foram padronizadas com argTypes consistentes:
+
+#### ArgTypes Básicos (Todos os Componentes)
+```jsx
+argTypes: {
+  backgroundColor: {
+    control: { type: 'color' },
+    description: 'Cor de fundo do componente',
+  },
+}
+```
+
+#### ArgTypes Específicos por Categoria
+
+**Header/Footer:**
 ```jsx
 argTypes: {
   backgroundColor: {
@@ -336,21 +383,40 @@ argTypes: {
     control: { type: 'color' },
     description: 'Cor do texto',
   },
-  size: {
-    control: { type: 'select' },
-    options: ['small', 'medium', 'large'],
-    description: 'Tamanho do componente',
-  },
-  isVisible: {
-    control: { type: 'boolean' },
-    description: 'Controla a visibilidade',
-  },
   variant: {
     control: { type: 'radio' },
-    options: ['primary', 'secondary', 'tertiary'],
+    options: ['default', 'transparent', 'solid'],
     description: 'Variação do componente',
   },
+  showLogo: {
+    control: { type: 'boolean' },
+    description: 'Exibir logo',
+  },
+  isFixed: {
+    control: { type: 'boolean' },
+    description: 'Header fixo no topo',
+  },
+  showSocialLinks: {
+    control: { type: 'boolean' },
+    description: 'Exibir links sociais',
+  },
+  showNewsletter: {
+    control: { type: 'boolean' },
+    description: 'Exibir seção de newsletter',
+  },
 }
+```
+
+**Componentes de Dados:**
+```jsx
+argTypes: {
+  backgroundColor: {
+    control: { type: 'color' },
+    description: 'Cor de fundo do componente',
+  },
+  // Controles específicos para dados NDVI, mapas, etc.
+}
+```
 ```
 
 ### Actions para Callbacks
@@ -435,32 +501,77 @@ O componente ZoneCard é usado para exibir informações de zonas de monitoramen
 
 ````
 
-## Boas Práticas
+## Mudanças Implementadas 📄🤖
+
+### Reorganização Completa das Stories
+
+1. **Categorização por Domínio:**
+   - `Landing/` - Componentes da landing page
+   - `Layout/` - Componentes de layout (Header, Footer, Sidebar)
+   - `Data/` - Componentes relacionados a dados (NDVI, mapas, gráficos)
+   - `UI/` - Componentes de interface genéricos
+
+2. **Padronização de Variações:**
+   - Todas as stories incluem: Default, MobileView, TabletView, ResponsiveDemo
+   - Remoção de decorators desnecessários
+   - Adição de tags "autodocs" para documentação automática
+
+3. **ArgTypes Consistentes:**
+   - backgroundColor em todos os componentes
+   - Controles específicos por categoria (textColor, variant, etc.)
+   - Descrições em português para melhor usabilidade
+
+4. **Configuração Otimizada:**
+   - Todos os addons recomendados instalados
+   - Backgrounds personalizados configurados
+   - Viewports padronizados para mobile, tablet e desktop
+
+### Status Atual das Stories
+
+✅ **Reorganizadas e Padronizadas:**
+- AchievementsSection (Landing)
+- AppSidebar (Layout)
+- CTASection (Landing)
+- FAQSection (Landing)
+- FeaturesSection (UI)
+- Footer (Layout)
+- Header (Layout)
+- HeroSection (UI)
+- HowItWorksSection (Landing)
+- Layout (Layout)
+- NDVIChart (Data)
+- NDVIMap (Data)
+- ProblemSection (Landing)
+- SolutionSection (Landing)
+- TestimonialsSection (Landing)
+- ZoneCard (Data)
+
+## Boas Práticas Implementadas
 
 ### 1. Nomenclatura
-- Use nomes descritivos para stories
-- Mantenha consistência entre componentes similares
-- Prefixe variações com contexto (Mobile, Tablet, etc.)
+- Nomes descritivos e consistentes
+- Categorização lógica por domínio
+- Prefixos padronizados para variações
 
 ### 2. Organização
-- Agrupe stories por funcionalidade
-- Use categorias lógicas no título
-- Mantenha ordem consistente das variações
+- Estrutura hierárquica clara
+- Ordem consistente das variações
+- Documentação automática habilitada
 
 ### 3. Performance
-- Evite dados muito grandes em stories
-- Use mocks para APIs externas
-- Otimize imagens e assets
+- Remoção de decorators desnecessários
+- Otimização de imports
+- Configuração eficiente de addons
 
 ### 4. Acessibilidade
-- Teste com diferentes contrastes
-- Inclua variações para screen readers
-- Valide navegação por teclado
+- Addon a11y configurado
+- Controles de cor para teste de contraste
+- Variações responsivas implementadas
 
 ### 5. Responsividade
-- Teste em múltiplos viewports
-- Valide breakpoints críticos
-- Documente comportamentos específicos
+- Viewports padronizados
+- Variações obrigatórias para mobile/tablet
+- ResponsiveDemo em todos os componentes
 
 ## Integração com CI/CD
 

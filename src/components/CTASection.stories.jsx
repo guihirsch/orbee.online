@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import CTASection from "./CTASection";
 
 export default {
-  title: "Components/CTASection",
+  title: "Landing/CTASection",
   component: CTASection,
   parameters: {
     layout: "fullscreen",
@@ -14,15 +14,13 @@ export default {
       },
     },
   },
-  decorators: [
-    (Story) => (
-      <BrowserRouter>
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-          <Story />
-        </div>
-      </BrowserRouter>
-    ),
-  ],
+  tags: ["autodocs"],
+  argTypes: {
+    backgroundColor: {
+      control: { type: "color" },
+      description: "Cor de fundo do componente",
+    },
+  },
 };
 
 // Story padrão

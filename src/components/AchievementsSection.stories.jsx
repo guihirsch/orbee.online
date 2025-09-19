@@ -3,7 +3,7 @@ import AchievementsSection from "./AchievementsSection";
 import { Trophy, TreePine, Users, Target } from "lucide-react";
 
 export default {
-  title: "Components/AchievementsSection",
+  title: "Landing/AchievementsSection",
   component: AchievementsSection,
   parameters: {
     layout: "fullscreen",
@@ -14,13 +14,13 @@ export default {
       },
     },
   },
-  decorators: [
-    (Story) => (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-        <Story />
-      </div>
-    ),
-  ],
+  tags: ["autodocs"],
+  argTypes: {
+    backgroundColor: {
+      control: { type: "color" },
+      description: "Cor de fundo do componente",
+    },
+  },
 };
 
 // Story padrão

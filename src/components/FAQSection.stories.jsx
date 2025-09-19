@@ -2,7 +2,7 @@ import React from "react";
 import FAQSection from "./FAQSection";
 
 export default {
-  title: "Components/FAQSection",
+  title: "Landing/FAQSection",
   component: FAQSection,
   parameters: {
     layout: "fullscreen",
@@ -13,13 +13,13 @@ export default {
       },
     },
   },
-  decorators: [
-    (Story) => (
-      <div className="min-h-screen bg-white py-20 px-4 sm:px-6 lg:px-8">
-        <Story />
-      </div>
-    ),
-  ],
+  tags: ["autodocs"],
+  argTypes: {
+    backgroundColor: {
+      control: { type: "color" },
+      description: "Cor de fundo do componente",
+    },
+  },
 };
 
 // Story padrão
