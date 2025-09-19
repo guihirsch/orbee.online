@@ -9,10 +9,11 @@ Este documento define as boas práticas e a estrutura recomendada para organizar
 Organize as histórias em categorias que façam sentido para o produto:
 
 - **Foundations (Fundamentos)**
-  - Cores
-  - Tipografia
-  - Espaçamento
-  - Tokens de design
+  - Colors - Sistema de cores e paleta completa
+  - Typography - Hierarquia tipográfica e variações
+  - Spacing - Tokens de espaçamento e grids responsivos
+  - Effects - Noise textures, animações e transições
+  - Icons - Biblioteca de ícones organizados por contexto
 
 - **UI (Primitivos de interface)**
   - Botões
@@ -67,6 +68,9 @@ Exemplo de árvore resultante:
 Foundations
   └── Colors
   └── Typography
+  └── Spacing
+  └── Effects
+  └── Icons
 UI
   └── Button
   └── Modal
@@ -215,6 +219,14 @@ export const Default = {
 ```
 
 ### Categorias de Stories
+
+#### 0. Foundations (Fundamentos)
+
+- `Foundations/Colors` - Sistema de cores com paleta completa, variações de opacidade e exemplos de uso por contexto
+- `Foundations/Typography` - Hierarquia tipográfica, escalas de tamanho e variações de cores para diferentes contextos
+- `Foundations/Spacing` - Tokens de espaçamento, grids responsivos e padrões de layout com demonstrações práticas
+- `Foundations/Effects` - Noise textures configuráveis, animações CSS e transições para elementos interativos
+- `Foundations/Icons` - Biblioteca completa de ícones organizados por contexto (região, saúde, ações, interface, status, dados)
 
 #### 1. Landing Page Components
 
@@ -528,6 +540,13 @@ O componente ZoneCard é usado para exibir informações de zonas de monitoramen
 
 ### Status Atual das Stories
 
+✅ **Foundations Implementadas:**
+- Colors (Foundations) - Sistema completo de cores com paleta, contextos e variações
+- Typography (Foundations) - Hierarquia tipográfica e escalas responsivas
+- Spacing (Foundations) - Tokens de espaçamento e grids com demonstrações práticas
+- Effects (Foundations) - Noise textures, animações e transições interativas
+- Icons (Foundations) - Biblioteca de ícones organizados por contexto e funcionalidade
+
 ✅ **Reorganizadas e Padronizadas:**
 - AchievementsSection (Landing)
 - AppSidebar (Layout)
@@ -628,6 +647,10 @@ gh-pages -d storybook-static
    - Otimize imports (use lazy loading)
    - Reduza tamanho de dados mock
    - Configure webpack adequadamente
+
+5. **Erros de chaves duplicadas**
+   - Verificar se não há propriedades duplicadas como `tags` ou `argTypes` no export default
+   - Consolidar configurações duplicadas em uma única declaração
 
 ### Debug
 

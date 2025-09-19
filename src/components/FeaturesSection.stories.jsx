@@ -9,12 +9,6 @@ export default {
     layout: "fullscreen",
   },
   tags: ["autodocs"],
-  argTypes: {
-    backgroundColor: {
-      control: { type: "color" },
-      description: "Cor de fundo do componente",
-    },
-  },
   decorators: [
     (Story) => (
       <BrowserRouter>
@@ -24,8 +18,11 @@ export default {
       </BrowserRouter>
     ),
   ],
-  tags: ["autodocs"],
   argTypes: {
+    backgroundColor: {
+      control: { type: "color" },
+      description: "Cor de fundo do componente",
+    },
     backgroundImage: {
       control: "text",
       description: "URL da imagem de fundo",

@@ -6,6 +6,20 @@
 
 Este documento define os padrões visuais e de interação desenvolvidos para o OrBee.Online, baseados na implementação das telas do MeadowGreen. O objetivo é garantir consistência visual e experiência de usuário uniforme em toda a aplicação.
 
+### Atualizações Recentes (Sistema de Efeitos Visuais)
+
+**Melhorias de Contraste e Legibilidade:**
+- Transição para fundo claro (`bg-slate-50`) para melhor legibilidade
+- Ajuste de todas as cores de texto para contraste adequado
+- Implementação de header fixo com controles interativos
+- Otimização de cards e elementos para melhor visibilidade
+
+**Novas Diretrizes:**
+- Uso de `text-slate-800` para títulos principais
+- `text-slate-600/700` para textos secundários
+- Backgrounds brancos com bordas `border-slate-300` para cards
+- Códigos com fundo `bg-slate-100` e bordas para destaque
+
 ---
 
 ## 1. Paleta de Cores
@@ -637,7 +651,27 @@ id = "cardNoiseFilter{número_sequencial}";
 
 ---
 
-## 12. Manutenção
+## 12. Layout Base
+
+### Background Principal
+
+O componente Layout utiliza um fundo branco limpo (`bg-white`) que substitui o gradiente verde anterior. Esta mudança proporciona:
+
+- **Melhor legibilidade** dos componentes
+- **Contraste otimizado** para textos e elementos
+- **Design minimalista** focado no conteúdo
+- **Compatibilidade** com diferentes temas
+
+### Stories Background
+
+Os stories do Storybook utilizam fundos apropriados para demonstração:
+
+- **Effects Stories**: Fundo claro (`bg-slate-50`) para melhor visualização dos efeitos visuais
+- **Componentes gerais**: Fundos neutros que destacam os elementos sem interferir na experiência
+
+---
+
+## 13. Manutenção
 
 Este design system deve ser atualizado sempre que:
 

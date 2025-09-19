@@ -2,6 +2,42 @@
 
 ## Estrutura de Componentes
 
+### Sistema de Efeitos Visuais (Atualizado)
+
+O sistema de efeitos visuais foi aprimorado com melhorias significativas de contraste, legibilidade e organização visual.
+
+#### Melhorias Implementadas:
+
+- **Contraste Aprimorado**: Todos os textos foram ajustados para melhor legibilidade em fundo claro
+- **Layout Reorganizado**: Header fixo com controles interativos mais visíveis
+- **Cores Otimizadas**: Cards e elementos com cores adaptadas para melhor visibilidade
+- **Controles Interativos**: Interface mais intuitiva com feedback visual
+
+#### Componentes do Sistema:
+
+**EffectDemo**: Componente wrapper para demonstração de efeitos
+```jsx
+const EffectDemo = ({ title, description, children, className = '', animate, showNoise }) => {
+  // Implementação com noise texture e animações
+};
+```
+
+**EffectButton**: Botão com efeitos visuais integrados
+```jsx
+const EffectButton = ({ variant = 'primary', animate, showNoise, children }) => {
+  // Variantes: primary, secondary, outline
+};
+```
+
+**AnimatedCard**: Card com animações e efeitos de hover
+```jsx
+const AnimatedCard = ({ children, className = '', animate, showNoise }) => {
+  // Card responsivo com transições suaves
+};
+```
+
+---
+
 ### App.jsx
 
 Componente principal da aplicação que gerencia roteamento e tema global.
