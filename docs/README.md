@@ -10,6 +10,18 @@ OrBee.Online é uma plataforma de monitoramento ambiental que combina dados sate
 
 **Propósito:** Plataforma que conecta satélites, comunidades e governos para ações locais com impacto global.
 
+## Estrutura da Documentação
+
+Esta pasta contém toda a documentação técnica do projeto OrBee.Online:
+
+- **[README.md](./README.md)**: Visão geral do projeto e documentação principal
+- **[components.md](./components.md)**: Documentação detalhada dos componentes React
+- **[design-system.md](./design-system.md)**: Tokens de design, cores, tipografia e padrões visuais
+- **[setup.md](./setup.md)**: Guia de instalação e configuração do ambiente
+- **[deployment.md](./deployment.md)**: Processos de deploy e infraestrutura
+- **[storybook.md](./storybook.md)**: Configuração e uso do Storybook
+- **[examples/](./examples/)**: Templates de documentação reutilizáveis para outros projetos
+
 ## Tecnologias Utilizadas
 
 ### Frontend
@@ -218,6 +230,27 @@ cp styling-template.md ../meu-projeto/styling.md
 - 🔄 **Reutilização facilitada** com templates isolados
 - 📚 **Documentação focada** para cada contexto de uso
 - 🚀 **Início mais rápido** em novos projetos
+
+## Templates de Documentação
+
+A pasta **[examples/](./examples/)** contém templates de documentação reutilizáveis que podem ser aplicados em outros projetos para manter consistência e qualidade na documentação técnica.
+
+### Templates Disponíveis
+
+- **[components.example.md](./examples/components.example.md)**: Template para documentar componentes React/UI
+- **[setup.example.md](./examples/setup.example.md)**: Template para guias de instalação e configuração
+- **[design-system.example.md](./examples/design-system.example.md)**: Template para documentar design systems e tokens
+- **[deployment.example.md](./examples/deployment.example.md)**: Template para processos de deploy e infraestrutura
+- **[storybook.example.md](./examples/storybook.example.md)**: Template para configuração e uso do Storybook
+
+### Como Usar
+
+1. **Escolha o template** apropriado para seu tipo de documentação
+2. **Copie o arquivo** para seu projeto: `cp docs/examples/template.example.md docs/template.md`
+3. **Adapte o conteúdo** substituindo placeholders pelos valores reais
+4. **Mantenha atualizado** junto com mudanças no código
+
+Estes templates foram criados com base nas melhores práticas de documentação técnica e podem acelerar significativamente o processo de criação de documentação em novos projetos.
 
 ---
 

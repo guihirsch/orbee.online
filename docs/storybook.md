@@ -1,6 +1,103 @@
-# Storybook - OrBee.Online
+# Guia de Organização do Storybook
 
-## Visão Geral
+Este documento define as boas práticas e a estrutura recomendada para organizar as histórias do Storybook, garantindo consistência, escalabilidade e facilidade de navegação.
+
+---
+
+## 1. Estrutura baseada em Domínios
+
+Organize as histórias em categorias que façam sentido para o produto:
+
+- **Foundations (Fundamentos)**
+  - Cores
+  - Tipografia
+  - Espaçamento
+  - Tokens de design
+
+- **UI (Primitivos de interface)**
+  - Botões
+  - Inputs
+  - Modais
+  - Dropdowns
+
+- **Layout**
+  - Header
+  - Footer
+  - Sidebar
+  - Grid
+
+- **Sections (Seções de Página)**
+  - Hero
+  - CTA
+  - FAQ
+  - Testimonials
+
+- **Pages (Páginas/Fluxos)**
+  - Landing Page
+  - Dashboard
+  - Fluxos de usuário
+
+---
+
+## 2. Nomeação Consistente
+
+- Use **PascalCase** para componentes: `Button`, `Modal`, `CTASection`.
+- Agrupe variações como sub-histórias:
+  - `Button/Primary`
+  - `Button/Secondary`
+- Evite nomes técnicos demais — pense em quem consome:
+  - Correto: `Section/Hero`
+  - Incorreto: `HeroSectionComponent`
+
+---
+
+## 3. Hierarquia de Histórias
+
+Aproveite `/` para criar hierarquias:
+
+```ts
+export default {
+  title: "UI/Button",
+  component: Button,
+};
+```
+
+Exemplo de árvore resultante:
+```
+Foundations
+  └── Colors
+  └── Typography
+UI
+  └── Button
+  └── Modal
+Layout
+  └── Header
+  └── Sidebar
+Sections
+  └── Hero
+  └── CTA
+Pages
+  └── Landing Page
+```
+
+## 4. Estados e Variações
+
+Cada componente deve ter histórias para estados comuns:
+
+**Button**
+- Primary
+- Secondary
+- Disabled
+- Loading
+
+**Input**
+- Empty
+- With Text
+- Error
+
+---
+
+## Visão Geral do Storybook
 
 O Storybook é uma ferramenta de desenvolvimento que permite criar, testar e documentar componentes React de forma isolada. No OrBee.Online, utilizamos o Storybook para:
 
