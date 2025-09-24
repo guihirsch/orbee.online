@@ -4,14 +4,47 @@
 
 ### Sistema de Efeitos Visuais (Atualizado)
 
-O sistema de efeitos visuais foi aprimorado com melhorias significativas de contraste, legibilidade e organização visual.
+O sistema de efeitos visuais foi completamente adaptado para modo claro, oferecendo melhor contraste, legibilidade e organização visual.
 
-#### Melhorias Implementadas:
+#### Adaptação para Modo Claro Implementada:
 
-- **Contraste Aprimorado**: Todos os textos foram ajustados para melhor legibilidade em fundo claro
-- **Layout Reorganizado**: Header fixo com controles interativos mais visíveis
-- **Cores Otimizadas**: Cards e elementos com cores adaptadas para melhor visibilidade
-- **Controles Interativos**: Interface mais intuitiva com feedback visual
+- **Noise Texture Otimizada**: Ajuste de opacidade e blend modes para fundo claro
+  - Noise Sutil: `opacity: 0.08` com `bg-emerald-100`
+  - Noise Padrão: `opacity: 0.12` com `bg-slate-200`
+  - Noise Intenso: `opacity: 0.18` com `bg-purple-100`
+- **Contraste Aprimorado**: Textos escuros (`text-slate-800`, `text-emerald-700`) para máxima legibilidade
+- **Layout Reorganizado**: Cards individuais com bordas `border-slate-300` e sombras sutis
+- **Código Destacado**: Blocos de código com fundo `bg-slate-100` e bordas arredondadas
+- **Cores Semânticas**: Backgrounds temáticos (emerald, slate, purple) com tons claros
+
+#### Implementação do Modo Claro:
+
+**Estrutura de Card Adaptada**:
+```jsx
+<div className="bg-white border border-slate-300 rounded-xl p-6 shadow-sm">
+  <div className="mb-4">
+    <h3 className="text-lg font-semibold text-slate-800 mb-2">{title}</h3>
+    <p className="text-slate-600 text-sm">{description}</p>
+  </div>
+  <div className="relative">
+    <div className="relative h-32 bg-emerald-100 rounded-lg overflow-hidden border border-emerald-200">
+      <NoiseOverlay
+        frequency={0.5}
+        octaves={2}
+        opacity={0.08}
+        id="subtle-light"
+        blendMode="multiply"
+      />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="text-emerald-700 font-medium">Background Sutil</span>
+      </div>
+    </div>
+    <code className="text-emerald-700 text-xs font-mono mt-2 block bg-slate-100 px-2 py-1 rounded">
+      frequency: 0.5, octaves: 2, opacity: 0.08
+    </code>
+  </div>
+</div>
+```
 
 #### Componentes do Sistema:
 
