@@ -10,8 +10,8 @@ const GridPattern = ({ variant = "default" }) => {
       },
       hero: {
          size: 50,
-         strokeWidth: 0.8,
-         opacity: 0.15,
+         strokeWidth: 0.5,
+         opacity: 0.05,
          color: "#2f4538",
       },
       subtle: {

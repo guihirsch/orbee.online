@@ -1,10 +1,16 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List
 import os
 from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
+    # Pydantic v2 settings
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=True,
+        extra="ignore",  # Ignora variáveis extras (ex.: VITE_*)
+    )
     # API Settings
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "OrBee.Online"
@@ -13,8 +19,10 @@ class Settings(BaseSettings):
     ALLOWED_HOSTS: List[str] = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
         "https://orbee.online",
-        "https://www.orbee.online"
+        "https://www.orbee.online",
     ]
     
     # Database Settings (Supabase)
@@ -40,9 +48,7 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
     DEBUG: bool = ENVIRONMENT == "development"
     
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    # Removido Config (Pydantic v2 não permite usar junto de model_config)
 
 
 settings = Settings()

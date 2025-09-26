@@ -1,43 +1,33 @@
-import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import {
-   Dice6,
-   RotateCcw,
-   Globe,
-   Search,
-   Leaf,
-   AlertTriangle,
-   Eye,
-   DollarSign,
-   MapPin,
-   Calculator,
-   Heart,
-   BarChart3,
-   TreePine,
-   Award,
-   Zap,
-   Building2,
-   Users,
-   ShoppingCart,
-} from "lucide-react";
+import React, { useState, useEffect } from "react";
 import HeroSection from "../components/HeroSection";
-import DashboardPreview from "../components/DashboardPreview";
-import FeaturesSection from "../components/FeaturesSection";
-import TestimonialsSection from "../components/TestimonialsSection";
-import FAQSection from "../components/FAQSection";
-import CTASection from "../components/CTASection";
+import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ProblemSection from "../components/ProblemSection";
 import SolutionSection from "../components/SolutionSection";
 import HowItWorksSection from "../components/HowItWorksSection";
-import AchievementsSection from "../components/AchievementsSection";
 import FutureSection from "../components/FutureSection";
 import SectionDivider from "../components/ui/SectionDivider";
 
 const Home = () => {
-   const [backgroundImage, setBackgroundImage] = useState("");
-   const [isTransparentMode, setIsTransparentMode] = useState(false);
-   const [showHeroSection, setShowHeroSection] = useState(false); // Estado para controlar a visibilidade da HeroSection
+   // useEffect para detectar cliques em links de navegação
+   useEffect(() => {
+      const handleHashChange = () => {
+         const hash = window.location.hash;
+         if (hash === "#features") {
+            setShowFeaturesSection(true);
+         }
+      };
+
+      // Verificar hash inicial
+      handleHashChange();
+
+      // Escutar mudanças no hash
+      window.addEventListener("hashchange", handleHashChange);
+
+      return () => {
+         window.removeEventListener("hashchange", handleHashChange);
+      };
+   }, []);
 
    // Função para gerar imagem aleatória e ativar transparência automaticamente
    const generateRandomBackground = () => {
@@ -65,6 +55,11 @@ const Home = () => {
 
    return (
       <div className="relative min-h-screen overflow-x-hidden">
+         {/* Header Fixo */}
+         <div className="fixed top-0 left-0 right-0 z-50">
+            <Header />
+         </div>
+
          {/* Hero Section */}
          <div className="relative z-40">
             <HeroSection />
@@ -72,12 +67,6 @@ const Home = () => {
 
          {/* Content Sections */}
          <div className="relative z-30">
-            <FeaturesSection
-               backgroundImage={backgroundImage}
-               isTransparentMode={isTransparentMode}
-               setShowHeroSection={setShowHeroSection}
-            />
-            <SectionDivider />
             <ProblemSection />
             <SectionDivider />
             <SolutionSection />
@@ -86,7 +75,6 @@ const Home = () => {
             <SectionDivider />
             <FutureSection />
             <SectionDivider />
-
             <Footer />
          </div>
       </div>

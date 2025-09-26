@@ -1,8 +1,16 @@
+import os
+import sys
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import uvicorn
 from contextlib import asynccontextmanager
+
+# Garante que o diretório 'backend' esteja no sys.path para permitir imports 'app.*'
+CURRENT_DIR = Path(__file__).resolve().parent
+if str(CURRENT_DIR) not in sys.path:
+	sys.path.append(str(CURRENT_DIR))
 
 from app.core.config import settings
 from app.api.v1.api import api_router

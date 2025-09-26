@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Header from "./Header";
 import SimpleBackground from "./SimpleBackground";
 
 const HeroSection = () => {
@@ -12,43 +11,12 @@ const HeroSection = () => {
    };
 
    return (
-      <section className="relative min-h-screen bg-white overflow-hidden">
+      <section
+         id="hero"
+         className="relative min-h-screen bg-white overflow-hidden pt-24"
+      >
          {/* Simple Background */}
          <SimpleBackground variant="hero" />
-
-         {/* Header */}
-         <header className="relative z-50 flex items-center justify-center py-6">
-            <div className="flex items-center gap-1">
-               <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-[#2f4538]"
-               >
-                  <path d="m8 2 1.88 1.88" />
-                  <path d="M14.12 3.88 16 2" />
-                  <path d="M9 7V6a3 3 0 1 1 6 0v1" />
-                  <path d="M5 7a3 3 0 1 0 2.2 5.1C9.1 10 12 7 12 7s2.9 3 4.8 5.1A3 3 0 1 0 19 7Z" />
-                  <path d="M7.56 12h8.87" />
-                  <path d="M7.5 17h9" />
-                  <path d="M15.5 10.7c.9.9 1.4 2.1 1.5 3.3 0 5.8-5 8-5 8s-5-2.2-5-8c.1-1.2.6-2.4 1.5-3.3" />
-               </svg>
-               <span
-                  className="font-light text-3xl text-[#2f4538]"
-                  style={{
-                     fontFamily: '"Fraunces", serif',
-                  }}
-               >
-                  orbee
-               </span>
-            </div>
-         </header>
 
          {/* Hero Content */}
          <div className="container mx-auto px-6 py-2 relative z-10">

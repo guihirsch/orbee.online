@@ -30,24 +30,24 @@ const SimpleBackground = ({ variant = "default" }) => {
          ],
       },
       hero: {
-         gradient: "from-white via-emerald-50/30 to-green-50/20",
+         gradient: "from-white via-white to-white",
          circles: [
             {
                position: "top-1/4 left-1/4",
                size: "w-[500px] h-[500px]",
-               color: "from-emerald-200/12 to-green-300/6",
+               color: "from-emerald-200/4 to-green-300/2",
                delay: "0s",
             },
             {
                position: "bottom-1/4 right-1/4",
                size: "w-[400px] h-[400px]",
-               color: "from-green-200/12 to-emerald-300/6",
+               color: "from-green-200/4 to-emerald-300/2",
                delay: "3s",
             },
             {
                position: "top-1/2 right-1/3",
                size: "w-64 h-64",
-               color: "from-[#2f4538]/8 to-emerald-400/4",
+               color: "from-[#2f4538]/3 to-emerald-400/1",
                delay: "6s",
             },
          ],
@@ -55,14 +55,14 @@ const SimpleBackground = ({ variant = "default" }) => {
             {
                position: "top-1/3 right-1/3",
                size: "w-40 h-40",
-               color: "from-emerald-300/15 to-green-400/8",
+               color: "from-emerald-300/5 to-green-400/3",
                rotation: "rotate-45",
                delay: "1s",
             },
             {
                position: "bottom-1/3 left-1/3",
                size: "w-28 h-28",
-               color: "from-green-300/15 to-emerald-400/8",
+               color: "from-green-300/5 to-emerald-400/3",
                rotation: "rotate-12",
                delay: "5s",
             },

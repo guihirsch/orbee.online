@@ -5,7 +5,10 @@ import SimpleBackground from "./SimpleBackground";
 
 const FutureSection = () => {
    return (
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden">
+      <section
+         id="future"
+         className="relative py-20 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden"
+      >
          {/* Simple Background */}
          <SimpleBackground variant="default" />
 
