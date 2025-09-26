@@ -114,7 +114,7 @@ class ObservationRepository:
         """Busca observações de um usuário"""
         try:
             response = (
-                self.db.table(self.table_name)
+                self.supabase.table(self.observations_table)
                 .select("*")
                 .eq("user_id", user_id)
                 .order("created_at", desc=True)
@@ -123,7 +123,8 @@ class ObservationRepository:
             )
             if response.data:
                 return [Observation(**obs) for obs in response.data]
-        except Exception:
+        except Exception as e:
+            logger.error(f"Erro ao buscar observações do usuário: {e}")
             pass
         
         # Dados mockados para desenvolvimento
@@ -143,7 +144,7 @@ class ObservationRepository:
             # Query com função PostGIS para busca geográfica
             # Nota: Requer extensão PostGIS no Supabase
             response = (
-                self.db.rpc(
+                self.supabase.rpc(
                     "get_observations_near_location",
                     {
                         "lat": latitude,
@@ -155,7 +156,8 @@ class ObservationRepository:
             )
             if response.data:
                 return [Observation(**obs) for obs in response.data]
-        except Exception:
+        except Exception as e:
+            logger.error(f"Erro ao buscar observações por localização: {e}")
             pass
         
         # Fallback: busca simples por proximidade
@@ -182,14 +184,15 @@ class ObservationRepository:
         """Atualiza dados da observação"""
         try:
             response = (
-                self.db.table(self.table_name)
+                self.supabase.table(self.observations_table)
                 .update(update_data)
                 .eq("id", observation_id)
                 .execute()
             )
             if response.data:
                 return Observation(**response.data[0])
-        except Exception:
+        except Exception as e:
+            logger.error(f"Erro ao atualizar observação: {e}")
             pass
         
         # Modo desenvolvimento - simula atualização
@@ -203,10 +206,11 @@ class ObservationRepository:
     async def delete(self, observation_id: str) -> bool:
         """Remove observação"""
         try:
-            response = self.db.table(self.table_name).delete().eq("id", observation_id).execute()
+            response = self.supabase.table(self.observations_table).delete().eq("id", observation_id).execute()
             return bool(response.data)
-        except Exception:
-            return True  # Simula sucesso em desenvolvimento
+        except Exception as e:
+            logger.error(f"Erro ao deletar observação: {e}")
+            return False
     
     async def add_validation(
         self, 
@@ -222,16 +226,17 @@ class ObservationRepository:
                 "is_valid": is_valid,
                 "created_at": datetime.utcnow().isoformat()
             }
-            response = self.db.table(self.validations_table).insert(validation_data).execute()
+            response = self.supabase.table(self.validations_table).insert(validation_data).execute()
             return bool(response.data)
-        except Exception:
-            return True  # Simula sucesso em desenvolvimento
+        except Exception as e:
+            logger.error(f"Erro ao adicionar validação: {e}")
+            return False
     
     async def get_recent(self, limit: int = 20) -> List[Observation]:
         """Retorna observações mais recentes"""
         try:
             response = (
-                self.db.table(self.table_name)
+                self.supabase.table(self.observations_table)
                 .select("*")
                 .order("created_at", desc=True)
                 .limit(limit)
@@ -239,7 +244,8 @@ class ObservationRepository:
             )
             if response.data:
                 return [Observation(**obs) for obs in response.data]
-        except Exception:
+        except Exception as e:
+            logger.error(f"Erro ao buscar observações recentes: {e}")
             pass
         
         # Dados mockados para desenvolvimento
@@ -250,7 +256,7 @@ class ObservationRepository:
         """Retorna observações validadas"""
         try:
             response = (
-                self.db.table(self.table_name)
+                self.supabase.table(self.observations_table)
                 .select("*")
                 .eq("is_validated", True)
                 .order("created_at", desc=True)
@@ -259,7 +265,8 @@ class ObservationRepository:
             )
             if response.data:
                 return [Observation(**obs) for obs in response.data]
-        except Exception:
+        except Exception as e:
+            logger.error(f"Erro ao buscar observações validadas: {e}")
             pass
         
         # Dados mockados para desenvolvimento
@@ -276,7 +283,7 @@ class ObservationRepository:
         """Busca observações por texto"""
         try:
             query_builder = (
-                self.db.table(self.table_name)
+                self.supabase.table(self.observations_table)
                 .select("*")
                 .or_(f"description.ilike.%{query}%,location.ilike.%{query}%")
             )
@@ -288,7 +295,8 @@ class ObservationRepository:
             
             if response.data:
                 return [Observation(**obs) for obs in response.data]
-        except Exception:
+        except Exception as e:
+            logger.error(f"Erro ao buscar observações: {e}")
             pass
         
         # Busca mockada para desenvolvimento
@@ -308,9 +316,9 @@ class ObservationRepository:
         """Retorna estatísticas globais"""
         try:
             # Queries para estatísticas reais
-            total_response = self.db.table(self.table_name).select("id", count="exact").execute()
+            total_response = self.supabase.table(self.observations_table).select("id", count="exact").execute()
             validated_response = (
-                self.db.table(self.table_name)
+                self.supabase.table(self.observations_table)
                 .select("id", count="exact")
                 .eq("is_validated", True)
                 .execute()
@@ -325,7 +333,8 @@ class ObservationRepository:
                 "validation_rate": validated_count / total_count if total_count > 0 else 0,
                 "active_users": 0  # TODO: implementar contagem de usuários ativos
             }
-        except Exception:
+        except Exception as e:
+            logger.error(f"Erro ao obter estatísticas globais: {e}")
             pass
         
         # Estatísticas mockadas para desenvolvimento
@@ -393,6 +402,7 @@ class ObservationRepository:
     
     def _calculate_distance(self, lat1: float, lon1: float, lat2: float, lon2: float) -> float:
         """Calcula distância entre duas coordenadas em km (fórmula de Haversine)"""
+        import math
         R = 6371  # Raio da Terra em km
         
         dlat = math.radians(lat2 - lat1)

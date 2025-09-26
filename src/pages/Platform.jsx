@@ -23,6 +23,8 @@ import {
    X,
    Camera,
 } from "lucide-react";
+import NDVIMap from "../components/NDVIMap";
+import MunicipalitySearch from "../components/MunicipalitySearch";
 
 const Platform = ({}) => {
    const [headerRef, headerVisible] = useScrollAnimation();
@@ -42,6 +44,13 @@ const Platform = ({}) => {
    const [isSelectionOpen, setIsSelectionOpen] = useState(false);
    const [showSearchModal, setShowSearchModal] = useState(false);
    const [searchQuery, setSearchQuery] = useState("");
+   const [aoiGeoJSON, setAoiGeoJSON] = useState(null);
+   const [actionPlan, setActionPlan] = useState(null);
+
+   function handleAOILoad({ municipality, geometry, ndvi, plan }) {
+      if (geometry) setAoiGeoJSON(geometry);
+      if (plan) setActionPlan(plan);
+   }
 
    // Dados estruturados para os cards das zonas
    const zoneCardsData = {
@@ -840,6 +849,7 @@ const Platform = ({}) => {
                   </div>
                </div>
                {/* Plano de Ação - Cards Interativos */}
+
                <div
                   ref={featuresRef}
                   className={`mb-16 transition-all duration-1000 delay-300 ${
@@ -872,7 +882,7 @@ const Platform = ({}) => {
                   </div>
 
                   <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                     {filteredZones.map((zone) => (
+                     {(actionPlan?.zones || filteredZones).map((zone) => (
                         <ZoneCard
                            key={zone.id}
                            zone={zone.id}

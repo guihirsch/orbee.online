@@ -25,7 +25,9 @@ from app.repositories.user_repository import UserRepository
 
 
 class UserService:
-    def __init__(self, supabase: Client = Depends(get_supabase_client)):
+    def __init__(self, supabase: Client = None):
+        if supabase is None:
+            supabase = get_supabase_client()
         self.user_repo = UserRepository(supabase)
     
     def create_access_token(self, data: dict, expires_delta: Optional[timedelta] = None) -> str:

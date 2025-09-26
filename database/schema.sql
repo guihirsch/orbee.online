@@ -130,36 +130,51 @@ CREATE TABLE IF NOT EXISTS monitored_areas (
     deleted_at TIMESTAMP WITH TIME ZONE
 );
 
--- Tabela de dados NDVI históricos
-CREATE TABLE IF NOT EXISTS ndvi_data (
+-- Tabela de dados NDVI históricos por município
+CREATE TABLE IF NOT EXISTS ndvi_history (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     
-    -- Localização
-    latitude DECIMAL(10, 8) NOT NULL,
-    longitude DECIMAL(11, 8) NOT NULL,
-    location_point GEOGRAPHY(POINT, 4326) GENERATED ALWAYS AS (ST_SetSRID(ST_MakePoint(longitude, latitude), 4326)) STORED,
+    -- Identificação do município
+    municipality_code VARCHAR(10) NOT NULL,
+    municipality_name VARCHAR(255),
+    
+    -- Geometria da área analisada
+    geometry GEOMETRY(POLYGON, 4326),
+    center_latitude DECIMAL(10, 8),
+    center_longitude DECIMAL(11, 8),
     
     -- Dados NDVI
     ndvi_value DECIMAL(4, 3) NOT NULL,
+    average_ndvi DECIMAL(4, 3),
+    min_ndvi DECIMAL(4, 3),
+    max_ndvi DECIMAL(4, 3),
+    
+    -- Período de análise
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
     acquisition_date DATE NOT NULL,
     
     -- Metadados da imagem
-    satellite VARCHAR(50), -- Sentinel-2, Landsat-8, etc.
-    cloud_coverage DECIMAL(5, 2), -- Porcentagem de cobertura de nuvens
-    data_quality VARCHAR(20) DEFAULT 'good', -- poor, fair, good, excellent
+    satellite VARCHAR(50) DEFAULT 'Sentinel-2',
+    cloud_coverage DECIMAL(5, 2),
+    data_quality VARCHAR(20) DEFAULT 'good',
     
-    -- Dados auxiliares
-    precipitation DECIMAL(6, 2), -- mm
-    temperature DECIMAL(4, 1), -- °C
+    -- Análise de tendência
+    trend VARCHAR(20), -- 'improving', 'stable', 'declining'
+    vegetation_status VARCHAR(20), -- 'excellent', 'good', 'moderate', 'poor', 'critical'
+    
+    -- Parâmetros da consulta
+    max_cloud INTEGER DEFAULT 30,
+    superres BOOLEAN DEFAULT false,
     
     -- Fonte dos dados
-    data_source VARCHAR(50) DEFAULT 'sentinel_hub', -- sentinel_hub, copernicus, mock
+    data_source VARCHAR(50) DEFAULT 'sentinel_hub',
     
     -- Metadados
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     
-    -- Índice único para evitar duplicatas
-    UNIQUE(latitude, longitude, acquisition_date, satellite)
+    -- Índices para performance
+    UNIQUE(municipality_code, acquisition_date, start_date, end_date)
 );
 
 -- Tabela de alertas
@@ -275,9 +290,10 @@ CREATE INDEX IF NOT EXISTS idx_observations_type ON observations(observation_typ
 CREATE INDEX IF NOT EXISTS idx_observations_created_at ON observations(created_at);
 CREATE INDEX IF NOT EXISTS idx_observations_status ON observations(status);
 
-CREATE INDEX IF NOT EXISTS idx_ndvi_data_location ON ndvi_data USING GIST (location_point);
-CREATE INDEX IF NOT EXISTS idx_ndvi_data_date ON ndvi_data(acquisition_date);
-CREATE INDEX IF NOT EXISTS idx_ndvi_data_location_date ON ndvi_data(latitude, longitude, acquisition_date);
+CREATE INDEX IF NOT EXISTS idx_ndvi_history_municipality ON ndvi_history(municipality_code);
+CREATE INDEX IF NOT EXISTS idx_ndvi_history_date ON ndvi_history(acquisition_date);
+CREATE INDEX IF NOT EXISTS idx_ndvi_history_period ON ndvi_history(start_date, end_date);
+CREATE INDEX IF NOT EXISTS idx_ndvi_history_geometry ON ndvi_history USING GIST (geometry);
 
 CREATE INDEX IF NOT EXISTS idx_monitored_areas_user_id ON monitored_areas(user_id);
 CREATE INDEX IF NOT EXISTS idx_monitored_areas_active ON monitored_areas(is_active);

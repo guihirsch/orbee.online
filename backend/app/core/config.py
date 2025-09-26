@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     )
     # API Settings
     API_V1_STR: str = "/api/v1"
-    PROJECT_NAME: str = "OrBee.Online"
+    PROJECT_NAME: str = "Orbee"
     
     # CORS Settings
     ALLOWED_HOSTS: List[str] = [
@@ -26,9 +26,9 @@ class Settings(BaseSettings):
     ]
     
     # Database Settings (Supabase)
-    SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
-    SUPABASE_KEY: str = os.getenv("SUPABASE_ANON_KEY", "")
-    SUPABASE_SERVICE_KEY: str = os.getenv("SUPABASE_SERVICE_KEY", "")
+    SUPABASE_URL: str = ""
+    SUPABASE_ANON_KEY: str = ""
+    SUPABASE_SERVICE_ROLE_KEY: str = ""
     
     # Authentication
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-change-in-production")
@@ -39,6 +39,10 @@ class Settings(BaseSettings):
     SENTINEL_HUB_CLIENT_ID: str = os.getenv("SENTINEL_HUB_CLIENT_ID", "")
     SENTINEL_HUB_CLIENT_SECRET: str = os.getenv("SENTINEL_HUB_CLIENT_SECRET", "")
     SENTINEL_HUB_INSTANCE_ID: str = os.getenv("SENTINEL_HUB_INSTANCE_ID", "")
+    # NDVI Provider and AI options
+    NDVI_PROVIDER: str = os.getenv("NDVI_PROVIDER", "sentinel_hub")  # options: sentinel_hub | earth_engine | sentinel_hub_mock
+    ENABLE_SUPER_RESOLUTION: bool = os.getenv("ENABLE_SUPER_RESOLUTION", "false").lower() == "true"
+    SUPER_RES_MODEL: str = os.getenv("SUPER_RES_MODEL", "bicubic")  # options: bicubic | dr-3.0 | esrgan
     
     # File Upload
     MAX_FILE_SIZE: int = 10 * 1024 * 1024  # 10MB

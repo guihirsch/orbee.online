@@ -7,6 +7,31 @@ class NDVIService {
       this.useStaticData = import.meta.env.VITE_USE_STATIC_DATA === "true";
    }
 
+   // NDVI por AOI/município
+   async getNDVIForAOI({
+      municipality_code,
+      geometry,
+      start_date,
+      end_date,
+      max_cloud = 30,
+      superres = false,
+   }) {
+      try {
+         const body = {
+            municipality_code,
+            geometry,
+            start_date,
+            end_date,
+            max_cloud,
+            superres,
+         };
+         return await apiClient.post(`/api/v1/ndvi/aoi`, body);
+      } catch (error) {
+         console.error("Erro ao buscar NDVI por AOI:", error);
+         return { time_series: [], data_source: "mock" };
+      }
+   }
+
    // Helpers
 
    getUserToken() {

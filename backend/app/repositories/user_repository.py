@@ -2,11 +2,13 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime
 from supabase import Client
 from passlib.context import CryptContext
+import logging
 
 from app.models.user import UserCreate, UserUpdate, UserInDB, User
 from app.core.exceptions import UserNotFoundError, UserAlreadyExistsError
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+logger = logging.getLogger(__name__)
 
 
 class UserRepository:
@@ -14,17 +16,29 @@ class UserRepository:
         self.supabase = supabase
         self.table = "users"
     
+    def _check_supabase(self):
+        """Verifica se Supabase está configurado"""
+        if self.supabase is None:
+            raise Exception("Supabase não configurado - modo desenvolvimento")
+    
     def _hash_password(self, password: str) -> str:
         """Hash da senha usando bcrypt"""
+        # Truncar senha para máximo de 72 bytes (limitação do bcrypt)
+        if len(password.encode('utf-8')) > 72:
+            password = password[:72]
         return pwd_context.hash(password)
     
     def verify_password(self, plain_password: str, hashed_password: str) -> bool:
         """Verifica se a senha está correta"""
+        # Truncar senha para máximo de 72 bytes (limitação do bcrypt)
+        if len(plain_password.encode('utf-8')) > 72:
+            plain_password = plain_password[:72]
         return pwd_context.verify(plain_password, hashed_password)
     
     async def create_user(self, user_data: UserCreate) -> UserInDB:
         """Cria um novo usuário"""
         try:
+            self._check_supabase()
             # Verificar se email já existe
             existing = await self.get_user_by_email(user_data.email)
             if existing:
@@ -64,6 +78,7 @@ class UserRepository:
     async def get_user_by_email(self, email: str) -> Optional[UserInDB]:
         """Busca usuário por email"""
         try:
+            self._check_supabase()
             result = self.supabase.table(self.table).select("*").eq("email", email).execute()
             
             if result.data:
@@ -77,33 +92,32 @@ class UserRepository:
     async def update(self, user_id: str, update_data: Dict[str, Any]) -> Optional[User]:
         """Atualiza dados do usuário"""
         try:
-            response = self.db.table(self.table_name).update(update_data).eq("id", user_id).execute()
+            self._check_supabase()
+            response = self.supabase.table(self.table).update(update_data).eq("id", user_id).execute()
             if response.data:
                 return User(**response.data[0])
-        except Exception:
-            pass
+        except Exception as e:
+            logger.error(f"Erro ao atualizar usuário: {e}")
+            return None
         
-        # Modo desenvolvimento - simula atualização
-        user = await self.get_by_id(user_id)
-        if user:
-            user_dict = user.dict()
-            user_dict.update(update_data)
-            return User(**user_dict)
         return None
     
     async def soft_delete(self, user_id: str) -> bool:
         """Desativa usuário (soft delete)"""
         try:
-            response = self.db.table(self.table_name).update({"is_active": False}).eq("id", user_id).execute()
+            self._check_supabase()
+            response = self.supabase.table(self.table).update({"is_active": False}).eq("id", user_id).execute()
             return bool(response.data)
-        except Exception:
-            return True  # Simula sucesso em desenvolvimento
+        except Exception as e:
+            logger.error(f"Erro ao desativar usuário: {e}")
+            return False
     
     async def get_top_users_by_points(self, limit: int = 10) -> List[User]:
         """Retorna usuários com mais pontos"""
         try:
+            self._check_supabase()
             response = (
-                self.db.table(self.table_name)
+                self.supabase.table(self.table)
                 .select("*")
                 .eq("is_active", True)
                 .order("points", desc=True)
@@ -112,7 +126,8 @@ class UserRepository:
             )
             if response.data:
                 return [User(**user) for user in response.data]
-        except Exception:
+        except Exception as e:
+            logger.error(f"Erro ao buscar top usuários: {e}")
             pass
         
         # Dados mockados para desenvolvimento
@@ -157,8 +172,9 @@ class UserRepository:
     async def search_users(self, query: str, limit: int = 20) -> List[User]:
         """Busca usuários por nome ou localização"""
         try:
+            self._check_supabase()
             response = (
-                self.db.table(self.table_name)
+                self.supabase.table(self.table)
                 .select("*")
                 .or_(f"name.ilike.%{query}%,location.ilike.%{query}%")
                 .eq("is_active", True)
@@ -167,7 +183,8 @@ class UserRepository:
             )
             if response.data:
                 return [User(**user) for user in response.data]
-        except Exception:
+        except Exception as e:
+            logger.error(f"Erro ao buscar usuários: {e}")
             pass
         
         # Busca mockada para desenvolvimento

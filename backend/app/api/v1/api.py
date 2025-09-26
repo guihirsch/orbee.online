@@ -6,7 +6,10 @@ from app.api.v1.endpoints import (
     observations,
     validations,
     ndvi,
-    recommendations
+    recommendations,
+    aoi,
+    geo,
+    plan
 )
 
 api_router = APIRouter()
@@ -46,4 +49,22 @@ api_router.include_router(
     recommendations.router, 
     prefix="/recommendations", 
     tags=["recommendations"]
+)
+
+api_router.include_router(
+    aoi.router,
+    prefix="/aoi",
+    tags=["areas-of-interest"]
+)
+
+api_router.include_router(
+    geo.router,
+    prefix="/geo",
+    tags=["geo"]
+)
+
+api_router.include_router(
+    plan.router,
+    prefix="/plan",
+    tags=["action-plan"]
 )

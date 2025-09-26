@@ -8,6 +8,7 @@ import base64
 
 from app.models.schemas import NDVIDataPoint, NDVIRequest, NDVIResponse
 from app.core.config import settings
+from app.core.cache import cache
 
 
 class NDVIService:
@@ -59,11 +60,11 @@ class NDVIService:
         # Fallback: dados mockados para desenvolvimento
         return await self._generate_mock_ndvi_data(request)
     
-    async def _fetch_real_ndvi_data(self, request: NDVIRequest) -> Optional[NDVIResponse]:
+    async def _fetch_real_ndvi_data(self, request: NDVIRequest, *, bounds: Optional[Dict[str, Any]] = None, max_cloud: int = 30) -> Optional[NDVIResponse]:
         """Busca dados NDVI reais da API Sentinel Hub"""
         token = await self._get_access_token()
         
-        # Calcula bbox expandida para a área
+        # Calcula bbox padrão (ponto + raio) — será substituído por geometria AOI quando disponível
         bbox_size = 0.01  # ~1km
         bbox = [
             request.longitude - bbox_size,
@@ -77,12 +78,18 @@ class NDVIService:
         start_date = request.start_date or (end_date - timedelta(days=90))
         
         # Payload para a API Sentinel Hub
+        # Preferir bounds.geometry quando fornecido, caso contrário usar bbox padrão
+        bounds_payload: Dict[str, Any] = {
+            "properties": {"crs": "http://www.opengis.net/def/crs/EPSG/0/4326"}
+        }
+        if bounds and "geometry" in bounds:
+            bounds_payload["geometry"] = bounds["geometry"]
+        else:
+            bounds_payload["bbox"] = bbox
+
         payload = {
             "input": {
-                "bounds": {
-                    "bbox": bbox,
-                    "properties": {"crs": "http://www.opengis.net/def/crs/EPSG/0/4326"}
-                },
+                "bounds": bounds_payload,
                 "data": [{
                     "type": "sentinel-2-l2a",
                     "dataFilter": {
@@ -90,7 +97,7 @@ class NDVIService:
                             "from": start_date.isoformat() + "T00:00:00Z",
                             "to": end_date.isoformat() + "T23:59:59Z"
                         },
-                        "maxCloudCoverage": 30
+                        "maxCloudCoverage": int(max(0, min(100, max_cloud)))
                     }
                 }]
             },
@@ -145,6 +152,102 @@ class NDVIService:
         except Exception as e:
             print(f"Erro na requisição Sentinel: {e}")
             return None
+
+    async def get_ndvi_for_aoi(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        """Obtém NDVI para uma AOI (por código do município ou GeoJSON de geometria).
+        Estratégia inicial: usar bbox da geometria e reusar _fetch_real_ndvi_data/_generate_mock_ndvi_data.
+        """
+        # Extrai período
+        start_date = payload.get("start_date")
+        end_date = payload.get("end_date")
+        max_cloud = payload.get("max_cloud", 30)
+        superres = payload.get("superres", False)
+
+        # Caso geometry esteja presente, deriva bbox; caso contrário, usar municipality_code (mock neste momento)
+        geometry = payload.get("geometry")
+        municipality_code = payload.get("municipality_code")
+
+        # BBox default (Sinimbu approx) se nada informado
+        bbox = [-52.60, -29.75, -52.30, -29.45]
+
+        if geometry and isinstance(geometry, dict):
+            try:
+                # Derivar bbox simples do GeoJSON (assume EPSG:4326)
+                def _coords_iter(g: Dict[str, Any]):
+                    t = g.get("type")
+                    if t == "Point":
+                        yield g["coordinates"]
+                    elif t in ("LineString", "MultiPoint"):
+                        for c in g["coordinates"]:
+                            yield c
+                    elif t in ("Polygon", "MultiLineString"):
+                        for ring in g["coordinates"]:
+                            for c in ring:
+                                yield c
+                    elif t == "MultiPolygon":
+                        for poly in g["coordinates"]:
+                            for ring in poly:
+                                for c in ring:
+                                    yield c
+                    elif t == "GeometryCollection":
+                        for gg in g.get("geometries", []):
+                            for c in _coords_iter(gg):
+                                yield c
+
+                xs, ys = [], []
+                for c in _coords_iter(geometry):
+                    xs.append(c[0]); ys.append(c[1])
+                if xs and ys:
+                    bbox = [min(xs), min(ys), max(xs), max(ys)]
+            except Exception as e:
+                print(f"Falha ao derivar bbox da geometria: {e}")
+
+        elif municipality_code:
+            # Placeholder: mapear código conhecido para bbox (substituir por lookup em /geo)
+            if municipality_code == "4320676":
+                bbox = [-52.60, -29.75, -52.30, -29.45]
+
+        # Converter bbox em request aproximado: usar centro para compat com NDVIRequest atual
+        cx = (bbox[0] + bbox[2]) / 2
+        cy = (bbox[1] + bbox[3]) / 2
+
+        req = NDVIRequest(
+            latitude=cy,
+            longitude=cx,
+            start_date=datetime.fromisoformat(start_date).date() if start_date else None,
+            end_date=datetime.fromisoformat(end_date).date() if end_date else None,
+        )
+
+        # Preferir passar geometry em bounds.geometry
+        bounds_param = {"geometry": geometry["geometry"]} if geometry and "geometry" in geometry else None
+
+        # Cache key baseado em bbox/período/superres
+        cache_key = f"ndvi_aoi:{bbox}:{start_date}:{end_date}:{max_cloud}:{superres}"
+        cached = cache.get(cache_key)
+        if cached is not None:
+            return cached
+
+        real = await self._fetch_real_ndvi_data(req, bounds=bounds_param, max_cloud=max_cloud)
+        if real:
+            out = real.model_dump() if hasattr(real, "model_dump") else real.__dict__
+            out.update({
+                "aoi_bbox": bbox,
+                "superres_applied": bool(superres),
+                "max_cloud": max_cloud,
+            })
+            cache.set(cache_key, out, ttl_seconds=3600)
+            return out
+
+        mock = await self._generate_mock_ndvi_data(req)
+        out = mock.model_dump() if hasattr(mock, "model_dump") else mock.__dict__
+        out.update({
+            "aoi_bbox": bbox,
+            "superres_applied": bool(superres),
+            "max_cloud": max_cloud,
+            "data_source": "Sentinel-2 (Simulado)"
+        })
+        cache.set(cache_key, out, ttl_seconds=900)
+        return out
     
     async def _process_sentinel_response(self, tiff_data: bytes, request: NDVIRequest) -> NDVIResponse:
         """Processa resposta TIFF da API Sentinel Hub"""
@@ -187,10 +290,11 @@ class NDVIService:
             ndvi_value = max(0.0, min(1.0, ndvi_value))
             
             time_series.append(NDVIDataPoint(
+                latitude=request.latitude,
+                longitude=request.longitude,
                 date=current_date,
                 ndvi_value=round(ndvi_value, 3),
-                confidence=0.85,
-                cloud_coverage=np.random.uniform(0, 30)
+                health_status=self._get_health_status(ndvi_value)
             ))
             
             current_date += timedelta(days=7)  # Dados semanais
@@ -226,14 +330,11 @@ class NDVIService:
             trend = "stable"
         
         return NDVIResponse(
-            location=f"Lat: {request.latitude}, Lon: {request.longitude}",
-            time_series=time_series,
             current_ndvi=round(current_ndvi, 3),
-            average_ndvi=round(avg_ndvi, 3),
-            vegetation_status=vegetation_status,
+            health_status=vegetation_status,
             trend=trend,
-            last_updated=datetime.now(),
-            data_source="Sentinel-2 (Simulado)"
+            last_update=datetime.now(),
+            historical_data=time_series
         )
     
     def _get_seasonal_factor(self, month: int) -> float:
@@ -277,6 +378,19 @@ class NDVIService:
             return 1.0  # Vegetação moderada a densa
         
         return 1.0
+    
+    def _get_health_status(self, ndvi_value: float) -> str:
+        """Determina status de saúde baseado no valor NDVI"""
+        if ndvi_value >= 0.7:
+            return "excellent"
+        elif ndvi_value >= 0.5:
+            return "good"
+        elif ndvi_value >= 0.3:
+            return "moderate"
+        elif ndvi_value >= 0.1:
+            return "poor"
+        else:
+            return "critical"
     
     async def get_ndvi_alerts(self, latitude: float, longitude: float) -> List[Dict[str, Any]]:
         """Retorna alertas baseados em mudanças no NDVI"""

@@ -1,8 +1,10 @@
 from typing import List, Optional
 from datetime import datetime, date
 from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import Body
 from fastapi.security import OAuth2PasswordBearer
 
+from app.services.ndvi_history_service import NDVIHistoryService
 from app.models.schemas import NDVIRequest, NDVIResponse, User
 from app.services.ndvi_service import NDVIService
 from app.api.deps import get_current_user
@@ -30,6 +32,32 @@ async def get_ndvi_data(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Erro ao obter dados NDVI: {str(e)}"
+        )
+
+@router.post("/aoi")
+async def get_ndvi_by_aoi(
+    payload: dict = Body(...),
+    current_user: User = Depends(get_current_user),
+    ndvi_service: NDVIService = Depends(get_ndvi_service)
+):
+    """Obtém NDVI por município (código IBGE) ou geometria AOI (GeoJSON).
+    Body exemplo:
+    {
+      "municipality_code": "4320676",
+      "geometry": { ...GeoJSON... },
+      "start_date": "YYYY-MM-DD",
+      "end_date": "YYYY-MM-DD",
+      "max_cloud": 30,
+      "superres": false
+    }
+    """
+    try:
+        result = await ndvi_service.get_ndvi_for_aoi(payload)
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Erro ao obter NDVI por AOI: {str(e)}"
         )
 
 
@@ -212,4 +240,62 @@ async def get_vegetation_health(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Erro ao analisar saúde da vegetação: {str(e)}"
+        )
+
+
+@router.get("/history/{municipality_code}")
+async def get_ndvi_history(
+    municipality_code: str,
+    days: int = Query(90, ge=7, le=365, description="Número de dias para buscar"),
+    limit: int = Query(100, ge=1, le=500, description="Limite de registros"),
+    current_user: User = Depends(get_current_user)
+):
+    """Obtém histórico NDVI de um município"""
+    try:
+        history_service = NDVIHistoryService()
+        history = await history_service.get_ndvi_history(
+            municipality_code=municipality_code,
+            days=days,
+            limit=limit
+        )
+        
+        return {
+            "municipality_code": municipality_code,
+            "history": history,
+            "records_count": len(history),
+            "period_days": days,
+            "last_updated": datetime.now().isoformat() + "Z"
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Erro ao obter histórico NDVI: {str(e)}"
+        )
+
+
+@router.get("/trend/{municipality_code}")
+async def get_ndvi_trend(
+    municipality_code: str,
+    days: int = Query(30, ge=7, le=90, description="Período para análise de tendência"),
+    current_user: User = Depends(get_current_user)
+):
+    """Obtém análise de tendência NDVI de um município"""
+    try:
+        history_service = NDVIHistoryService()
+        trend_analysis = await history_service.get_ndvi_trend_analysis(
+            municipality_code=municipality_code,
+            days=days
+        )
+        
+        return {
+            "municipality_code": municipality_code,
+            "trend_analysis": trend_analysis,
+            "analysis_date": datetime.now().isoformat() + "Z"
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Erro ao analisar tendência NDVI: {str(e)}"
         )

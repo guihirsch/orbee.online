@@ -43,7 +43,92 @@ async def register(user_data: RegisterRequest):
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Erro interno do servidor"
+            detail=f"Erro interno do servidor: {str(e)}"
+        )
+
+@router.post("/test-register", response_model=Token)
+async def test_register(user_data: RegisterRequest):
+    """Endpoint de teste para registro sem Supabase"""
+    try:
+        from datetime import timedelta
+        from jose import jwt
+        import uuid
+        
+        # Criar usuário mockado
+        user_id = str(uuid.uuid4())
+        
+        # Criar token JWT simples para testes
+        access_token_expires = timedelta(minutes=30)
+        expire = datetime.utcnow() + access_token_expires
+        
+        token_data = {
+            "sub": user_data.email,
+            "exp": expire
+        }
+        
+        access_token = jwt.encode(token_data, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+        
+        # Criar usuário mockado
+        user = User(
+            id=user_id,
+            email=user_data.email,
+            full_name=user_data.full_name,
+            username=user_data.username,
+            role="user",
+            bio=None,
+            location=None,
+            avatar_url=None,
+            is_active=True,
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow(),
+            observation_count=0,
+            validation_count=0,
+            points=0,
+            level=1,
+            last_login=None
+        )
+        
+        return Token(
+            access_token=access_token,
+            token_type="bearer",
+            expires_in=30 * 60,
+            user=user
+        )
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Erro interno do servidor: {str(e)}"
+        )
+
+@router.post("/test-token")
+async def test_token():
+    """Endpoint de teste para gerar token sem Supabase"""
+    try:
+        from datetime import timedelta
+        from jose import jwt
+        
+        # Criar token JWT simples para testes
+        access_token_expires = timedelta(minutes=30)
+        expire = datetime.utcnow() + access_token_expires
+        
+        token_data = {
+            "sub": "teste@exemplo.com",
+            "exp": expire
+        }
+        
+        access_token = jwt.encode(token_data, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "expires_in": 30 * 60,
+            "message": "Token de teste gerado (modo desenvolvimento)"
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Erro ao gerar token: {str(e)}"
         )
 
 @router.post("/login", response_model=Token)
