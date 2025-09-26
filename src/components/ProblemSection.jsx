@@ -5,8 +5,6 @@ import {
    Droplets,
    TrendingDown,
    DollarSign,
-   TreePine,
-   Waves,
 } from "lucide-react";
 import SimpleBackground from "./SimpleBackground";
 

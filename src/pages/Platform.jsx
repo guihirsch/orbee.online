@@ -7,7 +7,6 @@ import Modal from "../components/ui/Modal";
 import ZoneCard from "../components/ZoneCard";
 import SimpleBackground from "../components/SimpleBackground";
 import {
-   Home,
    BarChart3,
    Target,
    Users,
@@ -25,14 +24,9 @@ import {
    Camera,
 } from "lucide-react";
 
-const Platform = ({
-   backgroundImage,
-   isTransparentMode,
-   setShowHeroSection,
-}) => {
+const Platform = ({}) => {
    const [headerRef, headerVisible] = useScrollAnimation();
    const [featuresRef, featuresVisible] = useScrollAnimation();
-   const [ctaRef, ctaVisible] = useScrollAnimation();
    const { user } = useAuth();
 
    // Dados reais do MeadowGreen.jsx
@@ -485,11 +479,6 @@ const Platform = ({
          icon: <TrendingUp className="w-8 h-8" />,
          gradient: "from-blue-600 to-indigo-600",
       },
-   ];
-
-   const allFeatures = [
-      { title: "Explorar Região", features: exploreFeatures },
-      { title: "Plano de Ação", features: actionFeatures },
    ];
 
    return (
