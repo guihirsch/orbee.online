@@ -36,8 +36,7 @@ const HeroSection = () => {
                         Ambiental em Tempo Real
                      </h1>
                      <p className="text-lg text-gray-600 max-w-xl">
-                        Monitore e recupere áreas degradadas com dados em tempo
-                        real.
+                        Busque a sua região e veja a saúde da mata ciliar
                      </p>
                   </div>
 

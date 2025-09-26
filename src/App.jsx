@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Platform from "./pages/Platform";
+import MeadowGreen from "./pages/MeadowGreen";
 
 function App() {
    // Aplicar tema orbee globalmente
@@ -17,6 +18,7 @@ function App() {
          <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/plataforma" element={<Platform />} />
+            <Route path="/teste" element={<MeadowGreen />} />
          </Routes>
       </Layout>
    );

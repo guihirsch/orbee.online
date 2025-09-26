@@ -72,7 +72,7 @@ const Footer = () => {
                      </span>
                   </div>
                   <p className="text-gray-600 max-w-xl leading-relaxed">
-                     Inteligência coletiva para um futuro sustentável.
+                     O Sistema Operacional da Recuperação Ambiental.
                   </p>
                </div>
 
