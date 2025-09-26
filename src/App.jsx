@@ -16,7 +16,7 @@ function App() {
       <Layout>
          <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/platform" element={<Platform />} />
+            <Route path="/plataforma" element={<Platform />} />
          </Routes>
       </Layout>
    );

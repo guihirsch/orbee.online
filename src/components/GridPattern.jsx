@@ -16,9 +16,9 @@ const GridPattern = ({ variant = "default" }) => {
       },
       subtle: {
          size: 30,
-         strokeWidth: 0.3,
-         opacity: 0.05,
-         color: "#10b981",
+         strokeWidth: 0.8,
+         opacity: 0.18,
+         color: "#2f4538",
       },
    };
 

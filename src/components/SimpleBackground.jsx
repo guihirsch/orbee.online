@@ -11,12 +11,14 @@ const SimpleBackground = ({ variant = "default" }) => {
                size: "w-96 h-96",
                color: "from-emerald-200/8 to-green-300/4",
                delay: "0s",
+               duration: "8s",
             },
             {
                position: "bottom-1/4 right-1/4",
                size: "w-80 h-80",
                color: "from-green-200/8 to-emerald-300/4",
                delay: "2s",
+               duration: "10s",
             },
          ],
          shapes: [
@@ -37,18 +39,21 @@ const SimpleBackground = ({ variant = "default" }) => {
                size: "w-[500px] h-[500px]",
                color: "from-emerald-200/4 to-green-300/2",
                delay: "0s",
+               duration: "10s",
             },
             {
                position: "bottom-1/4 right-1/4",
                size: "w-[400px] h-[400px]",
                color: "from-green-200/4 to-emerald-300/2",
                delay: "3s",
+               duration: "12s",
             },
             {
                position: "top-1/2 right-1/3",
                size: "w-64 h-64",
                color: "from-[#2f4538]/3 to-emerald-400/1",
                delay: "6s",
+               duration: "14s",
             },
          ],
          shapes: [
@@ -76,12 +81,14 @@ const SimpleBackground = ({ variant = "default" }) => {
                size: "w-72 h-72",
                color: "from-emerald-200/6 to-green-300/3",
                delay: "0s",
+               duration: "9s",
             },
             {
                position: "bottom-1/4 right-1/4",
                size: "w-60 h-60",
                color: "from-green-200/6 to-emerald-300/3",
                delay: "3s",
+               duration: "11s",
             },
          ],
          shapes: [],
@@ -105,16 +112,10 @@ const SimpleBackground = ({ variant = "default" }) => {
             <div
                key={index}
                className={`absolute ${circle.position} ${circle.size} bg-gradient-to-br ${circle.color} rounded-full blur-3xl animate-pulse`}
-               style={{ animationDelay: circle.delay }}
-            />
-         ))}
-
-         {/* Formas geométricas */}
-         {currentConfig.shapes.map((shape, index) => (
-            <div
-               key={index}
-               className={`absolute ${shape.position} ${shape.size} bg-gradient-to-br ${shape.color} ${shape.rotation} blur-xl animate-pulse`}
-               style={{ animationDelay: shape.delay }}
+               style={{
+                  animationDelay: circle.delay,
+                  animationDuration: circle.duration || "8s",
+               }}
             />
          ))}
 

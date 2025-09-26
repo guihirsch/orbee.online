@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import useScrollAnimation from "../hooks/useScrollAnimation";
+import useAuth from "../hooks/useAuth";
 import Modal from "../components/ui/Modal";
 import ZoneCard from "../components/ZoneCard";
 import SimpleBackground from "../components/SimpleBackground";
@@ -23,7 +25,7 @@ import {
    Camera,
 } from "lucide-react";
 
-const FeaturesSection = ({
+const Platform = ({
    backgroundImage,
    isTransparentMode,
    setShowHeroSection,
@@ -31,6 +33,7 @@ const FeaturesSection = ({
    const [headerRef, headerVisible] = useScrollAnimation();
    const [featuresRef, featuresVisible] = useScrollAnimation();
    const [ctaRef, ctaVisible] = useScrollAnimation();
+   const { user } = useAuth();
 
    // Dados reais do MeadowGreen.jsx
    const [selectedZone, setSelectedZone] = useState(null);
@@ -41,6 +44,10 @@ const FeaturesSection = ({
    const [showPhotoGallery, setShowPhotoGallery] = useState(false);
    const [selectedZonePhotos, setSelectedZonePhotos] = useState(null);
    const [activeFilter, setActiveFilter] = useState("all"); // Filtro ativo: 'all', 'monitored', 'reported', 'registered'
+   const [isFilterOpen, setIsFilterOpen] = useState(false);
+   const [isSelectionOpen, setIsSelectionOpen] = useState(false);
+   const [showSearchModal, setShowSearchModal] = useState(false);
+   const [searchQuery, setSearchQuery] = useState("");
 
    // Dados estruturados para os cards das zonas
    const zoneCardsData = {
@@ -195,10 +202,6 @@ const FeaturesSection = ({
             return newSelection;
          });
       }
-   };
-
-   const clearSelectedZones = () => {
-      setSelectedZones([]);
    };
 
    const communityStats = {
@@ -499,6 +502,9 @@ const FeaturesSection = ({
          {/* Simple Background */}
          <SimpleBackground variant="subtle" />
 
+         {/* Faixa branca de fundo para o header (full width) */}
+         <div className="absolute top-0 left-0 right-0 h-20 bg-white z-0" />
+
          <div className="container mx-auto px-6 py-2 relative z-10">
             {/* Header */}
             <div
@@ -509,6 +515,341 @@ const FeaturesSection = ({
                      : "opacity-0 translate-y-10"
                }`}
             >
+               {/* Topbar da Plataforma: Logo à esquerda + Dropdowns à direita */}
+               <div className="mb-4 flex items-center justify-between  bg-white">
+                  {/* Logo */}
+                  <Link to="/" className="flex items-center gap-1">
+                     <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-bee-icon lucide-bee"
+                     >
+                        <path d="m8 2 1.88 1.88" stroke="#2f4538" />
+                        <path d="M14.12 3.88 16 2" stroke="#2f4538" />
+                        <path d="M9 7V6a3 3 0 1 1 6 0v1" stroke="#2f4538" />
+                        <path
+                           d="M5 7a3 3 0 1 0 2.2 5.1C9.1 10 12 7 12 7s2.9 3 4.8 5.1A3 3 0 1 0 19 7Z"
+                           stroke="#2f4538"
+                        />
+                        <path d="M7.56 12h8.87" stroke="#2f4538" />
+                        <path d="M7.5 17h9" stroke="#2f4538" />
+                        <path
+                           d="M15.5 10.7c.9.9 1.4 2.1 1.5 3.3 0 5.8-5 8-5 8s-5-2.2-5-8c.1-1.2.6-2.4 1.5-3.3"
+                           stroke="#2f4538"
+                        />
+                     </svg>
+                     <span
+                        className="text-xl font-medium text-[#2f4538]"
+                        style={{ fontFamily: '"Fraunces", serif' }}
+                     >
+                        orbee
+                     </span>
+                  </Link>
+
+                  {/* Ações: Filtro + Seleção */}
+                  <div className="flex items-center gap-2 sm:gap-3">
+                     {(() => {
+                        const totalAll = Object.values(zoneCardsData).length;
+                        const totalMonitored = Object.values(
+                           zoneCardsData
+                        ).filter(
+                           (zone) => zoneStatus[zone.id]?.isMonitored
+                        ).length;
+                        const totalReported = Object.values(
+                           zoneCardsData
+                        ).filter(
+                           (zone) => zoneStatus[zone.id]?.hasReport
+                        ).length;
+                        const totalRegistered = Object.values(
+                           zoneCardsData
+                        ).filter(
+                           (zone) => zoneStatus[zone.id]?.hasUserRegistration
+                        ).length;
+
+                        const currentLabel =
+                           activeFilter === "all"
+                              ? `Todas (${totalAll})`
+                              : activeFilter === "monitored"
+                                ? `Monitoradas (${totalMonitored})`
+                                : activeFilter === "reported"
+                                  ? `Com Relatório (${totalReported})`
+                                  : `Com Registro (${totalRegistered})`;
+
+                        return (
+                           <div className="relative inline-block text-left">
+                              <button
+                                 onClick={() => setIsFilterOpen((v) => !v)}
+                                 className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
+                              >
+                                 <span className="flex items-center gap-1.5">
+                                    {activeFilter === "all" && (
+                                       <Globe className="h-3 w-3" />
+                                    )}
+                                    {activeFilter === "monitored" && (
+                                       <Eye className="h-3 w-3" />
+                                    )}
+                                    {activeFilter === "reported" && (
+                                       <FileText className="h-3 w-3" />
+                                    )}
+                                    {activeFilter === "registered" && (
+                                       <Plus className="h-3 w-3" />
+                                    )}
+                                    <span>
+                                       {activeFilter === "all"
+                                          ? "Todas"
+                                          : activeFilter === "monitored"
+                                            ? "Monitoradas"
+                                            : activeFilter === "reported"
+                                              ? "Com Relatório"
+                                              : "Com Registro"}
+                                    </span>
+                                    <span className="rounded bg-gray-100 px-2 py-0.5 text-[10px] sm:text-xs text-gray-600">
+                                       {activeFilter === "all"
+                                          ? totalAll
+                                          : activeFilter === "monitored"
+                                            ? totalMonitored
+                                            : activeFilter === "reported"
+                                              ? totalReported
+                                              : totalRegistered}
+                                    </span>
+                                 </span>
+                                 <svg
+                                    className="ml-1 h-3 w-3 text-gray-500"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                 >
+                                    <path
+                                       fillRule="evenodd"
+                                       d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                                       clipRule="evenodd"
+                                    />
+                                 </svg>
+                              </button>
+                              {isFilterOpen && (
+                                 <div className="absolute right-0 z-20 mt-2 w-56 origin-top-right rounded-lg border border-gray-200 bg-white shadow-lg focus:outline-none">
+                                    <div className="py-1 text-sm text-gray-700">
+                                       <button
+                                          onClick={() => {
+                                             setActiveFilter("all");
+                                             setIsFilterOpen(false);
+                                          }}
+                                          className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${activeFilter === "all" ? "bg-[#2f4538]/10" : ""}`}
+                                       >
+                                          <span className="flex items-center gap-2">
+                                             <Globe className="h-4 w-4" />
+                                             Todas
+                                          </span>
+                                          <span className="text-gray-500">
+                                             {totalAll}
+                                          </span>
+                                       </button>
+                                       <button
+                                          onClick={() => {
+                                             setActiveFilter("monitored");
+                                             setIsFilterOpen(false);
+                                          }}
+                                          className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${activeFilter === "monitored" ? "bg-blue-500/10" : ""}`}
+                                       >
+                                          <span className="flex items-center gap-2">
+                                             <Eye className="h-4 w-4" />
+                                             Monitoradas
+                                          </span>
+                                          <span className="text-gray-500">
+                                             {totalMonitored}
+                                          </span>
+                                       </button>
+                                       <button
+                                          onClick={() => {
+                                             setActiveFilter("reported");
+                                             setIsFilterOpen(false);
+                                          }}
+                                          className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${activeFilter === "reported" ? "bg-yellow-500/10" : ""}`}
+                                       >
+                                          <span className="flex items-center gap-2">
+                                             <FileText className="h-4 w-4" />
+                                             Com Relatório
+                                          </span>
+                                          <span className="text-gray-500">
+                                             {totalReported}
+                                          </span>
+                                       </button>
+                                       <button
+                                          onClick={() => {
+                                             setActiveFilter("registered");
+                                             setIsFilterOpen(false);
+                                          }}
+                                          className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${activeFilter === "registered" ? "bg-green-500/10" : ""}`}
+                                       >
+                                          <span className="flex items-center gap-2">
+                                             <Plus className="h-4 w-4" />
+                                             Com Registro
+                                          </span>
+                                          <span className="text-gray-500">
+                                             {totalRegistered}
+                                          </span>
+                                       </button>
+                                    </div>
+                                 </div>
+                              )}
+                           </div>
+                        );
+                     })()}
+
+                     {/* Dropdown Seleção */}
+                     <div className="relative inline-block text-left">
+                        <button
+                           onClick={() => setIsSelectionOpen((v) => !v)}
+                           className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
+                        >
+                           <span className="rounded bg-gray-100 px-2 py-0.5 text-[10px] sm:text-xs text-gray-600">
+                              {selectedZones.length}
+                           </span>
+                           <span className="hidden sm:inline">
+                              Zonas selecionadas
+                           </span>
+                           <span className="sm:hidden">Selecionadas</span>
+                           <svg
+                              className="ml-1 h-3 w-3 text-gray-500"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                           >
+                              <path
+                                 fillRule="evenodd"
+                                 d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                                 clipRule="evenodd"
+                              />
+                           </svg>
+                        </button>
+                        {isSelectionOpen && (
+                           <div className="absolute right-0 z-20 mt-2 w-64 origin-top-right rounded-lg border border-gray-200 bg-white shadow-lg focus:outline-none">
+                              <div className="py-1 text-sm text-gray-700">
+                                 <div className="px-3 py-2 text-xs text-gray-500">
+                                    {selectedZones.length} zona
+                                    {selectedZones.length !== 1 ? "s" : ""}{" "}
+                                    selecionada
+                                    {selectedZones.length !== 1 ? "s" : ""}
+                                 </div>
+                                 <button
+                                    onClick={() => {
+                                       handleSelectAllZones();
+                                       setIsSelectionOpen(false);
+                                    }}
+                                    className="flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50"
+                                 >
+                                    <span className="flex items-center gap-2">
+                                       <Check className="h-4 w-4 text-[#2f4538]" />
+                                       {filteredZones.every((zone) =>
+                                          selectedZones.includes(zone.id)
+                                       )
+                                          ? "Desmarcar Todas"
+                                          : "Selecionar Todas"}
+                                    </span>
+                                    <span className="text-gray-500">
+                                       {filteredZones.length}
+                                    </span>
+                                 </button>
+                                 <div className="my-1 h-px bg-gray-100" />
+                                 <button
+                                    disabled={selectedZones.length === 0}
+                                    onClick={() => {
+                                       setShowExportModal(true);
+                                       setIsSelectionOpen(false);
+                                    }}
+                                    className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${selectedZones.length === 0 ? "cursor-not-allowed opacity-50" : ""}`}
+                                 >
+                                    <span className="flex items-center gap-2">
+                                       <FileText className="h-4 w-4 text-blue-600" />
+                                       Relatório
+                                    </span>
+                                    <span className="text-gray-500">
+                                       {selectedZones.length}
+                                    </span>
+                                 </button>
+                                 <button
+                                    disabled={selectedZones.length === 0}
+                                    onClick={() => {
+                                       setShowTrackingModal(true);
+                                       setIsSelectionOpen(false);
+                                    }}
+                                    className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${selectedZones.length === 0 ? "cursor-not-allowed opacity-50" : ""}`}
+                                 >
+                                    <span className="flex items-center gap-2">
+                                       <Eye className="h-4 w-4 text-yellow-600" />
+                                       Acompanhar
+                                    </span>
+                                    <span className="text-gray-500">
+                                       {selectedZones.length}
+                                    </span>
+                                 </button>
+                                 <button
+                                    disabled={selectedZones.length === 0}
+                                    onClick={() => {
+                                       setShowActionModal(true);
+                                       setIsSelectionOpen(false);
+                                    }}
+                                    className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${selectedZones.length === 0 ? "cursor-not-allowed opacity-50" : ""}`}
+                                 >
+                                    <span className="flex items-center gap-2">
+                                       <Plus className="h-4 w-4 text-green-600" />
+                                       Registrar
+                                    </span>
+                                    <span className="text-gray-500">
+                                       {selectedZones.length}
+                                    </span>
+                                 </button>
+                                 <div className="my-1 h-px bg-gray-100" />
+                                 <button
+                                    onClick={() => {
+                                       setSelectedZones([]);
+                                       setIsSelectionOpen(false);
+                                    }}
+                                    className="flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50"
+                                 >
+                                    <span className="flex items-center gap-2">
+                                       <X className="h-4 w-4 text-gray-600" />
+                                       Limpar seleção
+                                    </span>
+                                 </button>
+                              </div>
+                           </div>
+                        )}
+                     </div>
+
+                     {/* Botão de Pesquisa */}
+                     <button
+                        onClick={() => setShowSearchModal(true)}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
+                        aria-label="Pesquisar"
+                        title="Pesquisar"
+                     >
+                        <Search className="h-4 w-4" />
+                     </button>
+                     {/* Avatar / Perfil */}
+                     <Link
+                        to="/profile"
+                        title={user?.name || "Perfil"}
+                        className="ml-1 inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-gray-300 bg-gray-100 text-xs font-semibold text-gray-700 hover:ring-2 hover:ring-[#2f4538]/30"
+                        aria-label="Abrir perfil"
+                     >
+                        {user?.avatarUrl ? (
+                           // eslint-disable-next-line jsx-a11y/alt-text
+                           <img
+                              src={user.avatarUrl}
+                              className="h-full w-full object-cover"
+                           />
+                        ) : (
+                           <span>{(user?.name?.[0] || "U").toUpperCase()}</span>
+                        )}
+                     </Link>
+                  </div>
+               </div>
                {/* Plano de Ação - Cards Interativos */}
                <div
                   ref={featuresRef}
@@ -524,136 +865,20 @@ const FeaturesSection = ({
                            <h3
                               className="text-xl sm:text-2xl font-bold text-[#2f4538] mb-2 flex items-center"
                               style={{
-                                 fontFamily:
-                                    '"PP Fragment Glare Regular", "PP Fragment Glare", serif',
+                                 fontFamily: '"Fraunces", serif',
                               }}
                            >
-                              <Target className="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6 text-[#2f4538]" />
                               Áreas Prioritárias para Ação
                            </h3>
-                           <p className="text-gray-600 text-xs sm:text-sm mb-4">
+                           <p className="text-gray-600 text-xs sm:text-sm">
                               Clique nos cards para explorar recomendações para
                               cada zona
                            </p>
 
-                           {/* Filtros */}
-                           <div className="flex flex-wrap gap-2 mb-4">
-                              <button
-                                 onClick={() => setActiveFilter("all")}
-                                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                                    activeFilter === "all"
-                                       ? "bg-[#2f4538]/20 text-[#2f4538] border border-[#2f4538]/50"
-                                       : "bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200"
-                                 }`}
-                              >
-                                 <Globe className="h-3 w-3" />
-                                 Todas ({Object.values(zoneCardsData).length})
-                              </button>
-                              <button
-                                 onClick={() => setActiveFilter("monitored")}
-                                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                                    activeFilter === "monitored"
-                                       ? "bg-blue-500/20 text-blue-600 border border-blue-500/50"
-                                       : "bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200"
-                                 }`}
-                              >
-                                 <Eye className="h-3 w-3" />
-                                 Monitoradas (
-                                 {
-                                    Object.values(zoneCardsData).filter(
-                                       (zone) =>
-                                          zoneStatus[zone.id]?.isMonitored
-                                    ).length
-                                 }
-                                 )
-                              </button>
-                              <button
-                                 onClick={() => setActiveFilter("reported")}
-                                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                                    activeFilter === "reported"
-                                       ? "bg-yellow-500/20 text-yellow-600 border border-yellow-500/50"
-                                       : "bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200"
-                                 }`}
-                              >
-                                 <FileText className="h-3 w-3" />
-                                 Com Relatório (
-                                 {
-                                    Object.values(zoneCardsData).filter(
-                                       (zone) => zoneStatus[zone.id]?.hasReport
-                                    ).length
-                                 }
-                                 )
-                              </button>
-                              <button
-                                 onClick={() => setActiveFilter("registered")}
-                                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                                    activeFilter === "registered"
-                                       ? "bg-green-500/20 text-green-600 border border-green-500/50"
-                                       : "bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200"
-                                 }`}
-                              >
-                                 <Plus className="h-3 w-3" />
-                                 Com Registro (
-                                 {
-                                    Object.values(zoneCardsData).filter(
-                                       (zone) =>
-                                          zoneStatus[zone.id]
-                                             ?.hasUserRegistration
-                                    ).length
-                                 }
-                                 )
-                              </button>
-                           </div>
+                           {/* Filtros movidos para o header da plataforma */}
                         </div>
 
-                        {/* Controles de Seleção */}
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
-                           <div className="flex items-center gap-2">
-                              <span className="text-xs sm:text-sm text-gray-600">
-                                 {selectedZones.length} zona
-                                 {selectedZones.length !== 1 ? "s" : ""}{" "}
-                                 selecionada
-                                 {selectedZones.length !== 1 ? "s" : ""}
-                              </span>
-                              <button
-                                 onClick={handleSelectAllZones}
-                                 className="rounded-lg border border-[#2f4538]/30 bg-[#2f4538]/20 px-2 sm:px-3 py-1 text-xs font-medium text-[#2f4538] hover:bg-[#2f4538]/30 transition-colors"
-                              >
-                                 {filteredZones.every((zone) =>
-                                    selectedZones.includes(zone.id)
-                                 )
-                                    ? "Desmarcar Todas"
-                                    : "Selecionar Todas"}
-                              </button>
-                           </div>
-
-                           {/* Botões de Ação */}
-                           {selectedZones.length > 0 && (
-                              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                                 <button
-                                    onClick={() => setShowExportModal(true)}
-                                    className="flex items-center justify-center gap-2 rounded-lg border border-blue-500/30 bg-blue-500/20 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-blue-600 hover:bg-blue-500/30 transition-colors"
-                                 >
-                                    <FileText className="h-3 w-3 sm:h-4 sm:w-4" />
-                                    Relatório
-                                 </button>
-                                 <button
-                                    onClick={() => setShowTrackingModal(true)}
-                                    className="flex items-center gap-2 rounded-lg border border-yellow-500/30 bg-yellow-500/20 px-3 py-2 text-sm font-medium text-yellow-600 hover:bg-yellow-500/30 transition-colors"
-                                 >
-                                    <Eye className="h-4 w-4" />
-                                    Acompanhar
-                                 </button>
-                                 <button
-                                    onClick={() => setShowActionModal(true)}
-                                    className="flex items-center gap-2 rounded-lg border border-green-500/30 bg-green-500/20 px-3 py-2 text-sm font-medium text-green-600 hover:bg-green-500/30 transition-colors"
-                                 >
-                                    <Plus className="h-4 w-4" />
-                                    Registrar
-                                 </button>
-                              </div>
-                           )}
-                        </div>
+                        {/* Controles de Seleção movidos para o header da plataforma */}
                      </div>
                   </div>
 
@@ -1065,6 +1290,68 @@ const FeaturesSection = ({
             )}
          </AnimatePresence>
 
+         {/* Modal de Pesquisa */}
+         <Modal
+            isOpen={showSearchModal}
+            onClose={() => setShowSearchModal(false)}
+            title="Pesquisar"
+            size="md"
+         >
+            <div className="mb-4">
+               <label className="mb-2 block text-sm font-medium text-slate-300">
+                  Buscar zona
+               </label>
+               <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Digite o nome ou ID da zona (ex: A, B, C)"
+                  className="w-full rounded-lg border border-slate-600 bg-slate-700 p-3 text-white placeholder-slate-400 focus:border-blue-500 focus:outline-none"
+               />
+            </div>
+
+            <div className="max-h-64 overflow-y-auto rounded-lg border border-slate-700">
+               {Object.values(zoneCardsData)
+                  .filter((z) => {
+                     if (!searchQuery) return true;
+                     const q = searchQuery.toLowerCase();
+                     return (
+                        z.name.toLowerCase().includes(q) ||
+                        z.id.toLowerCase().includes(q)
+                     );
+                  })
+                  .map((z) => (
+                     <button
+                        key={z.id}
+                        onClick={() => {
+                           setSelectedZone(z.id);
+                           setShowSearchModal(false);
+                        }}
+                        className="flex w-full items-center justify-between px-3 py-2 text-left text-sm text-slate-200 hover:bg-slate-700/60"
+                     >
+                        <span className="flex items-center gap-2">
+                           <span
+                              className={`h-2 w-2 rounded-full ${z.color === "red" ? "bg-red-500" : z.color === "orange" ? "bg-orange-500" : "bg-yellow-500"}`}
+                           ></span>
+                           <span className="font-medium">{z.name}</span>
+                        </span>
+                        <span className="text-xs text-slate-400">
+                           ID: {z.id}
+                        </span>
+                     </button>
+                  ))}
+            </div>
+
+            <Modal.Footer>
+               <Modal.Button
+                  variant="secondary"
+                  onClick={() => setShowSearchModal(false)}
+               >
+                  Fechar
+               </Modal.Button>
+            </Modal.Footer>
+         </Modal>
+
          {/* Modal de Acompanhamento */}
          <Modal
             isOpen={showTrackingModal}
@@ -1337,4 +1624,4 @@ const FeaturesSection = ({
    );
 };
 
-export default FeaturesSection;
+export default Platform;
