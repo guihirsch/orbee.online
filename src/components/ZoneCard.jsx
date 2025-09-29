@@ -34,19 +34,30 @@ const ZoneCard = ({
       color,
       latitude,
       longitude,
-   } = zoneData;
+   } = zoneData || {};
    const isSelected = selectedZone === id;
    const isChecked = selectedZones.includes(id);
-   const activities = zoneActivities[`zona-${id.toLowerCase()}`];
+   const activities = zoneActivities?.[`zona-${id?.toLowerCase()}`] || {
+      reports: 0,
+      tracking: 0,
+      actions: 0,
+      photos: 0,
+   };
 
    // Calcular progresso baseado nas atividades
    const totalActivities =
-      activities.reports + activities.tracking + activities.actions;
+      (activities?.reports || 0) +
+      (activities?.tracking || 0) +
+      (activities?.actions || 0);
    const progressPercentage = Math.min(100, (totalActivities / 10) * 100); // Assumindo 10 como meta
 
    // Determinar status baseado na degradação e atividades
    const getZoneStatus = () => {
-      if (degradation === "Severa" && totalActivities < 3) return "critical";
+      if (
+         (degradation === "Severa" || degradation === "severe") &&
+         totalActivities < 3
+      )
+         return "critical";
       if (totalActivities >= 7) return "completed";
       if (totalActivities >= 3) return "in_progress";
       return "pending";
@@ -54,7 +65,7 @@ const ZoneCard = ({
 
    // Determinar tendência baseada no NDVI
    const getTrend = () => {
-      const ndviValue = parseFloat(ndvi);
+      const ndviValue = parseFloat(ndvi || 0);
       if (ndviValue >= 0.4) return "improving";
       if (ndviValue <= 0.3) return "declining";
       return "stable";
@@ -114,7 +125,36 @@ const ZoneCard = ({
       },
    };
 
-   const colors = colorClasses[color];
+   // Mapear cores dos dados do plano para cores válidas
+   const getColorFromData = (zoneData) => {
+      // Se já tem color válida, usar ela
+      if (color && colorClasses[color]) {
+         return color;
+      }
+
+      // Mapear baseado na prioridade ou degradação
+      if (
+         zoneData.priority === "Urgente" ||
+         zoneData.degradation === "Severa"
+      ) {
+         return "red";
+      }
+      if (zoneData.priority === "Alta" || zoneData.degradation === "Moderada") {
+         return "orange";
+      }
+      if (zoneData.priority === "Moderada" || zoneData.priority === "Baixa") {
+         return "yellow";
+      }
+
+      // Fallback baseado no NDVI
+      const ndviValue = parseFloat(zoneData.ndvi) || 0;
+      if (ndviValue < 0.3) return "red";
+      if (ndviValue < 0.5) return "orange";
+      return "yellow";
+   };
+
+   const mappedColor = getColorFromData(zoneData);
+   const colors = colorClasses[mappedColor] || colorClasses.yellow; // Fallback para yellow
 
    return (
       <div

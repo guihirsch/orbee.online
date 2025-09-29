@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS users (
     privacy_level VARCHAR(20) DEFAULT 'public', -- public, friends, private
     
     -- Metadados
+    role VARCHAR(20) DEFAULT 'citizen', -- citizen, scientist, moderator, admin
     is_active BOOLEAN DEFAULT true,
     is_verified BOOLEAN DEFAULT false,
     last_login TIMESTAMP WITH TIME ZONE,

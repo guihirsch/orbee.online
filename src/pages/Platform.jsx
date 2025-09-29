@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import useScrollAnimation from "../hooks/useScrollAnimation";
@@ -22,9 +22,17 @@ import {
    Check,
    X,
    Camera,
+   MapPin,
+   Loader2,
 } from "lucide-react";
 import NDVIMap from "../components/NDVIMap";
 import MunicipalitySearch from "../components/MunicipalitySearch";
+import {
+   searchMunicipalities,
+   getMunicipalityGeometry,
+} from "../services/geoService";
+import { getPlanForMunicipality } from "../services/planService";
+import cacheService from "../services/cacheService";
 
 const Platform = ({}) => {
    const [headerRef, headerVisible] = useScrollAnimation();
@@ -47,10 +55,156 @@ const Platform = ({}) => {
    const [aoiGeoJSON, setAoiGeoJSON] = useState(null);
    const [actionPlan, setActionPlan] = useState(null);
 
+   // Estados para pesquisa de município
+   const [municipalityResults, setMunicipalityResults] = useState([]);
+   const [municipalityLoading, setMunicipalityLoading] = useState(false);
+   const [selectedMunicipality, setSelectedMunicipality] = useState(null);
+
+   // Estados para dados do município
+   const [municipalityData, setMunicipalityData] = useState(null);
+   const [loadingMunicipalityData, setLoadingMunicipalityData] =
+      useState(false);
+
    function handleAOILoad({ municipality, geometry, ndvi, plan }) {
       if (geometry) setAoiGeoJSON(geometry);
       if (plan) setActionPlan(plan);
    }
+
+   // Função para pesquisar municípios
+   useEffect(() => {
+      const handler = setTimeout(async () => {
+         if (searchQuery.trim().length < 2) {
+            setMunicipalityResults([]);
+            return;
+         }
+
+         setMunicipalityLoading(true);
+         try {
+            const results = await searchMunicipalities(searchQuery.trim());
+
+            // Valida e filtra resultados
+            const validResults = (results || [])
+               .filter((result) => result && result.name && result.name.trim())
+               .map((result) => ({
+                  ...result,
+                  name: result.name.trim(),
+                  state: result.state || result.uf || "N/A",
+               }));
+
+            setMunicipalityResults(validResults);
+         } catch (error) {
+            console.error("Erro ao pesquisar municípios:", error);
+            setMunicipalityResults([]);
+         } finally {
+            setMunicipalityLoading(false);
+         }
+      }, 300);
+
+      return () => clearTimeout(handler);
+   }, [searchQuery]);
+
+   // Função para selecionar município e carregar plano
+   const handleMunicipalitySelect = async (municipality) => {
+      setSelectedMunicipality(municipality);
+      setShowSearchModal(false);
+      setSearchQuery("");
+      setMunicipalityResults([]);
+      setLoadingMunicipalityData(true);
+
+      try {
+         // 1. Primeiro tenta buscar dados do cache (rápido)
+         const cacheResult = await cacheService.getMunicipalityDataWithFallback(
+            municipality.ibge_code,
+            {
+               includeGeometry: true,
+               includePlan: true,
+               includeNDVI: true,
+            }
+         );
+
+         if (cacheResult.success) {
+            console.log(
+               `Dados carregados do cache para ${municipality.name} (${cacheResult.performance})`
+            );
+
+            // Usa dados do cache
+            const { data } = cacheResult;
+
+            if (data.geometry) {
+               setAoiGeoJSON(data.geometry.geometry);
+            }
+
+            if (data.plan) {
+               setActionPlan(data.plan.plan);
+
+               // Consolidar dados do município
+               const municipalityData = {
+                  municipality,
+                  geometry: data.geometry?.geometry,
+                  plan: data.plan.plan,
+                  ndvi: data.plan.ndvi_data,
+                  zones: data.plan.zones || [],
+                  summary: data.plan.summary,
+               };
+               setMunicipalityData(municipalityData);
+            }
+
+            // Callback para componentes
+            handleAOILoad({
+               municipality,
+               geometry: data.geometry?.geometry,
+               plan: data.plan?.plan,
+               ndvi: data.plan?.ndvi_data,
+            });
+         } else {
+            // 2. Fallback para API normal (mais lento)
+            console.log(
+               `Cache não disponível para ${municipality.name}, usando API normal...`
+            );
+
+            // Carregar geometria do município
+            const geometry = await getMunicipalityGeometry(
+               municipality.ibge_code,
+               "osm",
+               municipality.name
+            );
+            setAoiGeoJSON(geometry);
+
+            // Carregar plano de ação para o município (inclui NDVI)
+            const plan = await getPlanForMunicipality(municipality.ibge_code);
+            setActionPlan(plan);
+
+            // Consolidar dados do município
+            const municipalityData = {
+               municipality,
+               geometry,
+               plan,
+               ndvi: plan?.ndvi_data,
+               zones: plan?.zones || [],
+               summary: plan?.summary,
+            };
+            setMunicipalityData(municipalityData);
+
+            // Atualizar as zonas com os dados do plano
+            if (plan && plan.zones) {
+               console.log("Plano carregado para:", municipality.name);
+               console.log("Zonas do plano:", plan.zones);
+            }
+
+            // Callback para componentes que precisam dos dados
+            handleAOILoad({
+               municipality,
+               geometry,
+               plan,
+               ndvi: plan?.ndvi_data,
+            });
+         }
+      } catch (error) {
+         console.error("Erro ao carregar dados do município:", error);
+      } finally {
+         setLoadingMunicipalityData(false);
+      }
+   };
 
    // Dados estruturados para os cards das zonas
    const zoneCardsData = {
@@ -824,11 +978,29 @@ const Platform = ({}) => {
                      <button
                         onClick={() => setShowSearchModal(true)}
                         className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
-                        aria-label="Pesquisar"
-                        title="Pesquisar"
+                        aria-label="Pesquisar município"
+                        title="Pesquisar município"
                      >
                         <Search className="h-4 w-4" />
                      </button>
+
+                     {/* Botão para limpar seleção de município */}
+                     {selectedMunicipality && (
+                        <button
+                           onClick={() => {
+                              setSelectedMunicipality(null);
+                              setActionPlan(null);
+                              setAoiGeoJSON(null);
+                              setMunicipalityData(null);
+                              setLoadingMunicipalityData(false);
+                           }}
+                           className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
+                           aria-label="Limpar seleção"
+                           title="Limpar seleção de município"
+                        >
+                           <X className="h-4 w-4" />
+                        </button>
+                     )}
                      {/* Avatar / Perfil */}
                      <Link
                         to="/profile"
@@ -868,11 +1040,116 @@ const Platform = ({}) => {
                               }}
                            >
                               Áreas Prioritárias para Ação
+                              {selectedMunicipality && (
+                                 <span className="ml-3 text-sm font-normal text-blue-600">
+                                    - {selectedMunicipality.name}
+                                 </span>
+                              )}
                            </h3>
                            <p className="text-gray-600 text-xs sm:text-sm">
-                              Clique nos cards para explorar recomendações para
-                              cada zona
+                              {selectedMunicipality
+                                 ? `Plano de ação para ${selectedMunicipality.name}, ${selectedMunicipality.state}. Clique nos cards para explorar recomendações.`
+                                 : "Clique nos cards para explorar recomendações para cada zona"}
                            </p>
+
+                           {/* Informações do município carregado */}
+                           {municipalityData && (
+                              <div className="mt-4 space-y-4">
+                                 {/* Resumo principal */}
+                                 <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <div className="flex items-center gap-2 mb-3">
+                                       <MapPin className="h-4 w-4 text-blue-600" />
+                                       <span className="text-sm font-medium text-blue-800">
+                                          Resumo do Município
+                                       </span>
+                                    </div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+                                       <div>
+                                          <span className="text-gray-600">
+                                             NDVI Atual:
+                                          </span>
+                                          <span className="ml-1 font-medium text-blue-600">
+                                             {municipalityData.ndvi?.current_ndvi?.toFixed(
+                                                3
+                                             ) || "N/A"}
+                                          </span>
+                                       </div>
+                                       <div>
+                                          <span className="text-gray-600">
+                                             Status:
+                                          </span>
+                                          <span className="ml-1 font-medium text-blue-600">
+                                             {municipalityData.ndvi?.status ||
+                                                "N/A"}
+                                          </span>
+                                       </div>
+                                       <div>
+                                          <span className="text-gray-600">
+                                             Tendência:
+                                          </span>
+                                          <span className="ml-1 font-medium text-blue-600">
+                                             {municipalityData.ndvi?.trend ||
+                                                "N/A"}
+                                          </span>
+                                       </div>
+                                       <div>
+                                          <span className="text-gray-600">
+                                             Zonas:
+                                          </span>
+                                          <span className="ml-1 font-medium text-blue-600">
+                                             {municipalityData.zones?.length ||
+                                                0}{" "}
+                                             identificadas
+                                          </span>
+                                       </div>
+                                    </div>
+                                 </div>
+
+                                 {/* Estatísticas detalhadas */}
+                                 {municipalityData.plan && (
+                                    <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                                       <div className="flex items-center gap-2 mb-3">
+                                          <BarChart3 className="h-4 w-4 text-green-600" />
+                                          <span className="text-sm font-medium text-green-800">
+                                             Análise Detalhada
+                                          </span>
+                                       </div>
+                                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+                                          <div>
+                                             <span className="text-gray-600">
+                                                Área Total:
+                                             </span>
+                                             <span className="ml-1 font-medium text-green-600">
+                                                {municipalityData.plan.area_km2
+                                                   ? `${municipalityData.plan.area_km2} km²`
+                                                   : "N/A"}
+                                             </span>
+                                          </div>
+                                          <div>
+                                             <span className="text-gray-600">
+                                                População:
+                                             </span>
+                                             <span className="ml-1 font-medium text-green-600">
+                                                {municipalityData.plan
+                                                   .population
+                                                   ? municipalityData.plan.population.toLocaleString()
+                                                   : "N/A"}
+                                             </span>
+                                          </div>
+                                          <div>
+                                             <span className="text-gray-600">
+                                                Última Atualização:
+                                             </span>
+                                             <span className="ml-1 font-medium text-green-600">
+                                                {municipalityData.plan
+                                                   .last_update || "N/A"}
+                                             </span>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 )}
+                              </div>
+                           )}
 
                            {/* Filtros movidos para o header da plataforma */}
                         </div>
@@ -881,21 +1158,34 @@ const Platform = ({}) => {
                      </div>
                   </div>
 
-                  <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                     {(actionPlan?.zones || filteredZones).map((zone) => (
-                        <ZoneCard
-                           key={zone.id}
-                           zone={zone.id}
-                           zoneData={zone}
-                           selectedZone={selectedZone}
-                           selectedZones={selectedZones}
-                           zoneActivities={zoneActivities}
-                           onZoneClick={handleZoneClick}
-                           onZoneToggle={handleZoneToggle}
-                           onPhotoGalleryOpen={handlePhotoGalleryOpen}
-                        />
-                     ))}
-                  </div>
+                  {/* Indicador de carregamento */}
+                  {loadingMunicipalityData && (
+                     <div className="flex items-center justify-center py-12">
+                        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+                        <span className="ml-3 text-gray-600">
+                           Carregando dados do município...
+                        </span>
+                     </div>
+                  )}
+
+                  {/* Grid de zonas */}
+                  {!loadingMunicipalityData && (
+                     <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                        {(actionPlan?.zones || filteredZones).map((zone) => (
+                           <ZoneCard
+                              key={zone.id}
+                              zone={zone.id}
+                              zoneData={zone}
+                              selectedZone={selectedZone}
+                              selectedZones={selectedZones}
+                              zoneActivities={zoneActivities}
+                              onZoneClick={handleZoneClick}
+                              onZoneToggle={handleZoneToggle}
+                              onPhotoGalleryOpen={handlePhotoGalleryOpen}
+                           />
+                        ))}
+                     </div>
+                  )}
 
                   {/* Mensagem quando não há zonas filtradas */}
                   {filteredZones.length === 0 && (
@@ -1289,62 +1579,150 @@ const Platform = ({}) => {
             )}
          </AnimatePresence>
 
-         {/* Modal de Pesquisa */}
+         {/* Modal de Pesquisa de Município */}
          <Modal
             isOpen={showSearchModal}
-            onClose={() => setShowSearchModal(false)}
-            title="Pesquisar"
+            onClose={() => {
+               setShowSearchModal(false);
+               setSearchQuery("");
+               setMunicipalityResults([]);
+            }}
+            title="Pesquisar Município"
             size="md"
          >
             <div className="mb-4">
                <label className="mb-2 block text-sm font-medium text-slate-300">
-                  Buscar zona
+                  Buscar município
                </label>
                <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Digite o nome ou ID da zona (ex: A, B, C)"
+                  placeholder="Digite o nome do município (ex: Santa Cruz do Sul)"
                   className="w-full rounded-lg border border-slate-600 bg-slate-700 p-3 text-white placeholder-slate-400 focus:border-blue-500 focus:outline-none"
                />
             </div>
 
             <div className="max-h-64 overflow-y-auto rounded-lg border border-slate-700">
-               {Object.values(zoneCardsData)
-                  .filter((z) => {
-                     if (!searchQuery) return true;
-                     const q = searchQuery.toLowerCase();
-                     return (
-                        z.name.toLowerCase().includes(q) ||
-                        z.id.toLowerCase().includes(q)
-                     );
-                  })
-                  .map((z) => (
-                     <button
-                        key={z.id}
-                        onClick={() => {
-                           setSelectedZone(z.id);
-                           setShowSearchModal(false);
-                        }}
-                        className="flex w-full items-center justify-between px-3 py-2 text-left text-sm text-slate-200 hover:bg-slate-700/60"
-                     >
-                        <span className="flex items-center gap-2">
-                           <span
-                              className={`h-2 w-2 rounded-full ${z.color === "red" ? "bg-red-500" : z.color === "orange" ? "bg-orange-500" : "bg-yellow-500"}`}
-                           ></span>
-                           <span className="font-medium">{z.name}</span>
-                        </span>
-                        <span className="text-xs text-slate-400">
-                           ID: {z.id}
-                        </span>
-                     </button>
-                  ))}
+               {municipalityLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                     <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
+                     <span className="ml-2 text-sm text-slate-300">
+                        Pesquisando municípios...
+                     </span>
+                  </div>
+               ) : municipalityResults.length > 0 ? (
+                  <>
+                     {/* Contador de resultados */}
+                     <div className="px-3 py-2 text-xs text-slate-400 border-b border-slate-700">
+                        {municipalityResults.length} município
+                        {municipalityResults.length !== 1 ? "s" : ""} encontrado
+                        {municipalityResults.length !== 1 ? "s" : ""}
+                     </div>
+                     {municipalityResults
+                        .filter((municipality, index, self) => {
+                           // Remove duplicatas e valida dados
+                           if (!municipality || !municipality.name)
+                              return false;
+
+                           // Remove duplicatas baseado no ibge_code ou nome+estado
+                           return (
+                              self.findIndex(
+                                 (m) =>
+                                    (m.ibge_code &&
+                                       m.ibge_code ===
+                                          municipality.ibge_code) ||
+                                    (!m.ibge_code &&
+                                       m.name === municipality.name &&
+                                       m.state === municipality.state)
+                              ) === index
+                           );
+                        })
+                        .sort((a, b) => {
+                           // Ordena por relevância: primeiro municípios brasileiros, depois por nome
+                           const aIsBrazil =
+                              a.state === "RS" ||
+                              a.state === "SC" ||
+                              a.state === "PR";
+                           const bIsBrazil =
+                              b.state === "RS" ||
+                              b.state === "SC" ||
+                              b.state === "PR";
+
+                           if (aIsBrazil && !bIsBrazil) return -1;
+                           if (!aIsBrazil && bIsBrazil) return 1;
+
+                           return a.name.localeCompare(b.name, "pt-BR");
+                        })
+                        .map((municipality, index) => (
+                           <button
+                              key={
+                                 municipality.ibge_code ||
+                                 `municipality-${index}-${municipality.name}`
+                              }
+                              onClick={() =>
+                                 handleMunicipalitySelect(municipality)
+                              }
+                              className="flex w-full items-center justify-between px-3 py-2 text-left text-sm text-slate-200 hover:bg-slate-700/60"
+                           >
+                              <span className="flex items-center gap-2">
+                                 <MapPin className="h-4 w-4 text-blue-500" />
+                                 <span className="font-medium">
+                                    {municipality.name}
+                                 </span>
+                              </span>
+                              <span className="text-xs text-slate-400">
+                                 {municipality.state ||
+                                    municipality.uf ||
+                                    "N/A"}
+                              </span>
+                           </button>
+                        ))}
+                  </>
+               ) : searchQuery.length >= 2 ? (
+                  <div className="flex flex-col items-center justify-center py-8 text-slate-400">
+                     <Search className="h-8 w-8 mb-2" />
+                     <p className="text-sm font-medium">
+                        Nenhum município encontrado
+                     </p>
+                     <p className="text-xs">Tente outro termo de busca</p>
+                     <div className="mt-2 text-xs text-slate-500">
+                        Dica: Tente buscar por "Santa Cruz" ou "Porto Alegre"
+                     </div>
+                  </div>
+               ) : (
+                  <div className="flex flex-col items-center justify-center py-8 text-slate-400">
+                     <MapPin className="h-8 w-8 mb-2" />
+                     <p className="text-sm font-medium">
+                        Digite pelo menos 2 caracteres
+                     </p>
+                     <p className="text-xs">para buscar municípios</p>
+                     <div className="mt-2 text-xs text-slate-500">
+                        Exemplo: "Santa Cruz do Sul"
+                     </div>
+                  </div>
+               )}
             </div>
+
+            {selectedMunicipality && (
+               <div className="mt-4 rounded-lg bg-blue-500/10 border border-blue-500/20 p-3">
+                  <div className="flex items-center gap-2 text-blue-300">
+                     <MapPin className="h-4 w-4" />
+                     <span className="text-sm font-medium">
+                        Município selecionado: {selectedMunicipality.name}
+                     </span>
+                  </div>
+               </div>
+            )}
 
             <Modal.Footer>
                <Modal.Button
                   variant="secondary"
-                  onClick={() => setShowSearchModal(false)}
+                  onClick={() => {
+                     setShowSearchModal(false);
+                     setSearchQuery("");
+                     setMunicipalityResults([]);
+                  }}
                >
                   Fechar
                </Modal.Button>

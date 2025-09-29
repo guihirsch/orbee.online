@@ -27,7 +27,9 @@ from app.repositories.user_repository import UserRepository
 class UserService:
     def __init__(self, supabase: Client = None):
         if supabase is None:
-            supabase = get_supabase_client()
+            # Usar service role para contornar RLS
+            from app.core.database import get_supabase_service_client
+            supabase = get_supabase_service_client()
         self.user_repo = UserRepository(supabase)
     
     def create_access_token(self, data: dict, expires_delta: Optional[timedelta] = None) -> str:
@@ -58,7 +60,7 @@ class UserService:
         user = await self.user_repo.get_user_by_email(email)
         if not user:
             return None
-        if not self.user_repo.verify_password(password, user.hashed_password):
+        if not self.user_repo.verify_password(password, user.password_hash):
             return None
         return user
     
@@ -176,19 +178,19 @@ class UserService:
         update_data = user_data.dict(exclude_unset=True)
         if update_data:
             update_data["updated_at"] = datetime.utcnow()
-            return await self.user_repository.update(user_id, update_data)
+            return await self.user_repo.update(user_id, update_data)
         return await self.get_user_by_id(user_id)
     
     async def delete_user(self, user_id: str) -> bool:
         """Remove usuário (soft delete)"""
-        return await self.user_repository.soft_delete(user_id)
+        return await self.user_repo.soft_delete(user_id)
     
     async def add_points(self, user_id: str, points: int) -> Optional[User]:
         """Adiciona pontos ao usuário"""
         user = await self.get_user_by_id(user_id)
         if user:
             new_points = user.points + points
-            return await self.user_repository.update(user_id, {
+            return await self.user_repo.update(user_id, {
                 "points": new_points,
                 "updated_at": datetime.utcnow()
             })
@@ -201,7 +203,7 @@ class UserService:
             new_count = user.observations_count + 1
             # Adiciona pontos por observação
             new_points = user.points + 10
-            return await self.user_repository.update(user_id, {
+            return await self.user_repo.update(user_id, {
                 "observations_count": new_count,
                 "points": new_points,
                 "updated_at": datetime.utcnow()
@@ -215,7 +217,7 @@ class UserService:
             new_count = user.validations_count + 1
             # Adiciona pontos por validação
             new_points = user.points + 5
-            return await self.user_repository.update(user_id, {
+            return await self.user_repo.update(user_id, {
                 "validations_count": new_count,
                 "points": new_points,
                 "updated_at": datetime.utcnow()
@@ -224,8 +226,39 @@ class UserService:
     
     async def get_leaderboard(self, limit: int = 10) -> List[User]:
         """Retorna ranking de usuários por pontos"""
-        return await self.user_repository.get_top_users_by_points(limit)
+        return await self.user_repo.get_top_users_by_points(limit)
     
     async def search_users(self, query: str, limit: int = 20) -> List[User]:
         """Busca usuários por nome ou localização"""
-        return await self.user_repository.search_users(query, limit)
+        return await self.user_repo.search_users(query, limit)
+    
+    async def get_user_by_id(self, user_id: str) -> Optional[User]:
+        """Busca usuário por ID"""
+        try:
+            user_in_db = await self.user_repo.get_user_by_id(user_id)
+            if user_in_db is None:
+                raise UserNotFoundError("Usuário não encontrado")
+            
+            # Converter UserInDB para User (sem dados sensíveis)
+            return User(
+                id=user_in_db.id,
+                email=user_in_db.email,
+                full_name=user_in_db.full_name,
+                role=user_in_db.role,
+                bio=user_in_db.bio,
+                location=user_in_db.location,
+                avatar_url=user_in_db.avatar_url,
+                is_active=user_in_db.is_active,
+                created_at=user_in_db.created_at,
+                updated_at=user_in_db.updated_at,
+                observation_count=user_in_db.observation_count,
+                validation_count=user_in_db.validation_count,
+                points=user_in_db.points,
+                level=user_in_db.level,
+                last_login=user_in_db.last_login
+            )
+        except UserNotFoundError:
+            raise
+        except Exception as e:
+            print(f"Erro ao buscar usuário por ID: {e}")
+            raise UserNotFoundError("Erro ao buscar usuário")

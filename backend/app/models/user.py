@@ -11,6 +11,7 @@ class UserRole(str, Enum):
 class UserBase(BaseModel):
     email: EmailStr
     full_name: str = Field(..., min_length=2, max_length=100)
+    username: Optional[str] = Field(None, min_length=3, max_length=50)
     role: UserRole = UserRole.CITIZEN
     bio: Optional[str] = Field(None, max_length=500)
     location: Optional[str] = Field(None, max_length=100)
@@ -28,7 +29,7 @@ class UserUpdate(BaseModel):
 
 class UserInDB(UserBase):
     id: str
-    hashed_password: str
+    password_hash: str  # Mudado de hashed_password para password_hash
     created_at: datetime
     updated_at: datetime
     observation_count: int = 0

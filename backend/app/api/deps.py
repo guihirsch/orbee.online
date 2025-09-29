@@ -12,10 +12,11 @@ from app.core.exceptions import InvalidTokenError, UserNotFoundError, to_http_ex
 oauth2_scheme = HTTPBearer()
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme), supabase: Client = Depends(get_supabase_client)) -> User:
+async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
     """Obtém usuário atual baseado no token JWT"""
     try:
-        user_service = UserService(supabase)
+        # UserService já usa service role por padrão
+        user_service = UserService()
         return await user_service.get_current_user(token.credentials)
     except (InvalidTokenError, UserNotFoundError) as e:
         raise to_http_exception(e)
@@ -27,13 +28,14 @@ async def get_current_user(token: str = Depends(oauth2_scheme), supabase: Client
         )
 
 
-async def get_current_user_optional(token: Optional[str] = Depends(oauth2_scheme), supabase: Client = Depends(get_supabase_client)) -> Optional[User]:
+async def get_current_user_optional(token: Optional[str] = Depends(HTTPBearer(auto_error=False))) -> Optional[User]:
     """Obtém usuário atual baseado no token JWT (opcional)"""
     if not token:
         return None
     
     try:
-        user_service = UserService(supabase)
+        # UserService já usa service role por padrão
+        user_service = UserService()
         return await user_service.get_current_user(token.credentials)
     except (InvalidTokenError, UserNotFoundError):
         return None

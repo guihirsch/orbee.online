@@ -18,7 +18,7 @@ from app.services.observation_service import ObservationService
 from app.services.validation_service import ValidationService
 from app.repositories.observation_repository import ObservationRepository
 from app.repositories.validation_repository import ValidationRepository
-from app.api.deps import get_current_user, get_supabase_client
+from app.api.deps import get_current_user, get_current_user_optional, get_supabase_client, oauth2_scheme
 from app.core.exceptions import (
     ObservationNotFoundError,
     ValidationError,
@@ -47,12 +47,13 @@ def get_validation_service(supabase=Depends(get_supabase_client)) -> ValidationS
 async def create_observation(
     observation_data: ObservationCreate,
     current_user: User = Depends(get_current_user),
-    observation_service: ObservationService = Depends(get_observation_service)
+    observation_service: ObservationService = Depends(get_observation_service),
+    token: str = Depends(oauth2_scheme)
 ):
     """Cria nova observação"""
     try:
         observation = await observation_service.create_observation(
-            observation_data, current_user.id
+            observation_data, current_user.id, token.credentials
         )
         return observation
     except ValidationError as e:
@@ -77,7 +78,7 @@ async def get_observations(
     lat: Optional[float] = Query(None, ge=-90, le=90),
     lon: Optional[float] = Query(None, ge=-180, le=180),
     radius_km: Optional[float] = Query(None, gt=0, le=100),
-    current_user: Optional[User] = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_current_user_optional),
     observation_service: ObservationService = Depends(get_observation_service)
 ):
     """Lista observações com filtros opcionais"""
@@ -111,7 +112,7 @@ async def search_observations(
     q: str = Query(..., min_length=3),
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
-    current_user: Optional[User] = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_current_user_optional),
     observation_service: ObservationService = Depends(get_observation_service)
 ):
     """Busca observações por texto"""
@@ -137,7 +138,7 @@ async def get_nearby_observations(
     lon: float = Query(..., ge=-180, le=180),
     radius_km: float = Query(5.0, gt=0, le=50),
     limit: int = Query(10, ge=1, le=50),
-    current_user: Optional[User] = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_current_user_optional),
     observation_service: ObservationService = Depends(get_observation_service)
 ):
     """Busca observações próximas a uma localização"""
@@ -204,7 +205,7 @@ async def get_validated_observations(
 async def get_observation_stats(
     user_id: Optional[str] = None,
     days: Optional[int] = Query(None, ge=1, le=365),
-    current_user: Optional[User] = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_current_user_optional),
     observation_service: ObservationService = Depends(get_observation_service)
 ):
     """Obtém estatísticas de observações"""
@@ -251,7 +252,7 @@ async def get_my_observations(
 @router.get("/{observation_id}", response_model=Observation)
 async def get_observation(
     observation_id: str,
-    current_user: Optional[User] = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_current_user_optional),
     observation_service: ObservationService = Depends(get_observation_service)
 ):
     """Busca observação por ID"""

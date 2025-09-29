@@ -47,14 +47,16 @@ async def get_user_profile(user_id: str):
         # Converte User para UserProfile (dados públicos)
         return UserProfile(
             id=user.id,
-            name=user.name,
-            location=user.location,
+            email=user.email,
+            full_name=user.full_name,
+            role=user.role,
             bio=user.bio,
+            location=user.location,
             avatar_url=user.avatar_url,
             level=user.level,
             points=user.points,
-            observations_count=user.observations_count,
-            validations_count=user.validations_count,
+            observation_count=user.observation_count,
+            validation_count=user.validation_count,
             created_at=user.created_at
         )
     except UserNotFoundError as e:

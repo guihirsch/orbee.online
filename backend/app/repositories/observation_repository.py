@@ -37,7 +37,7 @@ class ObservationRepository:
         self.validations_table = "observation_validations"
         self.users_table = "users"
     
-    async def create_observation(self, observation_data: ObservationCreate, user_id: str) -> ObservationInDB:
+    async def create_observation(self, observation_data: ObservationCreate, user_id: str, user_token: str = None) -> ObservationInDB:
         """Cria nova observação"""
         try:
             # Preparar dados para inserção
@@ -48,17 +48,27 @@ class ObservationRepository:
                 "observation_type": observation_data.observation_type.value,
                 "latitude": observation_data.latitude,
                 "longitude": observation_data.longitude,
-                "location_name": observation_data.location_name,
-                "tags": observation_data.tags or [],
-                "metadata": observation_data.metadata or {},
+                "address": observation_data.location_name,
                 "images": observation_data.images or [],
                 "status": ObservationStatus.PENDING.value,
                 "validation_count": 0,
-                "confirmed_validations": 0,
-                "disputed_validations": 0
+                "validation_score": 0.0,
+                "is_validated": False
             }
             
-            result = self.supabase.table(self.observations_table).insert(insert_data).execute()
+            # Se temos um token de usuário, usar service role para bypass RLS
+            # ou configurar o cliente com o token do usuário
+            if user_token:
+                # Para desenvolvimento, vamos usar service role para bypass RLS
+                from app.core.database import get_supabase_service_client
+                service_client = get_supabase_service_client()
+                if service_client:
+                    result = service_client.table(self.observations_table).insert(insert_data).execute()
+                else:
+                    # Fallback para cliente normal
+                    result = self.supabase.table(self.observations_table).insert(insert_data).execute()
+            else:
+                result = self.supabase.table(self.observations_table).insert(insert_data).execute()
             
             if not result.data:
                 raise DatabaseError("Falha ao criar observação")
@@ -285,7 +295,7 @@ class ObservationRepository:
             query_builder = (
                 self.supabase.table(self.observations_table)
                 .select("*")
-                .or_(f"description.ilike.%{query}%,location.ilike.%{query}%")
+                .or_(f"description.ilike.%{query}%,location_name.ilike.%{query}%")
             )
             
             if observation_type:
@@ -306,13 +316,13 @@ class ObservationRepository:
         filtered = [
             obs for obs in mock_observations
             if (query_lower in obs.description.lower() or 
-                query_lower in obs.location.lower()) and
+                (obs.location_name and query_lower in obs.location_name.lower())) and
                (not observation_type or obs.observation_type == observation_type)
         ]
         
         return filtered[:limit]
     
-    async def get_global_stats(self) -> Dict[str, Any]:
+    async def get_global_stats(self) -> ObservationStats:
         """Retorna estatísticas globais"""
         try:
             # Queries para estatísticas reais
@@ -323,16 +333,51 @@ class ObservationRepository:
                 .eq("is_validated", True)
                 .execute()
             )
+            pending_response = (
+                self.supabase.table(self.observations_table)
+                .select("id", count="exact")
+                .eq("status", ObservationStatus.PENDING.value)
+                .execute()
+            )
+            rejected_response = (
+                self.supabase.table(self.observations_table)
+                .select("id", count="exact")
+                .eq("status", ObservationStatus.REJECTED.value)
+                .execute()
+            )
+            
+            # Buscar observações por tipo
+            type_response = self.supabase.table(self.observations_table).select("observation_type").execute()
+            observations_by_type = {}
+            if type_response.data:
+                for obs in type_response.data:
+                    obs_type = obs.get("observation_type", "other")
+                    observations_by_type[obs_type] = observations_by_type.get(obs_type, 0) + 1
+            
+            # Buscar observações recentes (últimos 7 dias)
+            from datetime import datetime, timedelta
+            week_ago = (datetime.utcnow() - timedelta(days=7)).isoformat()
+            recent_response = (
+                self.supabase.table(self.observations_table)
+                .select("id", count="exact")
+                .gte("created_at", week_ago)
+                .execute()
+            )
             
             total_count = total_response.count if total_response.count else 0
             validated_count = validated_response.count if validated_response.count else 0
+            pending_count = pending_response.count if pending_response.count else 0
+            rejected_count = rejected_response.count if rejected_response.count else 0
+            recent_count = recent_response.count if recent_response.count else 0
             
-            return {
-                "total_observations": total_count,
-                "validated_observations": validated_count,
-                "validation_rate": validated_count / total_count if total_count > 0 else 0,
-                "active_users": 0  # TODO: implementar contagem de usuários ativos
-            }
+            return ObservationStats(
+                total_observations=total_count,
+                pending_observations=pending_count,
+                validated_observations=validated_count,
+                rejected_observations=rejected_count,
+                observations_by_type=observations_by_type,
+                recent_observations=recent_count
+            )
         except Exception as e:
             logger.error(f"Erro ao obter estatísticas globais: {e}")
             pass
@@ -341,62 +386,208 @@ class ObservationRepository:
         mock_observations = self._get_mock_observations()
         total = len(mock_observations)
         validated = len([obs for obs in mock_observations if obs.is_validated])
+        pending = len([obs for obs in mock_observations if obs.status == ObservationStatus.PENDING])
+        rejected = len([obs for obs in mock_observations if obs.status == ObservationStatus.REJECTED])
         
-        return {
-            "total_observations": total,
-            "validated_observations": validated,
-            "validation_rate": validated / total if total > 0 else 0,
-            "active_users": 15
-        }
+        # Contar por tipo
+        observations_by_type = {}
+        for obs in mock_observations:
+            obs_type = obs.observation_type.value if hasattr(obs.observation_type, 'value') else str(obs.observation_type)
+            observations_by_type[obs_type] = observations_by_type.get(obs_type, 0) + 1
+        
+        # Observações recentes (últimos 7 dias)
+        from datetime import datetime, timedelta
+        week_ago = datetime.utcnow() - timedelta(days=7)
+        recent = len([obs for obs in mock_observations if obs.created_at >= week_ago])
+        
+        return ObservationStats(
+            total_observations=total,
+            pending_observations=pending,
+            validated_observations=validated,
+            rejected_observations=rejected,
+            observations_by_type=observations_by_type,
+            recent_observations=recent
+        )
+    
+    async def get_user_stats(self, user_id: str, days: Optional[int] = None) -> ObservationStats:
+        """Retorna estatísticas de um usuário específico"""
+        try:
+            # Query base para observações do usuário
+            base_query = self.supabase.table(self.observations_table).select("id", count="exact").eq("user_id", user_id)
+            
+            # Total de observações do usuário
+            total_response = base_query.execute()
+            
+            # Observações validadas
+            validated_response = (
+                self.supabase.table(self.observations_table)
+                .select("id", count="exact")
+                .eq("user_id", user_id)
+                .eq("is_validated", True)
+                .execute()
+            )
+            
+            # Observações pendentes
+            pending_response = (
+                self.supabase.table(self.observations_table)
+                .select("id", count="exact")
+                .eq("user_id", user_id)
+                .eq("status", ObservationStatus.PENDING.value)
+                .execute()
+            )
+            
+            # Observações rejeitadas
+            rejected_response = (
+                self.supabase.table(self.observations_table)
+                .select("id", count="exact")
+                .eq("user_id", user_id)
+                .eq("status", ObservationStatus.REJECTED.value)
+                .execute()
+            )
+            
+            # Buscar observações por tipo do usuário
+            type_response = (
+                self.supabase.table(self.observations_table)
+                .select("observation_type")
+                .eq("user_id", user_id)
+                .execute()
+            )
+            observations_by_type = {}
+            if type_response.data:
+                for obs in type_response.data:
+                    obs_type = obs.get("observation_type", "other")
+                    observations_by_type[obs_type] = observations_by_type.get(obs_type, 0) + 1
+            
+            # Observações recentes (últimos N dias ou 7 dias por padrão)
+            days_filter = days if days else 7
+            from datetime import datetime, timedelta
+            days_ago = (datetime.utcnow() - timedelta(days=days_filter)).isoformat()
+            recent_response = (
+                self.supabase.table(self.observations_table)
+                .select("id", count="exact")
+                .eq("user_id", user_id)
+                .gte("created_at", days_ago)
+                .execute()
+            )
+            
+            total_count = total_response.count if total_response.count else 0
+            validated_count = validated_response.count if validated_response.count else 0
+            pending_count = pending_response.count if pending_response.count else 0
+            rejected_count = rejected_response.count if rejected_response.count else 0
+            recent_count = recent_response.count if recent_response.count else 0
+            
+            return ObservationStats(
+                total_observations=total_count,
+                pending_observations=pending_count,
+                validated_observations=validated_count,
+                rejected_observations=rejected_count,
+                observations_by_type=observations_by_type,
+                recent_observations=recent_count
+            )
+        except Exception as e:
+            logger.error(f"Erro ao obter estatísticas do usuário {user_id}: {e}")
+            pass
+        
+        # Estatísticas mockadas para desenvolvimento
+        mock_observations = self._get_mock_observations()
+        user_observations = [obs for obs in mock_observations if obs.user_id == user_id]
+        
+        total = len(user_observations)
+        validated = len([obs for obs in user_observations if obs.is_validated])
+        pending = len([obs for obs in user_observations if obs.status == ObservationStatus.PENDING])
+        rejected = len([obs for obs in user_observations if obs.status == ObservationStatus.REJECTED])
+        
+        # Contar por tipo
+        observations_by_type = {}
+        for obs in user_observations:
+            obs_type = obs.observation_type.value if hasattr(obs.observation_type, 'value') else str(obs.observation_type)
+            observations_by_type[obs_type] = observations_by_type.get(obs_type, 0) + 1
+        
+        # Observações recentes (últimos N dias)
+        days_filter = days if days else 7
+        from datetime import datetime, timedelta
+        days_ago = datetime.utcnow() - timedelta(days=days_filter)
+        recent = len([obs for obs in user_observations if obs.created_at >= days_ago])
+        
+        return ObservationStats(
+            total_observations=total,
+            pending_observations=pending,
+            validated_observations=validated,
+            rejected_observations=rejected,
+            observations_by_type=observations_by_type,
+            recent_observations=recent
+        )
     
     def _get_mock_observations(self) -> List[Observation]:
         """Retorna observações mockadas para desenvolvimento"""
+        from datetime import datetime
+        
         return [
             Observation(
                 id="obs-1",
                 user_id="mock-user-id",
-                location="Parque Ibirapuera, São Paulo, SP",
+                title="Vegetação ciliar em bom estado",
+                description="Vegetação ciliar em bom estado, com presença de espécies nativas.",
+                observation_type="vegetation_health",
                 latitude=-23.5873,
                 longitude=-46.6573,
-                observation_type="vegetation_health",
-                description="Vegetação ciliar em bom estado, com presença de espécies nativas.",
-                vegetation_health="good",
-                photo_url="https://example.com/photo1.jpg",
-                weather_conditions="sunny",
-                created_at="2024-01-15T10:30:00Z",
-                is_validated=True,
+                location_name="Parque Ibirapuera, São Paulo, SP",
+                tags=["vegetação", "ciliar", "nativas"],
+                metadata={},
+                status="validated",
+                images=["https://example.com/photo1.jpg"],
                 validation_count=5,
-                confidence_score=0.85
+                confirmed_validations=4,
+                disputed_validations=1,
+                created_at=datetime(2024, 1, 15, 10, 30, 0),
+                updated_at=datetime(2024, 1, 15, 10, 30, 0),
+                user_name="João Silva",
+                user_avatar=None,
+                user_can_validate=False
             ),
             Observation(
                 id="obs-2",
                 user_id="maria-user-id",
-                location="Rio Tietê, Campinas, SP",
+                title="Poluição no Rio Tietê",
+                description="Água com coloração escura e presença de lixo nas margens.",
+                observation_type="water_quality",
                 latitude=-22.9068,
                 longitude=-47.0653,
-                observation_type="water_quality",
-                description="Água com coloração escura e presença de lixo nas margens.",
-                vegetation_health="poor",
-                weather_conditions="cloudy",
-                created_at="2024-01-14T14:20:00Z",
-                is_validated=True,
+                location_name="Rio Tietê, Campinas, SP",
+                tags=["poluição", "água", "lixo"],
+                metadata={},
+                status="validated",
+                images=["https://example.com/photo2.jpg"],
                 validation_count=3,
-                confidence_score=0.75
+                confirmed_validations=3,
+                disputed_validations=0,
+                created_at=datetime(2024, 1, 14, 14, 20, 0),
+                updated_at=datetime(2024, 1, 14, 14, 20, 0),
+                user_name="Maria Santos",
+                user_avatar=None,
+                user_can_validate=False
             ),
             Observation(
                 id="obs-3",
                 user_id="joao-user-id",
-                location="Córrego do Sapateiro, São Paulo, SP",
+                title="Erosão nas margens do córrego",
+                description="Erosão visível nas margens, necessita intervenção urgente.",
+                observation_type="degradation",
                 latitude=-23.5505,
                 longitude=-46.6333,
-                observation_type="erosion",
-                description="Erosão visível nas margens, necessita intervenção urgente.",
-                vegetation_health="critical",
-                weather_conditions="rainy",
-                created_at="2024-01-13T09:15:00Z",
-                is_validated=False,
+                location_name="Córrego do Sapateiro, São Paulo, SP",
+                tags=["erosão", "margens", "urgente"],
+                metadata={},
+                status="pending",
+                images=["https://example.com/photo3.jpg"],
                 validation_count=1,
-                confidence_score=0.6
+                confirmed_validations=0,
+                disputed_validations=1,
+                created_at=datetime(2024, 1, 13, 9, 15, 0),
+                updated_at=datetime(2024, 1, 13, 9, 15, 0),
+                user_name="João Oliveira",
+                user_avatar=None,
+                user_can_validate=False
             )
         ]
     

@@ -2,12 +2,15 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime
 from supabase import Client
 from passlib.context import CryptContext
+import bcrypt
 import logging
 
 from app.models.user import UserCreate, UserUpdate, UserInDB, User
 from app.core.exceptions import UserNotFoundError, UserAlreadyExistsError
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+def get_pwd_context():
+    """Retorna o contexto de senha configurado"""
+    return CryptContext(schemes=["bcrypt"], deprecated="auto")
 logger = logging.getLogger(__name__)
 
 
@@ -15,6 +18,11 @@ class UserRepository:
     def __init__(self, supabase: Client):
         self.supabase = supabase
         self.table = "users"
+        
+        # Se não há supabase, usar service role para contornar RLS
+        if supabase is None:
+            from app.core.database import get_supabase_service_client
+            self.supabase = get_supabase_service_client()
     
     def _check_supabase(self):
         """Verifica se Supabase está configurado"""
@@ -22,35 +30,70 @@ class UserRepository:
             raise Exception("Supabase não configurado - modo desenvolvimento")
     
     def _hash_password(self, password: str) -> str:
-        """Hash da senha usando bcrypt"""
-        # Truncar senha para máximo de 72 bytes (limitação do bcrypt)
-        if len(password.encode('utf-8')) > 72:
-            password = password[:72]
-        return pwd_context.hash(password)
+        """Hash da senha usando bcrypt diretamente"""
+        try:
+            print(f"DEBUG: _hash_password chamado com senha: {repr(password)}")
+            print(f"DEBUG: Tamanho em bytes: {len(password.encode('utf-8'))}")
+            
+            # Truncar senha para máximo de 72 bytes (limitação do bcrypt)
+            password_bytes = password.encode('utf-8')
+            if len(password_bytes) > 72:
+                print(f"DEBUG: Senha truncada de {len(password_bytes)} para 72 bytes")
+                password_bytes = password_bytes[:72]
+            
+            print(f"DEBUG: Senha final para hash: {password_bytes}")
+            
+            # Usar bcrypt diretamente
+            salt = bcrypt.gensalt()
+            result = bcrypt.hashpw(password_bytes, salt)
+            
+            print(f"DEBUG: Hash gerado com sucesso: {result[:20]}...")
+            return result.decode('utf-8')
+            
+        except Exception as e:
+            print(f"DEBUG: Erro em _hash_password: {e}")
+            raise e
     
     def verify_password(self, plain_password: str, hashed_password: str) -> bool:
-        """Verifica se a senha está correta"""
-        # Truncar senha para máximo de 72 bytes (limitação do bcrypt)
-        if len(plain_password.encode('utf-8')) > 72:
-            plain_password = plain_password[:72]
-        return pwd_context.verify(plain_password, hashed_password)
+        """Verifica se a senha está correta usando bcrypt diretamente"""
+        try:
+            # Truncar senha para máximo de 72 bytes (limitação do bcrypt)
+            password_bytes = plain_password.encode('utf-8')
+            if len(password_bytes) > 72:
+                password_bytes = password_bytes[:72]
+            
+            # Usar bcrypt diretamente
+            return bcrypt.checkpw(password_bytes, hashed_password.encode('utf-8'))
+        except Exception as e:
+            print(f"DEBUG: Erro em verify_password: {e}")
+            return False
     
     async def create_user(self, user_data: UserCreate) -> UserInDB:
         """Cria um novo usuário"""
         try:
+            print(f"DEBUG: create_user chamado com email: {user_data.email}")
             self._check_supabase()
             # Verificar se email já existe
             existing = await self.get_user_by_email(user_data.email)
             if existing:
                 raise UserAlreadyExistsError(f"Usuário com email {user_data.email} já existe")
             
+            print(f"DEBUG: Preparando dados do usuário...")
             # Preparar dados do usuário
-            user_dict = user_data.dict(exclude={"password"})
+            user_dict = user_data.dict(exclude={"password", "role"})  # Excluir role temporariamente
+            print(f"DEBUG: Dados do usuário (sem senha e role): {user_dict}")
+            
+            print(f"DEBUG: Fazendo hash da senha...")
             user_dict["password_hash"] = self._hash_password(user_data.password)
             user_dict["username"] = user_data.email.split("@")[0]  # Username temporário
             
+            print(f"DEBUG: Dados finais para inserção: {user_dict}")
+            print(f"DEBUG: Inserindo no Supabase...")
+            
             # Inserir no banco
             result = self.supabase.table(self.table).insert(user_dict).execute()
+            
+            print(f"DEBUG: Resultado da inserção: {result}")
             
             if not result.data:
                 raise Exception("Falha ao criar usuário")
@@ -58,6 +101,8 @@ class UserRepository:
             return UserInDB(**result.data[0])
             
         except Exception as e:
+            print(f"DEBUG: Erro em create_user: {e}")
+            print(f"DEBUG: Tipo do erro: {type(e)}")
             if "duplicate key" in str(e).lower():
                 raise UserAlreadyExistsError("Email já está em uso")
             raise e
@@ -198,3 +243,16 @@ class UserRepository:
         ]
         
         return filtered_users[:limit]
+    
+    async def update_last_login(self, user_id: str) -> bool:
+        """Atualiza o último login do usuário"""
+        try:
+            self._check_supabase()
+            result = self.supabase.table(self.table).update({
+                "last_login": datetime.utcnow().isoformat()
+            }).eq("id", user_id).execute()
+            
+            return bool(result.data)
+        except Exception as e:
+            print(f"Erro ao atualizar último login: {e}")
+            return False

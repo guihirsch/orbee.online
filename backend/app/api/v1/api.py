@@ -9,7 +9,8 @@ from app.api.v1.endpoints import (
     recommendations,
     aoi,
     geo,
-    plan
+    plan,
+    cache
 )
 
 api_router = APIRouter()
@@ -67,4 +68,10 @@ api_router.include_router(
     plan.router,
     prefix="/plan",
     tags=["action-plan"]
+)
+
+api_router.include_router(
+    cache.router,
+    prefix="/cache",
+    tags=["cache"]
 )

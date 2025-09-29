@@ -12,6 +12,7 @@ class ObservationType(str, Enum):
     RESTORATION = "restoration"
     WILDLIFE = "wildlife"
     POLLUTION = "pollution"
+    DEGRADATION = "degradation"
     OTHER = "other"
 
 
@@ -79,8 +80,8 @@ class ObservationInDB(ObservationBase):
     ndvi_value: Optional[float] = None
     ndvi_date: Optional[datetime] = None
     validation_count: int = 0
-    confirmed_validations: int = 0
-    disputed_validations: int = 0
+    validation_score: float = 0.0
+    is_validated: bool = False
     created_at: datetime
     updated_at: datetime
 
@@ -91,6 +92,8 @@ class Observation(ObservationInDB):
     user_avatar: Optional[str] = None
     distance_km: Optional[float] = None  # Distância do usuário atual
     user_can_validate: bool = False  # Se o usuário atual pode validar
+    confirmed_validations: int = 0  # Computado das validações
+    disputed_validations: int = 0  # Computado das validações
 
 
 class ValidationBase(BaseModel):
