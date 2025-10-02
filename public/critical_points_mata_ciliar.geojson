@@ -1,0 +1,2073 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.48486316500505,
+          -29.56614794352377
+        ]
+      },
+      "properties": {
+        "severity": "critical",
+        "ndvi": 0.052909611517184214,
+        "description": "Área crítico - NDVI 0.053",
+        "type": "critical_point",
+        "level": "critical",
+        "color": "#DC143C",
+        "label": "Crítico",
+        "distance_to_river_m": 201.93481229888332
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.56091758033374,
+          -29.473015835963317
+        ]
+      },
+      "properties": {
+        "severity": "critical",
+        "ndvi": 0.06406152200560292,
+        "description": "Área crítico - NDVI 0.064",
+        "type": "critical_point",
+        "level": "critical",
+        "color": "#DC143C",
+        "label": "Crítico",
+        "distance_to_river_m": 112.53121625535462
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.49708220116628,
+          -29.550491585428905
+        ]
+      },
+      "properties": {
+        "severity": "critical",
+        "ndvi": 0.07846623525494877,
+        "description": "Área crítico - NDVI 0.078",
+        "type": "critical_point",
+        "level": "critical",
+        "color": "#DC143C",
+        "label": "Crítico",
+        "distance_to_river_m": 9.271561834465913
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.51542606891515,
+          -29.522100641446393
+        ]
+      },
+      "properties": {
+        "severity": "critical",
+        "ndvi": 0.1478849367365146,
+        "description": "Área crítico - NDVI 0.148",
+        "type": "critical_point",
+        "level": "critical",
+        "color": "#DC143C",
+        "label": "Crítico",
+        "distance_to_river_m": 133.7508688228608
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.55724814405054,
+          -29.48392539058616
+        ]
+      },
+      "properties": {
+        "severity": "critical",
+        "ndvi": 0.11712068373161791,
+        "description": "Área crítico - NDVI 0.117",
+        "type": "critical_point",
+        "level": "critical",
+        "color": "#DC143C",
+        "label": "Crítico",
+        "distance_to_river_m": 135.84067647795067
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.546596357595135,
+          -29.496715334175224
+        ]
+      },
+      "properties": {
+        "severity": "critical",
+        "ndvi": 0.1326788445761905,
+        "description": "Área crítico - NDVI 0.133",
+        "type": "critical_point",
+        "level": "critical",
+        "color": "#DC143C",
+        "label": "Crítico",
+        "distance_to_river_m": 156.89847263352203
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50376815271974,
+          -29.548433817373347
+        ]
+      },
+      "properties": {
+        "severity": "critical",
+        "ndvi": 0.12624085132091517,
+        "description": "Área crítico - NDVI 0.126",
+        "type": "critical_point",
+        "level": "critical",
+        "color": "#DC143C",
+        "label": "Crítico",
+        "distance_to_river_m": 63.27110947527036
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.478871880454875,
+          -29.575095573581546
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.31181709482111497,
+        "description": "Área moderado - NDVI 0.312",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.548185105162446,
+          -29.50496914236064
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.23176482905805987,
+        "description": "Área moderado - NDVI 0.232",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.49212561885822,
+          -29.46763694029904
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.2357074179321324,
+        "description": "Área moderado - NDVI 0.236",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.48912049637781,
+          -29.566047849673247
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.3817577881857237,
+        "description": "Área moderado - NDVI 0.382",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.473026543528015,
+          -29.403373262830762
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.36065618682513695,
+        "description": "Área moderado - NDVI 0.361",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.47652139043328,
+          -29.57623188720552
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.27514658042107953,
+        "description": "Área moderado - NDVI 0.275",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.47991564518792,
+          -29.571991601880974
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.3707003716920743,
+        "description": "Área moderado - NDVI 0.371",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.487589286456036,
+          -29.55204452354857
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.2673323461864849,
+        "description": "Área moderado - NDVI 0.267",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.48520267655297,
+          -29.44684417271343
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.37540457962945173,
+        "description": "Área moderado - NDVI 0.375",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.49182544431994,
+          -29.45748839338379
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.3166139307733861,
+        "description": "Área moderado - NDVI 0.317",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50670322702371,
+          -29.49123497052412
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.3728953282128581,
+        "description": "Área moderado - NDVI 0.373",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.55241529066339,
+          -29.455552762024812
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.3437976543713494,
+        "description": "Área moderado - NDVI 0.344",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.48587223806261,
+          -29.450648815877642
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.32466419250174205,
+        "description": "Área moderado - NDVI 0.325",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.48911231185918,
+          -29.55128057863291
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.343126156813085,
+        "description": "Área moderado - NDVI 0.343",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50455988043497,
+          -29.486629209852293
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.3862781102987742,
+        "description": "Área moderado - NDVI 0.386",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.48900318759566,
+          -29.568950942773338
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.3839853203264266,
+        "description": "Área moderado - NDVI 0.384",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.4763760182914,
+          -29.426600806950837
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.37190605012868566,
+        "description": "Área moderado - NDVI 0.372",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.54389898638856,
+          -29.39212906260172
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.2532690688933222,
+        "description": "Área moderado - NDVI 0.253",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.543962074930604,
+          -29.382878182940612
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.2746885809005419,
+        "description": "Área moderado - NDVI 0.275",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.552154783298086,
+          -29.406095809956756
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.22499787915064132,
+        "description": "Área moderado - NDVI 0.225",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.5514242037716,
+          -29.423577925508706
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.35756141350440085,
+        "description": "Área moderado - NDVI 0.358",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.52159324166339,
+          -29.531904716839914
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.2717101016843273,
+        "description": "Área moderado - NDVI 0.272",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.55216267005784,
+          -29.50325897470821
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.23355210775413965,
+        "description": "Área moderado - NDVI 0.234",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.48776817972434,
+          -29.592089791828272
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.3216802967116086,
+        "description": "Área moderado - NDVI 0.322",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.549628304380704,
+          -29.396759701478864
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.22691016410566897,
+        "description": "Área moderado - NDVI 0.227",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.51730782931139,
+          -29.498592654361385
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.3663202478700349,
+        "description": "Área moderado - NDVI 0.366",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50751852962226,
+          -29.48654114316687
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.26363171499391364,
+        "description": "Área moderado - NDVI 0.264",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.5084228611517,
+          -29.48251882759235
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.23789988088422143,
+        "description": "Área moderado - NDVI 0.238",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.561617804760225,
+          -29.49153694697127
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.383497946578105,
+        "description": "Área moderado - NDVI 0.383",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.56287951403197,
+          -29.477578876764515
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.3412579441513566,
+        "description": "Área moderado - NDVI 0.341",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.55040189098024,
+          -29.444745485127637
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.318363730793197,
+        "description": "Área moderado - NDVI 0.318",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.56068417485036,
+          -29.50724060237138
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.3607414674135555,
+        "description": "Área moderado - NDVI 0.361",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.47659699052283,
+          -29.42355362074999
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.21482579716576233,
+        "description": "Área moderado - NDVI 0.215",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.55141742837287,
+          -29.455199664462615
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.3679867551061603,
+        "description": "Área moderado - NDVI 0.368",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.55826532625,
+          -29.41874182741685
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.23100594394199797,
+        "description": "Área moderado - NDVI 0.231",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.52476857860216,
+          -29.527455660241806
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.26767422782855516,
+        "description": "Área moderado - NDVI 0.268",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.544740391320396,
+          -29.394632317963453
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.37383632987624926,
+        "description": "Área moderado - NDVI 0.374",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.49191534139603,
+          -29.555916906038362
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.24071274358175693,
+        "description": "Área moderado - NDVI 0.241",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.55641340549293,
+          -29.499725954790968
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.35993416356683905,
+        "description": "Área moderado - NDVI 0.360",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.51672879186739,
+          -29.523914065213468
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.3608601245296956,
+        "description": "Área moderado - NDVI 0.361",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50596445707257,
+          -29.484801610557767
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.22653270107892262,
+        "description": "Área moderado - NDVI 0.227",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.49457483965629,
+          -29.547512765756867
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.374393461542723,
+        "description": "Área moderado - NDVI 0.374",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.5558265570696,
+          -29.449660939702554
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.27831273336266027,
+        "description": "Área moderado - NDVI 0.278",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.475526974739765,
+          -29.416114540393785
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.27874633216049743,
+        "description": "Área moderado - NDVI 0.279",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.54559510274711,
+          -29.39288793502066
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.34655058053949195,
+        "description": "Área moderado - NDVI 0.347",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.552065188949186,
+          -29.411472116436848
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.24286316310099104,
+        "description": "Área moderado - NDVI 0.243",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.52354508927877,
+          -29.506183488906835
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.32360322663953267,
+        "description": "Área moderado - NDVI 0.324",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.475081069524734,
+          -29.437137952615355
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.346507063979527,
+        "description": "Área moderado - NDVI 0.347",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.5117507184464,
+          -29.479382804757446
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.3528318025163257,
+        "description": "Área moderado - NDVI 0.353",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.5112412908578,
+          -29.49526715960131
+        ]
+      },
+      "properties": {
+        "severity": "moderate",
+        "ndvi": 0.2606886204024969,
+        "description": "Área moderado - NDVI 0.261",
+        "type": "moderate_point",
+        "level": "moderate",
+        "color": "#FF8C00",
+        "label": "Moderado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.53871543927331,
+          -29.51124974989257
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5532448208643796,
+        "description": "Área regular - NDVI 0.553",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.56024040676036,
+          -29.46143278820015
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5409355039712311,
+        "description": "Área regular - NDVI 0.541",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.51740516700033,
+          -29.499215221932147
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5323299861628817,
+        "description": "Área regular - NDVI 0.532",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.56230264555342,
+          -29.45629181607255
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.46240817377075755,
+        "description": "Área regular - NDVI 0.462",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.550213334621496,
+          -29.446035074179164
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.4888493163706934,
+        "description": "Área regular - NDVI 0.489",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.553946091461434,
+          -29.436932625996093
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.559405520612688,
+        "description": "Área regular - NDVI 0.559",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.54725586880642,
+          -29.386157059116165
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5813459360375343,
+        "description": "Área regular - NDVI 0.581",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.47274293749029,
+          -29.42156048088514
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.4435238291726087,
+        "description": "Área regular - NDVI 0.444",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.55317335300811,
+          -29.499440248252153
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.41491282187352224,
+        "description": "Área regular - NDVI 0.415",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.488806165966956,
+          -29.45412022109035
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5397749285594885,
+        "description": "Área regular - NDVI 0.540",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.479830408632445,
+          -29.430369448630913
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.40386606722463564,
+        "description": "Área regular - NDVI 0.404",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.511640163379234,
+          -29.51233751243833
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.503522777873851,
+        "description": "Área regular - NDVI 0.504",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50838631911673,
+          -29.480607815872315
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.447492249853816,
+        "description": "Área regular - NDVI 0.447",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.53156483638722,
+          -29.517919494465882
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.564911871162795,
+        "description": "Área regular - NDVI 0.565",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.55203213513063,
+          -29.410844780778483
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5870375792321054,
+        "description": "Área regular - NDVI 0.587",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.49396652685286,
+          -29.561850760040265
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.507492278757194,
+        "description": "Área regular - NDVI 0.507",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.46000552103355,
+          -29.387156035446278
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5572313499793318,
+        "description": "Área regular - NDVI 0.557",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.46956483469782,
+          -29.42209273876267
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.4354710844575467,
+        "description": "Área regular - NDVI 0.435",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.468141809113334,
+          -29.41984730507837
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.48044220386451764,
+        "description": "Área regular - NDVI 0.480",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.51736414412681,
+          -29.469288301732632
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.4472184662437602,
+        "description": "Área regular - NDVI 0.447",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.510454028502565,
+          -29.48176652068577
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.4213745651176752,
+        "description": "Área regular - NDVI 0.421",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.485653474603005,
+          -29.441044286392028
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.42695831204908313,
+        "description": "Área regular - NDVI 0.427",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.513824117371186,
+          -29.48020358574541
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.43195889143887534,
+        "description": "Área regular - NDVI 0.432",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.55950791507416,
+          -29.475669986695856
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.40641137942370675,
+        "description": "Área regular - NDVI 0.406",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.51815368192984,
+          -29.537703613816834
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5432930190674554,
+        "description": "Área regular - NDVI 0.543",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.49410225271116,
+          -29.54810323102638
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.42089472102761766,
+        "description": "Área regular - NDVI 0.421",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50245944190904,
+          -29.548310856991016
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.4234256955471697,
+        "description": "Área regular - NDVI 0.423",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.52795044266599,
+          -29.51436774223616
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.43516789769720243,
+        "description": "Área regular - NDVI 0.435",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.47620714327021,
+          -29.40222444861251
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5425996591818953,
+        "description": "Área regular - NDVI 0.543",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.554751895576594,
+          -29.413503178710037
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.523470411584458,
+        "description": "Área regular - NDVI 0.523",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.47401863005864,
+          -29.403320627363254
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5522042971986539,
+        "description": "Área regular - NDVI 0.552",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50589115400173,
+          -29.494428705834856
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5373683351649625,
+        "description": "Área regular - NDVI 0.537",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50122516339674,
+          -29.474914619067725
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.42810820405047445,
+        "description": "Área regular - NDVI 0.428",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.51265080872144,
+          -29.48188857901812
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.46117061002933657,
+        "description": "Área regular - NDVI 0.461",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.49498421500157,
+          -29.472087276585896
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.40904075776430515,
+        "description": "Área regular - NDVI 0.409",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.557006738582615,
+          -29.425472116658412
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.4604044290805193,
+        "description": "Área regular - NDVI 0.460",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.5489362517622,
+          -29.394061475035244
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.43841120518135557,
+        "description": "Área regular - NDVI 0.438",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.55435405971999,
+          -29.401854248590134
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5411690698735464,
+        "description": "Área regular - NDVI 0.541",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.547125615488355,
+          -29.496765201981827
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.4190104979048955,
+        "description": "Área regular - NDVI 0.419",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50463157974229,
+          -29.549309985828174
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5882879861948145,
+        "description": "Área regular - NDVI 0.588",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.47924342364506,
+          -29.573687808614814
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.4156489990475323,
+        "description": "Área regular - NDVI 0.416",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.485205243530054,
+          -29.59293751680456
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.48410868345145036,
+        "description": "Área regular - NDVI 0.484",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.51624536805944,
+          -29.510675878579963
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5684892292815483,
+        "description": "Área regular - NDVI 0.568",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.47971087230142,
+          -29.58686314145842
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5028342818552348,
+        "description": "Área regular - NDVI 0.503",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.55119401139904,
+          -29.405937765395596
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.42247219618611165,
+        "description": "Área regular - NDVI 0.422",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50108229894013,
+          -29.476598540688798
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.4328560695211741,
+        "description": "Área regular - NDVI 0.433",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.551834372138835,
+          -29.419866428347575
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.4191813718689378,
+        "description": "Área regular - NDVI 0.419",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.47609985050843,
+          -29.4247396976701
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.4055546367343262,
+        "description": "Área regular - NDVI 0.406",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50100132405366,
+          -29.487899429548673
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5137640408338634,
+        "description": "Área regular - NDVI 0.514",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.47733155074913,
+          -29.431423690406394
+        ]
+      },
+      "properties": {
+        "severity": "fair",
+        "ndvi": 0.5492139364983432,
+        "description": "Área regular - NDVI 0.549",
+        "type": "fair_point",
+        "level": "fair",
+        "color": "#FFD700",
+        "label": "Regular"
+      }
+    }
+  ],
+  "metadata": {
+    "analysis_date": "2025-10-02T16:20:48.047539",
+    "data_source": "HLS (Harmonized Landsat Sentinel)",
+    "buffer_distance": "200 meters",
+    "thresholds": {
+      "critical": 0.2,
+      "moderate": 0.4
+    },
+    "statistics": {
+      "total_pixels": 33083,
+      "ndvi_min": -0.16111300685545765,
+      "ndvi_max": 0.9599228031679338,
+      "ndvi_mean": 0.7605888739401284,
+      "critical_fraction": 0.0019345283075900008,
+      "moderate_fraction": 0.01828733790768673,
+      "overall_status": "healthy"
+    },
+    "total_critical_points": 7,
+    "total_moderate_points": 50,
+    "total_fair_points": 50,
+    "processing_params": {
+      "min_distance_points": 100,
+      "sampling_step": 3,
+      "start_date": "2022-06-01",
+      "end_date": "2022-09-30",
+      "cloud_coverage_max": 50
+    }
+  }
+}
