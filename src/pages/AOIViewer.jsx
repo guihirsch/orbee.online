@@ -1,16 +1,36 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { fromUrl as geotiffFromUrl } from "geotiff";
 import proj4 from "proj4";
+import useAuth from "../hooks/useAuth";
+import {
+   Globe,
+   Search,
+   X,
+   BarChart3,
+   Activity,
+   Leaf,
+   Camera,
+   TrendingUp,
+   TrendingDown,
+   Check,
+   MapPin,
+} from "lucide-react";
 
 export default function AOIViewer() {
    const mapRef = useRef(null);
    const containerRef = useRef(null);
+   const { user } = useAuth();
    const [loaded, setLoaded] = useState(false);
    const [baseLayer, setBaseLayer] = useState("osm");
    const [rgbVisible, setRgbVisible] = useState(false);
    const [rgbAvailable, setRgbAvailable] = useState(false);
+   const [legendMinimized, setLegendMinimized] = useState(false);
+   const [criticalPoints, setCriticalPoints] = useState([]);
+   const [selectedPoint, setSelectedPoint] = useState(null);
+   const [showCards, setShowCards] = useState(true);
 
    useEffect(() => {
       if (mapRef.current) return;
@@ -93,6 +113,12 @@ export default function AOIViewer() {
                   console.log(
                      `✅ ${criticalGeo.features.length} pontos carregados`
                   );
+                  
+                  // Armazenar dados globalmente para acesso no useEffect
+                  window.criticalGeoData = criticalGeo;
+                  
+                  // Armazenar pontos críticos no estado para os cards
+                  setCriticalPoints(criticalGeo.features);
 
                   // Função para classificar degradação usando dados REAIS do GeoJSON
                   const classifyDegradation = (feature) => {
@@ -101,10 +127,20 @@ export default function AOIViewer() {
 
                      // Se já tem classificação do GeoJSON, usar ela
                      if (props.level && props.color) {
+                        // Mapear levels do GeoJSON para levels da função getVegetationDescription
+                        const levelMapping = {
+                           "very_sparse": "critical",
+                           "sparse": "moderate", 
+                           "dense": "good",
+                           "very_dense": "excellent"
+                        };
+                        
+                        const mappedLevel = levelMapping[props.level] || props.level;
+                        
                         return {
-                           level: props.level,
+                           level: mappedLevel,
                            color: props.color,
-                           label: props.label || props.severity,
+                           label: props.label || props.severity || "Não classificado",
                            ndvi: props.ndvi,
                         };
                      }
@@ -154,11 +190,11 @@ export default function AOIViewer() {
                         minDistance: 50, // Distância mínima de 50m entre pontos
                         showCritical: true, // Sempre mostrar críticos
                         showModerate: true, // Sempre mostrar moderados
-                        showFair: true, // Sempre mostrar regulares
+                        showHealthy: true, // Sempre mostrar saudáveis
                         maxPointsPerType: {
                            critical: 999, // Sem limite para críticos
-                           moderate: 50, // Máximo 50 moderados
-                           fair: 25, // Máximo 25 regulares
+                           moderate: 999, // Sem limite para moderados
+                           healthy: 999, // Sem limite para saudáveis
                         },
                      };
 
@@ -174,21 +210,18 @@ export default function AOIViewer() {
 
                      // Separar por severidade usando dados reais do GeoJSON
                      const critical = classifiedFeatures.filter((f) => {
-                        const severity =
-                           f.properties.severity || f.classification.level;
+                        const severity = f.properties.severity;
                         return severity === "critical";
                      });
 
                      const moderate = classifiedFeatures.filter((f) => {
-                        const severity =
-                           f.properties.severity || f.classification.level;
+                        const severity = f.properties.severity;
                         return severity === "moderate";
                      });
 
-                     const fair = classifiedFeatures.filter((f) => {
-                        const severity =
-                           f.properties.severity || f.classification.level;
-                        return severity === "fair";
+                     const healthy = classifiedFeatures.filter((f) => {
+                        const severity = f.properties.severity;
+                        return severity === "healthy";
                      });
 
                      // Função para calcular distância entre dois pontos (Haversine)
@@ -266,21 +299,21 @@ export default function AOIViewer() {
                         );
                      }
 
-                     // REGULARES: Com limite menor
-                     if (config.showFair) {
-                        const filteredFair = filterByDistance(
-                           fair,
-                           config.minDistance * 1.5, // Mais espaçados
-                           config.maxPointsPerType.fair
+                     // SAUDÁVEIS: Sem limite
+                     if (config.showHealthy) {
+                        const filteredHealthy = filterByDistance(
+                           healthy,
+                           config.minDistance,
+                           config.maxPointsPerType.healthy
                         );
-                        result = [...result, ...filteredFair];
+                        result = [...result, ...filteredHealthy];
                         console.log(
-                           `🟢 Regulares incluídos: ${filteredFair.length}/${fair.length}`
+                           `🟢 Saudáveis incluídos: ${filteredHealthy.length}/${healthy.length}`
                         );
                      }
 
                      console.log(
-                        `📊 Total final: ${result.length} pontos (${result.filter((f) => f.properties.severity === "critical").length} críticos, ${result.filter((f) => f.properties.severity === "moderate").length} moderados, ${result.filter((f) => f.properties.severity === "fair").length} regulares)`
+                        `📊 Total final: ${result.length} pontos (${result.filter((f) => f.properties.severity === "critical").length} críticos, ${result.filter((f) => f.properties.severity === "moderate").length} moderados, ${result.filter((f) => f.properties.severity === "healthy").length} saudáveis)`
                      );
 
                      return result;
@@ -446,6 +479,13 @@ export default function AOIViewer() {
                               layout: {
                                  "icon-image": [
                                     "case",
+                                    ["==", ["get", "severity"], "critical"],
+                                    "critical-pin",
+                                    ["==", ["get", "severity"], "moderate"],
+                                    "moderate-pin",
+                                    ["==", ["get", "severity"], "healthy"],
+                                    "good-pin",
+                                    // Fallback por NDVI se não tiver severity
                                     ["<", ["get", "ndvi"], -0.2],
                                     "water-pin",
                                     ["<", ["get", "ndvi"], 0.0],
@@ -454,8 +494,6 @@ export default function AOIViewer() {
                                     "severe-pin",
                                     ["<", ["get", "ndvi"], 0.4],
                                     "moderate-pin",
-                                    ["<", ["get", "ndvi"], 0.5],
-                                    "light-pin",
                                     ["<", ["get", "ndvi"], 0.6],
                                     "fair-pin",
                                     ["<", ["get", "ndvi"], 0.8],
@@ -566,12 +604,7 @@ export default function AOIViewer() {
                               )
                               .addTo(mapRef.current);
 
-                           // Zoom no ponto
-                           mapRef.current.flyTo({
-                              center: e.features[0].geometry.coordinates,
-                              zoom: 16,
-                              duration: 1000,
-                           });
+                           // Zoom removido - apenas popup
                         }
                      );
 
@@ -583,13 +616,17 @@ export default function AOIViewer() {
                      const descriptions = {
                         water: "Área de água ou solo exposto",
                         critical: "Vegetação severamente degradada ou ausente",
-                        severe:
-                           "Vegetação muito danificada, necessita intervenção urgente",
+                        severe: "Vegetação muito danificada, necessita intervenção urgente",
                         moderate: "Vegetação parcialmente degradada",
                         light: "Vegetação com sinais leves de estresse",
                         fair: "Vegetação em condição regular",
                         good: "Vegetação saudável e bem desenvolvida",
                         excellent: "Vegetação exuberante e muito densa",
+                        // Níveis específicos do GeoJSON
+                        very_sparse: "Vegetação muito rala ou solo exposto",
+                        sparse: "Vegetação esparsa em regeneração",
+                        dense: "Vegetação densa e bem desenvolvida",
+                        very_dense: "Vegetação muito densa e exuberante"
                      };
                      return descriptions[level] || "Estado não classificado";
                   };
@@ -641,18 +678,19 @@ export default function AOIViewer() {
                      const severityIcons = {
                         critical: "🔴",
                         moderate: "🟡",
-                        fair: "🟢",
+                        healthy: "🟢",
                      };
 
                      // Ordem de prioridade para exibição
-                     const severityOrder = ["critical", "moderate", "fair"];
+                     const severityOrder = ["critical", "moderate", "healthy"];
 
                      const legend = document.createElement("div");
                      legend.className =
-                        "ndvi-legend absolute left-3 bottom-3 z-10 bg-white/95 shadow-lg rounded-lg px-4 py-3 text-xs max-h-96 overflow-y-auto";
+                        "ndvi-legend absolute left-3 bottom-3 z-10 bg-white/95 shadow-lg rounded-lg text-xs";
                      legend.style.width = "320px";
                      legend.style.backdropFilter = "blur(8px)";
                      legend.style.border = "1px solid rgba(0,0,0,0.1)";
+                     legend.style.transition = "all 0.3s ease";
 
                      // Criar itens da legenda baseados nos dados reais
                      const legendItems = severityOrder
@@ -675,10 +713,29 @@ export default function AOIViewer() {
                      const stats = metadata?.statistics || {};
                      const processingParams = metadata?.processing_params || {};
 
-                     legend.innerHTML = `
-                       <div style="font-weight:bold;margin-bottom:8px;border-bottom:2px solid #228B22;padding-bottom:4px;color:#228B22">
-                          🛰️ Análise HLS - Mata Ciliar
-                       </div>
+                     // Função para atualizar o conteúdo da legenda
+                     const updateLegendContent = (isMinimized) => {
+                        if (isMinimized) {
+                           return `
+                              <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px">
+                                 <div style="font-weight:bold;color:#228B22;font-size:14px">
+                                    🛰️ Análise HLS
+                                 </div>
+                                 <button id="legend-toggle" style="background:none;border:none;cursor:pointer;font-size:16px;color:#666;padding:4px">
+                                    📖
+                                 </button>
+                              </div>
+                           `;
+                        } else {
+                           return `
+                              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;border-bottom:2px solid #228B22;padding-bottom:4px">
+                                 <div style="font-weight:bold;color:#228B22;font-size:14px">
+                                    🛰️ Análise HLS - Mata Ciliar
+                                 </div>
+                                 <button id="legend-toggle" style="background:none;border:none;cursor:pointer;font-size:16px;color:#666;padding:4px">
+                                    📕
+                                 </button>
+                              </div>
                        
                        <!-- Seção: Informações Gerais -->
                        <div style="margin-bottom:8px;padding:6px;background:#f0f8f0;border-radius:4px;border-left:3px solid #228B22">
@@ -756,9 +813,23 @@ export default function AOIViewer() {
                           <div>🔍 <strong>Zoom</strong> para ver mais pontos</div>
                           <div>🗺️ <strong>Alterne</strong> mapas base acima</div>
                        </div>
-                          `;
+                           `;
+                        }
+                     };
+
+                     // Definir conteúdo inicial da legenda
+                     legend.innerHTML = updateLegendContent(legendMinimized);
                      containerRef.current.appendChild(legend);
                      console.log("✅ Legenda criada");
+
+                     // Adicionar event listener para o botão de toggle
+                     const toggleButton = legend.querySelector('#legend-toggle');
+                     if (toggleButton) {
+                        toggleButton.addEventListener('click', (e) => {
+                           e.stopPropagation();
+                           setLegendMinimized(!legendMinimized);
+                        });
+                     }
                   };
                }
             } catch (error) {
@@ -798,31 +869,491 @@ export default function AOIViewer() {
       }
    }, [baseLayer]);
 
+   // Atualizar legenda quando legendMinimized mudar
+   useEffect(() => {
+      const legend = containerRef.current?.querySelector('.ndvi-legend');
+      if (legend) {
+         const updateLegendContent = (isMinimized) => {
+            if (isMinimized) {
+               return `
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px">
+                     <div style="font-weight:bold;color:#228B22;font-size:14px">
+                        🛰️ Análise HLS
+                     </div>
+                     <button id="legend-toggle" style="background:none;border:none;cursor:pointer;font-size:16px;color:#666;padding:4px">
+                        📖
+                     </button>
+                  </div>
+               `;
+            } else {
+               // Conteúdo completo da legenda (mesmo do createLegend)
+               const criticalGeo = window.criticalGeoData; // Armazenar dados globalmente
+               if (!criticalGeo) return legend.innerHTML;
+
+               const realData = criticalGeo.features.reduce((acc, f) => {
+                  const severity = f.properties.severity;
+                  const ndvi = f.properties.ndvi;
+
+                  if (!acc[severity]) {
+                     acc[severity] = {
+                        count: 0,
+                        ndviMin: ndvi,
+                        ndviMax: ndvi,
+                        color: f.properties.color,
+                        label: f.properties.label,
+                     };
+                  }
+
+                  acc[severity].count++;
+                  acc[severity].ndviMin = Math.min(acc[severity].ndviMin, ndvi);
+                  acc[severity].ndviMax = Math.max(acc[severity].ndviMax, ndvi);
+
+                  return acc;
+               }, {});
+
+               const severityIcons = {
+                  critical: "🔴",
+                  moderate: "🟡",
+                  healthy: "🟢",
+               };
+
+               const severityOrder = ["critical", "moderate", "healthy"];
+
+               const legendItems = severityOrder
+                  .filter((severity) => realData[severity])
+                  .map((severity) => {
+                     const data = realData[severity];
+                     return {
+                        level: severity,
+                        icon: severityIcons[severity],
+                        color: data.color,
+                        label: data.label,
+                        range: `${data.ndviMin.toFixed(2)} - ${data.ndviMax.toFixed(2)}`,
+                        count: data.count,
+                     };
+                  });
+
+               const totalPoints = criticalGeo.features.length;
+               const metadata = criticalGeo.metadata;
+               const stats = metadata?.statistics || {};
+               const processingParams = metadata?.processing_params || {};
+
+               return `
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;border-bottom:2px solid #228B22;padding-bottom:4px">
+                     <div style="font-weight:bold;color:#228B22;font-size:14px">
+                        🛰️ Análise HLS - Mata Ciliar
+                     </div>
+                     <button id="legend-toggle" style="background:none;border:none;cursor:pointer;font-size:16px;color:#666;padding:4px">
+                        📕
+                     </button>
+                  </div>
+                  
+                  <!-- Seção: Informações Gerais -->
+                  <div style="margin-bottom:8px;padding:6px;background:#f0f8f0;border-radius:4px;border-left:3px solid #228B22">
+                     <div style="font-weight:600;font-size:11px;color:#2d5a2d;margin-bottom:4px">📊 Informações Gerais</div>
+                     <div style="font-size:10px;color:#666;line-height:1.3">
+                        <div>📅 Período: ${processingParams.start_date || "Jun"}-${processingParams.end_date ? processingParams.end_date.split("-")[1] : "Set"} 2022</div>
+                        <div>🌿 Status: <span style="color:#228B22;font-weight:600">${stats.overall_status === "healthy" ? "Saudável" : stats.overall_status || "N/A"}</span></div>
+                        <div>📊 NDVI médio: <span style="font-family:monospace;font-weight:600">${stats.ndvi_mean ? stats.ndvi_mean.toFixed(3) : "N/A"}</span></div>
+                        <div>📏 Buffer: ${metadata?.buffer_distance || "200m"} do rio</div>
+                        <div>☁️ Máx. nuvens: ${processingParams.cloud_coverage_max || 50}%</div>
+                     </div>
+                  </div>
+
+                  <!-- Seção: Distribuição dos Pontos -->
+                  <div style="margin-bottom:8px;padding:6px;background:#fff8e1;border-radius:4px;border-left:3px solid #ff8c00">
+                     <div style="font-weight:600;font-size:11px;color:#b8860b;margin-bottom:4px">📍 Distribuição dos Pontos</div>
+                     <div style="font-size:10px;color:#666">
+                        <div style="display:flex;justify-content:space-between">
+                           <span>📊 Total analisado:</span>
+                           <span style="font-weight:600">${totalPoints} pontos</span>
+                        </div>
+                     </div>
+                  </div>
+
+                  <!-- Seção: Escala NDVI por Severidade -->
+                  <div style="margin-bottom:8px;padding:6px;background:#fef7f7;border-radius:4px;border-left:3px solid #dc143c">
+                     <div style="font-weight:600;font-size:11px;color:#8b0000;margin-bottom:6px">🎯 Escala NDVI por Severidade</div>
+                     ${legendItems
+                        .map(
+                           (item) => `
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin:5px 0;padding:4px;background:white;border-radius:3px;border:1px solid #f0f0f0">
+                           <div style="display:flex;align-items:center;gap:8px">
+                              <span style="font-size:16px">${item.icon}</span>
+                              <div>
+                                 <div style="color:${item.color};font-weight:700;font-size:12px">${item.label}</div>
+                                 <div style="font-size:10px;color:#666;font-weight:500">${item.count} pontos detectados</div>
+                              </div>
+                           </div>
+                           <div style="text-align:right;background:#f8f9fa;padding:3px 6px;border-radius:3px">
+                              <div style="font-size:8px;color:#666;font-weight:600">NDVI</div>
+                              <div style="font-size:10px;color:#333;font-family:monospace;font-weight:600">${item.range}</div>
+                           </div>
+                        </div>
+                     `
+                        )
+                        .join("")}
+                  </div>
+
+                  <!-- Seção: Estatísticas Detalhadas -->
+                  <div style="margin-bottom:8px;padding:6px;background:#f5f5f5;border-radius:4px;border-left:3px solid #666">
+                     <div style="font-weight:600;font-size:11px;color:#333;margin-bottom:4px">📈 Estatísticas da Análise</div>
+                     <div style="font-size:9px;color:#666;line-height:1.4">
+                        <div style="display:flex;justify-content:space-between">
+                           <span>🔴 Fração crítica:</span>
+                           <span style="font-family:monospace">${stats.critical_fraction ? (stats.critical_fraction * 100).toFixed(1) + "%" : "N/A"}</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between">
+                           <span>🟡 Fração moderada:</span>
+                           <span style="font-family:monospace">${stats.moderate_fraction ? (stats.moderate_fraction * 100).toFixed(1) + "%" : "N/A"}</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between">
+                           <span>📊 Pixels analisados:</span>
+                           <span style="font-family:monospace">${stats.total_pixels ? stats.total_pixels.toLocaleString() : "N/A"}</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between">
+                           <span>📏 Distância mín. pontos:</span>
+                           <span style="font-family:monospace">${processingParams.min_distance_points || 100}m</span>
+                        </div>
+                     </div>
+                  </div>
+
+                  <!-- Seção: Instruções -->
+                  <div style="font-size:9px;color:#666;margin-top:8px;border-top:2px solid #ddd;padding-top:6px;text-align:center;background:#f9f9f9;padding:6px;border-radius:3px">
+                     <div style="margin-bottom:2px;font-weight:600">💡 Como usar:</div>
+                     <div>📍 <strong>Clique</strong> nos pins para detalhes</div>
+                     <div>🔍 <strong>Zoom</strong> para ver mais pontos</div>
+                     <div>🗺️ <strong>Alterne</strong> mapas base acima</div>
+                  </div>
+               `;
+            }
+         };
+
+         legend.innerHTML = updateLegendContent(legendMinimized);
+
+         // Reconfigurar event listener para o novo botão
+         const toggleButton = legend.querySelector('#legend-toggle');
+         if (toggleButton) {
+            toggleButton.addEventListener('click', (e) => {
+               e.stopPropagation();
+               setLegendMinimized(!legendMinimized);
+            });
+         }
+      }
+   }, [legendMinimized]);
+
+   // Função para criar card de ponto crítico
+   const createCriticalPointCard = (point, index) => {
+      const props = point.properties;
+      const coords = point.geometry.coordinates;
+      
+      // Determinar cor baseada na severidade
+      const getColorClasses = (severity) => {
+         switch (severity) {
+            case "critical":
+               return {
+                  border: "border-red-400/20 hover:border-red-400/40",
+                  gradient: "from-red-500/10",
+                  shadow: "hover:shadow-red-500/25",
+                  badge: "bg-red-500/20 text-red-600",
+                  text: "text-red-600",
+                  indicator: "bg-red-500/20",
+               };
+            case "moderate":
+               return {
+                  border: "border-orange-400/20 hover:border-orange-400/40",
+                  gradient: "from-orange-500/10",
+                  shadow: "hover:shadow-orange-500/25",
+                  badge: "bg-orange-500/20 text-orange-600",
+                  text: "text-orange-600",
+                  indicator: "bg-orange-500/20",
+               };
+            case "healthy":
+               return {
+                  border: "border-green-400/20 hover:border-green-400/40",
+                  gradient: "from-green-500/10",
+                  shadow: "hover:shadow-green-500/25",
+                  badge: "bg-green-500/20 text-green-600",
+                  text: "text-green-600",
+                  indicator: "bg-green-500/20",
+               };
+            default:
+               return {
+                  border: "border-gray-400/20 hover:border-gray-400/40",
+                  gradient: "from-gray-500/10",
+                  shadow: "hover:shadow-gray-500/25",
+                  badge: "bg-gray-500/20 text-gray-600",
+                  text: "text-gray-600",
+                  indicator: "bg-gray-500/20",
+               };
+         }
+      };
+
+      const colors = getColorClasses(props.severity);
+      const isSelected = selectedPoint === index;
+
+      // Determinar tendência baseada no NDVI
+      const getTrend = () => {
+         const ndviValue = parseFloat(props.ndvi || 0);
+         if (ndviValue >= 0.6) return "improving";
+         if (ndviValue <= 0.3) return "declining";
+         return "stable";
+      };
+
+      const trend = getTrend();
+
+      return (
+         <div
+            key={index}
+            className={`group relative overflow-hidden rounded-xl border ${
+               colors.border
+            } bg-white/90 backdrop-blur-sm p-4 shadow-xl transition-all duration-300 ease-in-out ${
+               colors.shadow
+            } cursor-pointer hover:-translate-y-1 hover:bg-white/95 ${
+               isSelected ? "scale-105 ring-2 ring-blue-400/50" : ""
+            }`}
+            onClick={() => setSelectedPoint(isSelected ? null : index)}
+         >
+            <div
+               className={`absolute inset-0 bg-gradient-to-br ${colors.gradient} to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100`}
+            ></div>
+
+            <div className="relative z-10">
+               <div className="mb-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                     <div className={`h-3 w-3 rounded-full ${colors.indicator}`}></div>
+                     <h4 className="text-sm font-semibold text-gray-900">
+                        Ponto #{index + 1}
+                     </h4>
+                  </div>
+                  <span
+                     className={`rounded-full ${colors.badge} px-2 py-1 text-xs font-semibold`}
+                  >
+                     {props.severity === "critical" ? "Crítico" : 
+                      props.severity === "moderate" ? "Moderado" : "Saudável"}
+                  </span>
+               </div>
+
+               <div className="space-y-2 text-xs text-gray-600">
+                  <div className="flex justify-between items-center">
+                     <span>NDVI:</span>
+                     <span className={`font-medium ${colors.text}`}>
+                        {props.ndvi?.toFixed(3) || "N/A"}
+                     </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                     <span>Nível:</span>
+                     <span className={`font-medium ${colors.text}`}>
+                        {props.label || "N/A"}
+                     </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                     <span>Distância do rio:</span>
+                     <span className="text-gray-500 font-mono">
+                        {props.distance_to_river_m ? `${props.distance_to_river_m}m` : "N/A"}
+                     </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                     <span>Coordenadas:</span>
+                     <span className="text-gray-500 font-mono text-[10px]">
+                        {coords[1].toFixed(4)}, {coords[0].toFixed(4)}
+                     </span>
+                  </div>
+               </div>
+
+               {/* Evolução NDVI */}
+               <div className="mt-3 pt-3 border-t border-gray-200">
+                  <div className="flex items-center justify-between mb-2">
+                     <span className="text-gray-700 text-xs font-medium">
+                        Tendência NDVI
+                     </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                     <span className="text-gray-500 text-xs">Status:</span>
+                     <div className="flex items-center gap-1">
+                        {trend === "improving" ? (
+                           <TrendingUp className="w-3 h-3 text-green-600" />
+                        ) : trend === "declining" ? (
+                           <TrendingDown className="w-3 h-3 text-red-600" />
+                        ) : (
+                           <div className="w-3 h-3 rounded-full bg-gray-400" />
+                        )}
+                        <span
+                           className={`text-xs ${
+                              trend === "improving"
+                                 ? "text-green-600"
+                                 : trend === "declining"
+                                   ? "text-red-600"
+                                   : "text-gray-500"
+                           }`}
+                        >
+                           {trend === "improving"
+                              ? "Melhorando"
+                              : trend === "declining"
+                                ? "Declinando"
+                                : "Estável"}
+                        </span>
+                     </div>
+                  </div>
+               </div>
+
+               {/* Informações adicionais */}
+               <div className="mt-3 pt-3 border-t border-gray-200">
+                  <div className="flex items-center justify-between text-xs">
+                     <div className="flex items-center gap-1 text-gray-500">
+                        <MapPin className="h-3 w-3" />
+                        <span>HLS</span>
+                     </div>
+                     <div className="flex items-center gap-1 text-gray-500">
+                        <BarChart3 className="h-3 w-3" />
+                        <span>Análise</span>
+                     </div>
+                     <div className="flex items-center gap-1 text-gray-500">
+                        <Leaf className="h-3 w-3" />
+                        <span>Vegetação</span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      );
+   };
+
    return (
       <div className="h-screen w-full relative">
          <div ref={containerRef} className="h-full w-full" />
-         <div className="absolute left-3 top-3 z-10 bg-white/90 shadow rounded px-3 py-2">
-            <div className="mb-1 space-x-2 text-sm">
-               <label>
-                  <input
-                     type="radio"
-                     name="base"
-                     checked={baseLayer === "osm"}
-                     onChange={() => setBaseLayer("osm")}
-                  />{" "}
-                  OSM
-               </label>
-               <label>
-                  <input
-                     type="radio"
-                     name="base"
-                     checked={baseLayer === "sat"}
-                     onChange={() => setBaseLayer("sat")}
-                  />{" "}
-                  Satélite
-               </label>
+         
+         {/* Header da Plataforma */}
+         <div className="absolute top-0 left-0 right-0 z-20 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+            <div className="px-6 py-3 flex items-center justify-between">
+               {/* Logo */}
+               <Link to="/" className="flex items-center gap-1">
+                  <svg
+                     xmlns="http://www.w3.org/2000/svg"
+                     width="28"
+                     height="28"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     strokeWidth="2"
+                     strokeLinecap="round"
+                     strokeLinejoin="round"
+                     className="lucide lucide-bee-icon lucide-bee"
+                  >
+                     <path d="m8 2 1.88 1.88" stroke="#2f4538" />
+                     <path d="M14.12 3.88 16 2" stroke="#2f4538" />
+                     <path d="M9 7V6a3 3 0 1 1 6 0v1" stroke="#2f4538" />
+                     <path
+                        d="M5 7a3 3 0 1 0 2.2 5.1C9.1 10 12 7 12 7s2.9 3 4.8 5.1A3 3 0 1 0 19 7Z"
+                        stroke="#2f4538"
+                     />
+                     <path d="M7.56 12h8.87" stroke="#2f4538" />
+                     <path d="M7.5 17h9" stroke="#2f4538" />
+                     <path
+                        d="M15.5 10.7c.9.9 1.4 2.1 1.5 3.3 0 5.8-5 8-5 8s-5-2.2-5-8c.1-1.2.6-2.4 1.5-3.3"
+                        stroke="#2f4538"
+                     />
+                  </svg>
+                  <span
+                     className="text-xl font-medium text-[#2f4538]"
+                     style={{ fontFamily: '"Fraunces", serif' }}
+                  >
+                     orbee
+                  </span>
+               </Link>
+
+               {/* Ações: Controles do Mapa + Avatar */}
+               <div className="flex items-center gap-2 sm:gap-3">
+                  {/* Controles de Camada */}
+                  <div className="flex items-center gap-2 bg-white/90 shadow rounded px-3 py-1.5">
+                     <div className="flex items-center gap-1.5 text-sm">
+                        <label className="flex items-center gap-1 cursor-pointer">
+                           <input
+                              type="radio"
+                              name="base"
+                              checked={baseLayer === "osm"}
+                              onChange={() => setBaseLayer("osm")}
+                              className="w-3 h-3"
+                           />
+                           <Globe className="h-3 w-3" />
+                           <span className="text-xs">OSM</span>
+                        </label>
+                        <label className="flex items-center gap-1 cursor-pointer">
+                           <input
+                              type="radio"
+                              name="base"
+                              checked={baseLayer === "sat"}
+                              onChange={() => setBaseLayer("sat")}
+                              className="w-3 h-3"
+                           />
+                           <Search className="h-3 w-3" />
+                           <span className="text-xs">Satélite</span>
+                        </label>
+                     </div>
+                  </div>
+
+                  {/* Avatar / Perfil */}
+                  <Link
+                     to="/profile"
+                     title={user?.name || "Perfil"}
+                     className="inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-gray-300 bg-gray-100 text-xs font-semibold text-gray-700 hover:ring-2 hover:ring-[#2f4538]/30"
+                     aria-label="Abrir perfil"
+                  >
+                     {user?.avatarUrl ? (
+                        // eslint-disable-next-line jsx-a11y/alt-text
+                        <img
+                           src={user.avatarUrl}
+                           className="h-full w-full object-cover"
+                        />
+                     ) : (
+                        <span>{(user?.name?.[0] || "U").toUpperCase()}</span>
+                     )}
+                  </Link>
+               </div>
             </div>
          </div>
+
+         {/* Cards Flutuantes dos Pontos Críticos */}
+         {showCards && criticalPoints.length > 0 && (
+            <div className="absolute right-4 top-20 bottom-4 w-80 z-10 flex flex-col">
+               {/* Header dos Cards */}
+               <div className="bg-white/95 backdrop-blur-sm rounded-t-xl border border-gray-200 px-4 py-3 mb-2">
+                  <div className="flex items-center justify-between">
+                     <h3 className="text-sm font-semibold text-gray-900">
+                        Pontos Críticos ({criticalPoints.length})
+                     </h3>
+                     <button
+                        onClick={() => setShowCards(false)}
+                        className="p-1 hover:bg-gray-100 rounded-md transition-colors"
+                        title="Fechar cards"
+                     >
+                        <X className="h-4 w-4 text-gray-500" />
+                     </button>
+                  </div>
+               </div>
+
+               {/* Área Scrollável dos Cards */}
+               <div className="flex-1 overflow-y-auto bg-white/95 backdrop-blur-sm rounded-b-xl border border-gray-200 border-t-0 p-4 space-y-3">
+                  {criticalPoints.map((point, index) => createCriticalPointCard(point, index))}
+               </div>
+            </div>
+         )}
+
+         {/* Botão para mostrar cards quando ocultos */}
+         {!showCards && criticalPoints.length > 0 && (
+            <button
+               onClick={() => setShowCards(true)}
+               className="absolute right-4 top-20 z-10 bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg px-3 py-2 shadow-lg hover:bg-white transition-colors"
+               title="Mostrar pontos críticos"
+            >
+               <div className="flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4 text-gray-600" />
+                  <span className="text-sm font-medium text-gray-700">
+                     {criticalPoints.length} pontos
+                  </span>
+               </div>
+            </button>
+         )}
       </div>
    );
 }
