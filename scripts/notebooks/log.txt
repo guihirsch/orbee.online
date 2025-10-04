@@ -1,0 +1,584 @@
+AOIViewer.jsx:1345 📤 Passando props para MapShortcuts
+AOIViewer.jsx:1346 📤 selectedRegion sendo passado: null
+AOIViewer.jsx:1347 📤 clearSelectedRegion sendo passado: function
+AOIViewer.jsx:1345 📤 Passando props para MapShortcuts
+AOIViewer.jsx:1346 📤 selectedRegion sendo passado: null
+AOIViewer.jsx:1347 📤 clearSelectedRegion sendo passado: function
+MapShortcuts.jsx:46 🔍 MapShortcuts renderizado
+MapShortcuts.jsx:47 🔍 selectedRegion: null
+MapShortcuts.jsx:48 🔍 clearSelectedRegion: function
+MapShortcuts.jsx:49 🔍 selectedRegion é truthy? false
+MapShortcuts.jsx:339 🎨 Renderizando botão de busca
+MapShortcuts.jsx:340 🎨 selectedRegion no render: null
+MapShortcuts.jsx:341 🎨 Condição selectedRegion: false
+MapShortcuts.jsx:376 ❌ Verificando se deve renderizar X
+MapShortcuts.jsx:377 ❌ selectedRegion: null
+MapShortcuts.jsx:378 ❌ selectedRegion && true: null
+MapShortcuts.jsx:401 🪟 Modal de busca - showSearchResults: false
+MapShortcuts.jsx:405 🪟 Modal de busca - searchResults.length: 0
+MapShortcuts.jsx:46 🔍 MapShortcuts renderizado
+MapShortcuts.jsx:47 🔍 selectedRegion: null
+MapShortcuts.jsx:48 🔍 clearSelectedRegion: function
+MapShortcuts.jsx:49 🔍 selectedRegion é truthy? false
+MapShortcuts.jsx:339 🎨 Renderizando botão de busca
+MapShortcuts.jsx:340 🎨 selectedRegion no render: null
+MapShortcuts.jsx:341 🎨 Condição selectedRegion: false
+MapShortcuts.jsx:376 ❌ Verificando se deve renderizar X
+MapShortcuts.jsx:377 ❌ selectedRegion: null
+MapShortcuts.jsx:378 ❌ selectedRegion && true: null
+MapShortcuts.jsx:401 🪟 Modal de busca - showSearchResults: false
+MapShortcuts.jsx:405 🪟 Modal de busca - searchResults.length: 0
+AOIViewer.jsx:810 ⏰ Debounce triggered com searchQuery: 
+AOIViewer.jsx:827 🔄 selectedRegion mudou para: null
+AOIViewer.jsx:828 🔄 Tipo: object
+AOIViewer.jsx:829 🔄 É null? true
+AOIViewer.jsx:830 🔄 É undefined? false
+hook.js:608 ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition. Error Component Stack
+    at BrowserRouter (react-router-dom.js?v=b2f2da07:5247:5)
+overrideMethod @ hook.js:608
+warnOnce @ react-router-dom.js?v=b2f2da07:4393
+logDeprecation @ react-router-dom.js?v=b2f2da07:4396
+logV6DeprecationWarnings @ react-router-dom.js?v=b2f2da07:4399
+(anônimo) @ react-router-dom.js?v=b2f2da07:5271
+commitHookEffectListMount @ chunk-PJEEZAML.js?v=b2f2da07:16915
+commitPassiveMountOnFiber @ chunk-PJEEZAML.js?v=b2f2da07:18156
+commitPassiveMountEffects_complete @ chunk-PJEEZAML.js?v=b2f2da07:18129
+commitPassiveMountEffects_begin @ chunk-PJEEZAML.js?v=b2f2da07:18119
+commitPassiveMountEffects @ chunk-PJEEZAML.js?v=b2f2da07:18109
+flushPassiveEffectsImpl @ chunk-PJEEZAML.js?v=b2f2da07:19490
+flushPassiveEffects @ chunk-PJEEZAML.js?v=b2f2da07:19447
+(anônimo) @ chunk-PJEEZAML.js?v=b2f2da07:19328
+workLoop @ chunk-PJEEZAML.js?v=b2f2da07:197
+flushWork @ chunk-PJEEZAML.js?v=b2f2da07:176
+performWorkUntilDeadline @ chunk-PJEEZAML.js?v=b2f2da07:384
+hook.js:608 ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath. Error Component Stack
+    at BrowserRouter (react-router-dom.js?v=b2f2da07:5247:5)
+overrideMethod @ hook.js:608
+warnOnce @ react-router-dom.js?v=b2f2da07:4393
+logDeprecation @ react-router-dom.js?v=b2f2da07:4396
+logV6DeprecationWarnings @ react-router-dom.js?v=b2f2da07:4402
+(anônimo) @ react-router-dom.js?v=b2f2da07:5271
+commitHookEffectListMount @ chunk-PJEEZAML.js?v=b2f2da07:16915
+commitPassiveMountOnFiber @ chunk-PJEEZAML.js?v=b2f2da07:18156
+commitPassiveMountEffects_complete @ chunk-PJEEZAML.js?v=b2f2da07:18129
+commitPassiveMountEffects_begin @ chunk-PJEEZAML.js?v=b2f2da07:18119
+commitPassiveMountEffects @ chunk-PJEEZAML.js?v=b2f2da07:18109
+flushPassiveEffectsImpl @ chunk-PJEEZAML.js?v=b2f2da07:19490
+flushPassiveEffects @ chunk-PJEEZAML.js?v=b2f2da07:19447
+(anônimo) @ chunk-PJEEZAML.js?v=b2f2da07:19328
+workLoop @ chunk-PJEEZAML.js?v=b2f2da07:197
+flushWork @ chunk-PJEEZAML.js?v=b2f2da07:176
+performWorkUntilDeadline @ chunk-PJEEZAML.js?v=b2f2da07:384
+AOIViewer.jsx:810 ⏰ Debounce triggered com searchQuery: 
+AOIViewer.jsx:827 🔄 selectedRegion mudou para: null
+AOIViewer.jsx:828 🔄 Tipo: object
+AOIViewer.jsx:829 🔄 É null? true
+AOIViewer.jsx:830 🔄 É undefined? false
+AOIViewer.jsx:1345 📤 Passando props para MapShortcuts
+AOIViewer.jsx:1346 📤 selectedRegion sendo passado: null
+AOIViewer.jsx:1347 📤 clearSelectedRegion sendo passado: function
+AOIViewer.jsx:1345 📤 Passando props para MapShortcuts
+AOIViewer.jsx:1346 📤 selectedRegion sendo passado: null
+AOIViewer.jsx:1347 📤 clearSelectedRegion sendo passado: function
+MapShortcuts.jsx:46 🔍 MapShortcuts renderizado
+MapShortcuts.jsx:47 🔍 selectedRegion: null
+MapShortcuts.jsx:48 🔍 clearSelectedRegion: function
+MapShortcuts.jsx:49 🔍 selectedRegion é truthy? false
+MapShortcuts.jsx:339 🎨 Renderizando botão de busca
+MapShortcuts.jsx:340 🎨 selectedRegion no render: null
+MapShortcuts.jsx:341 🎨 Condição selectedRegion: false
+MapShortcuts.jsx:376 ❌ Verificando se deve renderizar X
+MapShortcuts.jsx:377 ❌ selectedRegion: null
+MapShortcuts.jsx:378 ❌ selectedRegion && true: null
+MapShortcuts.jsx:401 🪟 Modal de busca - showSearchResults: false
+MapShortcuts.jsx:405 🪟 Modal de busca - searchResults.length: 0
+MapShortcuts.jsx:46 🔍 MapShortcuts renderizado
+MapShortcuts.jsx:47 🔍 selectedRegion: null
+MapShortcuts.jsx:48 🔍 clearSelectedRegion: function
+MapShortcuts.jsx:49 🔍 selectedRegion é truthy? false
+MapShortcuts.jsx:339 🎨 Renderizando botão de busca
+MapShortcuts.jsx:340 🎨 selectedRegion no render: null
+MapShortcuts.jsx:341 🎨 Condição selectedRegion: false
+MapShortcuts.jsx:376 ❌ Verificando se deve renderizar X
+MapShortcuts.jsx:377 ❌ selectedRegion: null
+MapShortcuts.jsx:378 ❌ selectedRegion && true: null
+MapShortcuts.jsx:401 🪟 Modal de busca - showSearchResults: false
+MapShortcuts.jsx:405 🪟 Modal de busca - searchResults.length: 0
+ ⏰ Query vazia, limpando resultados
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: false
+ 🪟 Modal de busca - searchResults.length: 0
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: false
+ 🪟 Modal de busca - searchResults.length: 0
+ 🔄 Carregando pontos críticos...
+ 📡 Status da resposta: 200 OK
+ ✅ 24 pontos carregados
+ 🎯 Configuração fixa: 50m distância mínima, todos os críticos visíveis
+ 🔴 Críticos incluídos: 1/1
+ 🟡 Moderados incluídos: 11/11
+ 🟢 Saudáveis incluídos: 12/12
+ 📊 Total final: 24 pontos (1 críticos, 11 moderados, 12 saudáveis)
+ 🎯 Definindo 24 pontos críticos no estado
+ 🎨 Criando pin water (#8B0000, 22px)
+ 🎨 Criando pin critical (#DC143C, 30px)
+ 🎨 Criando pin severe (#FF4500, 28px)
+ 🎨 Criando pin moderate (#FF8C00, 26px)
+ 🎨 Criando pin light (#FFD700, 24px)
+ 🎨 Criando pin fair (#ADFF2F, 22px)
+ 🎨 Criando pin good (#32CD32, 20px)
+ 🎨 Criando pin excellent (#228B22, 20px)
+ ✅ Pontos configurados estaticamente - sem mudança por zoom
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: false
+ 🪟 Modal de busca - searchResults.length: 0
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: false
+ 🪟 Modal de busca - searchResults.length: 0
+ ✅ Pin water carregado (1/8)
+ ✅ Pin critical carregado (2/8)
+ ✅ Pin severe carregado (3/8)
+ ✅ Pin moderate carregado (4/8)
+ ✅ Pin light carregado (5/8)
+ ✅ Pin fair carregado (6/8)
+ ✅ Pin good carregado (7/8)
+ ✅ Pin excellent carregado (8/8)
+ ✅ Todas as 8 imagens carregadas, criando camada...
+ ✅ Camada de símbolos criada com sucesso
+ ✅ Event listeners configurados
+ 🔍 Botão de busca clicado!
+ 🔍 showSearchResults antes: false
+ 🔍 showSearchResults depois: true
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ ⏰ Debounce triggered com searchQuery: s
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ ⏰ Debounce triggered com searchQuery: si
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ ⏰ Debounce triggered com searchQuery: sin
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ ⏰ Debounce triggered com searchQuery: sini
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ ⏰ Debounce triggered com searchQuery: sinim
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ ⏰ Debounce triggered com searchQuery: sinimb
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ ⏰ Debounce triggered com searchQuery: sinimbu
+ ⏰ Executando busca após debounce para: sinimbu
+ 🔍 searchLocations chamada com: sinimbu
+ 🔍 Iniciando busca...
+ 🔍 URL da busca: https://nominatim.openstreetmap.org/search?format=json&q=sinimbu&limit=10&countrycodes=br&addressdetails=1&extratags=1&namedetails=1&class=boundary&type=administrative&admin_level=8
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 0
+ 📋 Renderizando resultados: 0
+ 📋 searchResults: []
+ 🔍 Resultados brutos: (5) [{…}, {…}, {…}, {…}, {…}]
+ 🔍 Resultados formatados: (5) [{…}, {…}, {…}, {…}, {…}]
+ 🔍 Estados atualizados - searchResults: 5 showSearchResults: true
+ 🔍 Busca finalizada
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 5
+ 📋 Renderizando resultados: 5
+ 📋 searchResults: (5) [{…}, {…}, {…}, {…}, {…}]
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: true
+ 🪟 Modal de busca - searchResults.length: 5
+ 📋 Renderizando resultados: 5
+ 📋 searchResults: (5) [{…}, {…}, {…}, {…}, {…}]
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 📤 Passando props para MapShortcuts
+ 📤 selectedRegion sendo passado: null
+ 📤 clearSelectedRegion sendo passado: function
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: false
+ 🪟 Modal de busca - searchResults.length: 5
+ 🔍 MapShortcuts renderizado
+ 🔍 selectedRegion: null
+ 🔍 clearSelectedRegion: function
+ 🔍 selectedRegion é truthy? false
+ 🎨 Renderizando botão de busca
+ 🎨 selectedRegion no render: null
+ 🎨 Condição selectedRegion: false
+ ❌ Verificando se deve renderizar X
+ ❌ selectedRegion: null
+ ❌ selectedRegion && true: null
+ 🪟 Modal de busca - showSearchResults: false
+ 🪟 Modal de busca - searchResults.length: 5

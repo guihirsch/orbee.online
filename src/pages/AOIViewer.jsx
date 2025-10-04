@@ -5,6 +5,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { fromUrl as geotiffFromUrl } from "geotiff";
 import proj4 from "proj4";
 import useAuth from "../hooks/useAuth";
+import MapShortcuts from "../components/MapShortcuts";
 import {
    Globe,
    Search,
@@ -17,6 +18,10 @@ import {
    TrendingDown,
    Check,
    MapPin,
+   Navigation,
+   Bookmark,
+   Eye,
+   Clock,
 } from "lucide-react";
 
 export default function AOIViewer() {
@@ -27,10 +32,42 @@ export default function AOIViewer() {
    const [baseLayer, setBaseLayer] = useState("osm");
    const [rgbVisible, setRgbVisible] = useState(false);
    const [rgbAvailable, setRgbAvailable] = useState(false);
-   const [legendMinimized, setLegendMinimized] = useState(false);
    const [criticalPoints, setCriticalPoints] = useState([]);
    const [selectedPoint, setSelectedPoint] = useState(null);
-   const [showCards, setShowCards] = useState(true);
+   const [showCards, setShowCards] = useState(false);
+   const [showAcompanhamentos, setShowAcompanhamentos] = useState(false);
+   const [searchQuery, setSearchQuery] = useState("");
+   const [searchResults, setSearchResults] = useState([]);
+   const [showSearchResults, setShowSearchResults] = useState(false);
+   const [isSearching, setIsSearching] = useState(false);
+   const [selectedRegion, setSelectedRegion] = useState(null);
+
+   // Estados para filtros e seleção de pontos críticos
+   const [activeFilter, setActiveFilter] = useState("all");
+   const [isFilterOpen, setIsFilterOpen] = useState(false);
+   const [selectedPoints, setSelectedPoints] = useState([]);
+   const [isSelectionOpen, setIsSelectionOpen] = useState(false);
+
+   // Estados para expansão horizontal
+   const [panelWidth, setPanelWidth] = useState(() => {
+      const saved = localStorage.getItem("orbee-panel-width");
+      return saved ? parseInt(saved) : 320; // Largura padrão em pixels
+   });
+   const [isResizing, setIsResizing] = useState(false);
+   const [resizeStartX, setResizeStartX] = useState(0);
+   const [resizeStartWidth, setResizeStartWidth] = useState(0);
+
+   // Estados para expansão horizontal da seção de acompanhamentos
+   const [acompanhamentosWidth, setAcompanhamentosWidth] = useState(() => {
+      const saved = localStorage.getItem("orbee-acompanhamentos-width");
+      return saved ? parseInt(saved) : 300; // Largura padrão em pixels
+   });
+   const [isAcompanhamentosResizing, setIsAcompanhamentosResizing] =
+      useState(false);
+   const [acompanhamentosResizeStartX, setAcompanhamentosResizeStartX] =
+      useState(0);
+   const [acompanhamentosResizeStartWidth, setAcompanhamentosResizeStartWidth] =
+      useState(0);
 
    useEffect(() => {
       if (mapRef.current) return;
@@ -73,11 +110,6 @@ export default function AOIViewer() {
          zoom: 13,
       });
 
-      mapRef.current.addControl(
-         new maplibregl.NavigationControl(),
-         "top-right"
-      );
-
       mapRef.current.on("load", async () => {
          try {
             // Base layers
@@ -108,17 +140,17 @@ export default function AOIViewer() {
                const criticalRes = await fetch(
                   "/critical_points_mata_ciliar.geojson"
                );
+               console.log(
+                  `📡 Status da resposta: ${criticalRes.status} ${criticalRes.statusText}`
+               );
                if (criticalRes.ok) {
                   const criticalGeo = await criticalRes.json();
                   console.log(
                      `✅ ${criticalGeo.features.length} pontos carregados`
                   );
-                  
+
                   // Armazenar dados globalmente para acesso no useEffect
                   window.criticalGeoData = criticalGeo;
-                  
-                  // Armazenar pontos críticos no estado para os cards
-                  setCriticalPoints(criticalGeo.features);
 
                   // Função para classificar degradação usando dados REAIS do GeoJSON
                   const classifyDegradation = (feature) => {
@@ -129,18 +161,22 @@ export default function AOIViewer() {
                      if (props.level && props.color) {
                         // Mapear levels do GeoJSON para levels da função getVegetationDescription
                         const levelMapping = {
-                           "very_sparse": "critical",
-                           "sparse": "moderate", 
-                           "dense": "good",
-                           "very_dense": "excellent"
+                           very_sparse: "critical",
+                           sparse: "moderate",
+                           dense: "good",
+                           very_dense: "excellent",
                         };
-                        
-                        const mappedLevel = levelMapping[props.level] || props.level;
-                        
+
+                        const mappedLevel =
+                           levelMapping[props.level] || props.level;
+
                         return {
                            level: mappedLevel,
                            color: props.color,
-                           label: props.label || props.severity || "Não classificado",
+                           label:
+                              props.label ||
+                              props.severity ||
+                              "Não classificado",
                            ndvi: props.ndvi,
                         };
                      }
@@ -329,6 +365,12 @@ export default function AOIViewer() {
                      features: filteredFeatures,
                      metadata: criticalGeo.metadata,
                   };
+
+                  // Atualizar estado dos pontos críticos com os dados filtrados
+                  console.log(
+                     `🎯 Definindo ${filteredFeatures.length} pontos críticos no estado`
+                  );
+                  setCriticalPoints(filteredFeatures);
 
                   mapRef.current.addSource("critical-points", {
                      type: "geojson",
@@ -521,9 +563,6 @@ export default function AOIViewer() {
                               "✅ Camada de símbolos criada com sucesso"
                            );
 
-                           // Criar legenda apenas uma vez, após a camada ser criada
-                           createLegend();
-
                            // Adicionar event listeners apenas após a camada ser criada
                            setupEventListeners();
                         } catch (error) {
@@ -616,7 +655,8 @@ export default function AOIViewer() {
                      const descriptions = {
                         water: "Área de água ou solo exposto",
                         critical: "Vegetação severamente degradada ou ausente",
-                        severe: "Vegetação muito danificada, necessita intervenção urgente",
+                        severe:
+                           "Vegetação muito danificada, necessita intervenção urgente",
                         moderate: "Vegetação parcialmente degradada",
                         light: "Vegetação com sinais leves de estresse",
                         fair: "Vegetação em condição regular",
@@ -626,7 +666,7 @@ export default function AOIViewer() {
                         very_sparse: "Vegetação muito rala ou solo exposto",
                         sparse: "Vegetação esparsa em regeneração",
                         dense: "Vegetação densa e bem desenvolvida",
-                        very_dense: "Vegetação muito densa e exuberante"
+                        very_dense: "Vegetação muito densa e exuberante",
                      };
                      return descriptions[level] || "Estado não classificado";
                   };
@@ -635,205 +675,17 @@ export default function AOIViewer() {
                   console.log(
                      "✅ Pontos configurados estaticamente - sem mudança por zoom"
                   );
-
-                  // Função para criar legenda baseada nos dados reais do GeoJSON
-                  const createLegend = () => {
-                     // Verificar se já existe uma legenda
-                     const existingLegenda =
-                        containerRef.current.querySelector(".ndvi-legend");
-                     if (existingLegenda) {
-                        console.log("⚠️ Legenda já existe, pulando criação");
-                        return;
-                     }
-
-                     // Analisar os dados reais do GeoJSON para criar legenda precisa
-                     const realData = criticalGeo.features.reduce((acc, f) => {
-                        const severity = f.properties.severity;
-                        const ndvi = f.properties.ndvi;
-
-                        if (!acc[severity]) {
-                           acc[severity] = {
-                              count: 0,
-                              ndviMin: ndvi,
-                              ndviMax: ndvi,
-                              color: f.properties.color,
-                              label: f.properties.label,
-                           };
-                        }
-
-                        acc[severity].count++;
-                        acc[severity].ndviMin = Math.min(
-                           acc[severity].ndviMin,
-                           ndvi
-                        );
-                        acc[severity].ndviMax = Math.max(
-                           acc[severity].ndviMax,
-                           ndvi
-                        );
-
-                        return acc;
-                     }, {});
-
-                     // Mapear ícones por severidade
-                     const severityIcons = {
-                        critical: "🔴",
-                        moderate: "🟡",
-                        healthy: "🟢",
-                     };
-
-                     // Ordem de prioridade para exibição
-                     const severityOrder = ["critical", "moderate", "healthy"];
-
-                     const legend = document.createElement("div");
-                     legend.className =
-                        "ndvi-legend absolute left-3 bottom-3 z-10 bg-white/95 shadow-lg rounded-lg text-xs";
-                     legend.style.width = "320px";
-                     legend.style.backdropFilter = "blur(8px)";
-                     legend.style.border = "1px solid rgba(0,0,0,0.1)";
-                     legend.style.transition = "all 0.3s ease";
-
-                     // Criar itens da legenda baseados nos dados reais
-                     const legendItems = severityOrder
-                        .filter((severity) => realData[severity])
-                        .map((severity) => {
-                           const data = realData[severity];
-                           return {
-                              level: severity,
-                              icon: severityIcons[severity],
-                              color: data.color,
-                              label: data.label,
-                              range: `${data.ndviMin.toFixed(2)} - ${data.ndviMax.toFixed(2)}`,
-                              count: data.count,
-                           };
-                        });
-
-                     // Adicionar estatísticas gerais do GeoJSON
-                     const totalPoints = criticalGeo.features.length;
-                     const metadata = criticalGeo.metadata;
-                     const stats = metadata?.statistics || {};
-                     const processingParams = metadata?.processing_params || {};
-
-                     // Função para atualizar o conteúdo da legenda
-                     const updateLegendContent = (isMinimized) => {
-                        if (isMinimized) {
-                           return `
-                              <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px">
-                                 <div style="font-weight:bold;color:#228B22;font-size:14px">
-                                    🛰️ Análise HLS
-                                 </div>
-                                 <button id="legend-toggle" style="background:none;border:none;cursor:pointer;font-size:16px;color:#666;padding:4px">
-                                    📖
-                                 </button>
-                              </div>
-                           `;
-                        } else {
-                           return `
-                              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;border-bottom:2px solid #228B22;padding-bottom:4px">
-                                 <div style="font-weight:bold;color:#228B22;font-size:14px">
-                                    🛰️ Análise HLS - Mata Ciliar
-                                 </div>
-                                 <button id="legend-toggle" style="background:none;border:none;cursor:pointer;font-size:16px;color:#666;padding:4px">
-                                    📕
-                                 </button>
-                              </div>
-                       
-                       <!-- Seção: Informações Gerais -->
-                       <div style="margin-bottom:8px;padding:6px;background:#f0f8f0;border-radius:4px;border-left:3px solid #228B22">
-                          <div style="font-weight:600;font-size:11px;color:#2d5a2d;margin-bottom:4px">📊 Informações Gerais</div>
-                          <div style="font-size:10px;color:#666;line-height:1.3">
-                             <div>📅 Período: ${processingParams.start_date || "Jun"}-${processingParams.end_date ? processingParams.end_date.split("-")[1] : "Set"} 2022</div>
-                             <div>🌿 Status: <span style="color:#228B22;font-weight:600">${stats.overall_status === "healthy" ? "Saudável" : stats.overall_status || "N/A"}</span></div>
-                             <div>📊 NDVI médio: <span style="font-family:monospace;font-weight:600">${stats.ndvi_mean ? stats.ndvi_mean.toFixed(3) : "N/A"}</span></div>
-                             <div>📏 Buffer: ${metadata?.buffer_distance || "200m"} do rio</div>
-                             <div>☁️ Máx. nuvens: ${processingParams.cloud_coverage_max || 50}%</div>
-                          </div>
-                       </div>
-
-                       <!-- Seção: Distribuição dos Pontos -->
-                       <div style="margin-bottom:8px;padding:6px;background:#fff8e1;border-radius:4px;border-left:3px solid #ff8c00">
-                          <div style="font-weight:600;font-size:11px;color:#b8860b;margin-bottom:4px">📍 Distribuição dos Pontos</div>
-                          <div style="font-size:10px;color:#666">
-                             <div style="display:flex;justify-content:space-between">
-                                <span>📊 Total analisado:</span>
-                                <span style="font-weight:600">${totalPoints} pontos</span>
-                             </div>
-                          </div>
-                       </div>
-                       <!-- Seção: Escala NDVI por Severidade -->
-                       <div style="margin-bottom:8px;padding:6px;background:#fef7f7;border-radius:4px;border-left:3px solid #dc143c">
-                          <div style="font-weight:600;font-size:11px;color:#8b0000;margin-bottom:6px">🎯 Escala NDVI por Severidade</div>
-                          ${legendItems
-                             .map(
-                                (item) => `
-                             <div style="display:flex;align-items:center;justify-content:space-between;margin:5px 0;padding:4px;background:white;border-radius:3px;border:1px solid #f0f0f0">
-                                <div style="display:flex;align-items:center;gap:8px">
-                                   <span style="font-size:16px">${item.icon}</span>
-                                   <div>
-                                      <div style="color:${item.color};font-weight:700;font-size:12px">${item.label}</div>
-                                      <div style="font-size:10px;color:#666;font-weight:500">${item.count} pontos detectados</div>
-                                   </div>
-                                </div>
-                                <div style="text-align:right;background:#f8f9fa;padding:3px 6px;border-radius:3px">
-                                   <div style="font-size:8px;color:#666;font-weight:600">NDVI</div>
-                                   <div style="font-size:10px;color:#333;font-family:monospace;font-weight:600">${item.range}</div>
-                                </div>
-                             </div>
-                          `
-                             )
-                             .join("")}
-                       </div>
-
-                       <!-- Seção: Estatísticas Detalhadas -->
-                       <div style="margin-bottom:8px;padding:6px;background:#f5f5f5;border-radius:4px;border-left:3px solid #666">
-                          <div style="font-weight:600;font-size:11px;color:#333;margin-bottom:4px">📈 Estatísticas da Análise</div>
-                          <div style="font-size:9px;color:#666;line-height:1.4">
-                             <div style="display:flex;justify-content:space-between">
-                                <span>🔴 Fração crítica:</span>
-                                <span style="font-family:monospace">${stats.critical_fraction ? (stats.critical_fraction * 100).toFixed(1) + "%" : "N/A"}</span>
-                             </div>
-                             <div style="display:flex;justify-content:space-between">
-                                <span>🟡 Fração moderada:</span>
-                                <span style="font-family:monospace">${stats.moderate_fraction ? (stats.moderate_fraction * 100).toFixed(1) + "%" : "N/A"}</span>
-                             </div>
-                             <div style="display:flex;justify-content:space-between">
-                                <span>📊 Pixels analisados:</span>
-                                <span style="font-family:monospace">${stats.total_pixels ? stats.total_pixels.toLocaleString() : "N/A"}</span>
-                             </div>
-                             <div style="display:flex;justify-content:space-between">
-                                <span>📏 Distância mín. pontos:</span>
-                                <span style="font-family:monospace">${processingParams.min_distance_points || 100}m</span>
-                             </div>
-                          </div>
-                       </div>
-
-                       <!-- Seção: Instruções -->
-                       <div style="font-size:9px;color:#666;margin-top:8px;border-top:2px solid #ddd;padding-top:6px;text-align:center;background:#f9f9f9;padding:6px;border-radius:3px">
-                          <div style="margin-bottom:2px;font-weight:600">💡 Como usar:</div>
-                          <div>📍 <strong>Clique</strong> nos pins para detalhes</div>
-                          <div>🔍 <strong>Zoom</strong> para ver mais pontos</div>
-                          <div>🗺️ <strong>Alterne</strong> mapas base acima</div>
-                       </div>
-                           `;
-                        }
-                     };
-
-                     // Definir conteúdo inicial da legenda
-                     legend.innerHTML = updateLegendContent(legendMinimized);
-                     containerRef.current.appendChild(legend);
-                     console.log("✅ Legenda criada");
-
-                     // Adicionar event listener para o botão de toggle
-                     const toggleButton = legend.querySelector('#legend-toggle');
-                     if (toggleButton) {
-                        toggleButton.addEventListener('click', (e) => {
-                           e.stopPropagation();
-                           setLegendMinimized(!legendMinimized);
-                        });
-                     }
-                  };
+               } else {
+                  console.error(
+                     `❌ Erro ao carregar pontos críticos: ${criticalRes.status} ${criticalRes.statusText}`
+                  );
+                  // Definir pontos vazios para evitar erro
+                  setCriticalPoints([]);
                }
             } catch (error) {
                console.error("❌ Erro ao carregar pontos críticos:", error);
+               // Definir pontos vazios para evitar erro
+               setCriticalPoints([]);
             }
 
             setLoaded(true);
@@ -869,184 +721,336 @@ export default function AOIViewer() {
       }
    }, [baseLayer]);
 
-   // Atualizar legenda quando legendMinimized mudar
-   useEffect(() => {
-      const legend = containerRef.current?.querySelector('.ndvi-legend');
-      if (legend) {
-         const updateLegendContent = (isMinimized) => {
-            if (isMinimized) {
-               return `
-                  <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px">
-                     <div style="font-weight:bold;color:#228B22;font-size:14px">
-                        🛰️ Análise HLS
-                     </div>
-                     <button id="legend-toggle" style="background:none;border:none;cursor:pointer;font-size:16px;color:#666;padding:4px">
-                        📖
-                     </button>
-                  </div>
-               `;
-            } else {
-               // Conteúdo completo da legenda (mesmo do createLegend)
-               const criticalGeo = window.criticalGeoData; // Armazenar dados globalmente
-               if (!criticalGeo) return legend.innerHTML;
-
-               const realData = criticalGeo.features.reduce((acc, f) => {
-                  const severity = f.properties.severity;
-                  const ndvi = f.properties.ndvi;
-
-                  if (!acc[severity]) {
-                     acc[severity] = {
-                        count: 0,
-                        ndviMin: ndvi,
-                        ndviMax: ndvi,
-                        color: f.properties.color,
-                        label: f.properties.label,
-                     };
-                  }
-
-                  acc[severity].count++;
-                  acc[severity].ndviMin = Math.min(acc[severity].ndviMin, ndvi);
-                  acc[severity].ndviMax = Math.max(acc[severity].ndviMax, ndvi);
-
-                  return acc;
-               }, {});
-
-               const severityIcons = {
-                  critical: "🔴",
-                  moderate: "🟡",
-                  healthy: "🟢",
-               };
-
-               const severityOrder = ["critical", "moderate", "healthy"];
-
-               const legendItems = severityOrder
-                  .filter((severity) => realData[severity])
-                  .map((severity) => {
-                     const data = realData[severity];
-                     return {
-                        level: severity,
-                        icon: severityIcons[severity],
-                        color: data.color,
-                        label: data.label,
-                        range: `${data.ndviMin.toFixed(2)} - ${data.ndviMax.toFixed(2)}`,
-                        count: data.count,
-                     };
-                  });
-
-               const totalPoints = criticalGeo.features.length;
-               const metadata = criticalGeo.metadata;
-               const stats = metadata?.statistics || {};
-               const processingParams = metadata?.processing_params || {};
-
-               return `
-                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;border-bottom:2px solid #228B22;padding-bottom:4px">
-                     <div style="font-weight:bold;color:#228B22;font-size:14px">
-                        🛰️ Análise HLS - Mata Ciliar
-                     </div>
-                     <button id="legend-toggle" style="background:none;border:none;cursor:pointer;font-size:16px;color:#666;padding:4px">
-                        📕
-                     </button>
-                  </div>
-                  
-                  <!-- Seção: Informações Gerais -->
-                  <div style="margin-bottom:8px;padding:6px;background:#f0f8f0;border-radius:4px;border-left:3px solid #228B22">
-                     <div style="font-weight:600;font-size:11px;color:#2d5a2d;margin-bottom:4px">📊 Informações Gerais</div>
-                     <div style="font-size:10px;color:#666;line-height:1.3">
-                        <div>📅 Período: ${processingParams.start_date || "Jun"}-${processingParams.end_date ? processingParams.end_date.split("-")[1] : "Set"} 2022</div>
-                        <div>🌿 Status: <span style="color:#228B22;font-weight:600">${stats.overall_status === "healthy" ? "Saudável" : stats.overall_status || "N/A"}</span></div>
-                        <div>📊 NDVI médio: <span style="font-family:monospace;font-weight:600">${stats.ndvi_mean ? stats.ndvi_mean.toFixed(3) : "N/A"}</span></div>
-                        <div>📏 Buffer: ${metadata?.buffer_distance || "200m"} do rio</div>
-                        <div>☁️ Máx. nuvens: ${processingParams.cloud_coverage_max || 50}%</div>
-                     </div>
-                  </div>
-
-                  <!-- Seção: Distribuição dos Pontos -->
-                  <div style="margin-bottom:8px;padding:6px;background:#fff8e1;border-radius:4px;border-left:3px solid #ff8c00">
-                     <div style="font-weight:600;font-size:11px;color:#b8860b;margin-bottom:4px">📍 Distribuição dos Pontos</div>
-                     <div style="font-size:10px;color:#666">
-                        <div style="display:flex;justify-content:space-between">
-                           <span>📊 Total analisado:</span>
-                           <span style="font-weight:600">${totalPoints} pontos</span>
-                        </div>
-                     </div>
-                  </div>
-
-                  <!-- Seção: Escala NDVI por Severidade -->
-                  <div style="margin-bottom:8px;padding:6px;background:#fef7f7;border-radius:4px;border-left:3px solid #dc143c">
-                     <div style="font-weight:600;font-size:11px;color:#8b0000;margin-bottom:6px">🎯 Escala NDVI por Severidade</div>
-                     ${legendItems
-                        .map(
-                           (item) => `
-                        <div style="display:flex;align-items:center;justify-content:space-between;margin:5px 0;padding:4px;background:white;border-radius:3px;border:1px solid #f0f0f0">
-                           <div style="display:flex;align-items:center;gap:8px">
-                              <span style="font-size:16px">${item.icon}</span>
-                              <div>
-                                 <div style="color:${item.color};font-weight:700;font-size:12px">${item.label}</div>
-                                 <div style="font-size:10px;color:#666;font-weight:500">${item.count} pontos detectados</div>
-                              </div>
-                           </div>
-                           <div style="text-align:right;background:#f8f9fa;padding:3px 6px;border-radius:3px">
-                              <div style="font-size:8px;color:#666;font-weight:600">NDVI</div>
-                              <div style="font-size:10px;color:#333;font-family:monospace;font-weight:600">${item.range}</div>
-                           </div>
-                        </div>
-                     `
-                        )
-                        .join("")}
-                  </div>
-
-                  <!-- Seção: Estatísticas Detalhadas -->
-                  <div style="margin-bottom:8px;padding:6px;background:#f5f5f5;border-radius:4px;border-left:3px solid #666">
-                     <div style="font-weight:600;font-size:11px;color:#333;margin-bottom:4px">📈 Estatísticas da Análise</div>
-                     <div style="font-size:9px;color:#666;line-height:1.4">
-                        <div style="display:flex;justify-content:space-between">
-                           <span>🔴 Fração crítica:</span>
-                           <span style="font-family:monospace">${stats.critical_fraction ? (stats.critical_fraction * 100).toFixed(1) + "%" : "N/A"}</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between">
-                           <span>🟡 Fração moderada:</span>
-                           <span style="font-family:monospace">${stats.moderate_fraction ? (stats.moderate_fraction * 100).toFixed(1) + "%" : "N/A"}</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between">
-                           <span>📊 Pixels analisados:</span>
-                           <span style="font-family:monospace">${stats.total_pixels ? stats.total_pixels.toLocaleString() : "N/A"}</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between">
-                           <span>📏 Distância mín. pontos:</span>
-                           <span style="font-family:monospace">${processingParams.min_distance_points || 100}m</span>
-                        </div>
-                     </div>
-                  </div>
-
-                  <!-- Seção: Instruções -->
-                  <div style="font-size:9px;color:#666;margin-top:8px;border-top:2px solid #ddd;padding-top:6px;text-align:center;background:#f9f9f9;padding:6px;border-radius:3px">
-                     <div style="margin-bottom:2px;font-weight:600">💡 Como usar:</div>
-                     <div>📍 <strong>Clique</strong> nos pins para detalhes</div>
-                     <div>🔍 <strong>Zoom</strong> para ver mais pontos</div>
-                     <div>🗺️ <strong>Alterne</strong> mapas base acima</div>
-                  </div>
-               `;
-            }
-         };
-
-         legend.innerHTML = updateLegendContent(legendMinimized);
-
-         // Reconfigurar event listener para o novo botão
-         const toggleButton = legend.querySelector('#legend-toggle');
-         if (toggleButton) {
-            toggleButton.addEventListener('click', (e) => {
-               e.stopPropagation();
-               setLegendMinimized(!legendMinimized);
-            });
-         }
+   // Função de busca de localidades
+   const searchLocations = async (query) => {
+      if (!query.trim()) {
+         setSearchResults([]);
+         setShowSearchResults(false);
+         return;
       }
-   }, [legendMinimized]);
+
+      setIsSearching(true);
+      try {
+         // Usar Nominatim (OpenStreetMap) para busca APENAS de municípios
+         const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=10&countrycodes=br&addressdetails=1&extratags=1&namedetails=1&class=boundary&type=administrative&admin_level=8`;
+         const response = await fetch(url);
+         const results = await response.json();
+
+         // Filtrar apenas municípios (admin_level=8 no Brasil)
+         const filteredResults = results
+            .filter((result) => {
+               const address = result.address || {};
+               const adminLevel = result.address?.admin_level;
+
+               // Garantir que é um município (admin_level=8 no Brasil)
+               return (
+                  adminLevel === 8 ||
+                  (result.class === "boundary" &&
+                     result.type === "administrative") ||
+                  (address.municipality && address.state)
+               );
+            })
+            .sort((a, b) => {
+               // Ordenar por importância (maior importância primeiro)
+               return (b.importance || 0) - (a.importance || 0);
+            })
+            .slice(0, 5); // Limitar a 5 resultados
+
+         const formattedResults = filteredResults.map((result) => {
+            // Extrair informações do município
+            const address = result.address || {};
+            const municipality =
+               address.municipality || address.city || address.town;
+            const state = address.state;
+            const stateCode = address.state_code;
+
+            // Criar nome do município
+            let displayName = municipality;
+            if (state) {
+               displayName = `${municipality}, ${state}`;
+            }
+
+            return {
+               id: result.place_id,
+               name: displayName,
+               fullName: result.display_name,
+               lat: parseFloat(result.lat),
+               lon: parseFloat(result.lon),
+               municipality: municipality,
+               state: state,
+               stateCode: stateCode,
+               importance: result.importance,
+            };
+         });
+
+         setSearchResults(formattedResults);
+         setShowSearchResults(true);
+      } catch (error) {
+         console.error("Erro na busca:", error);
+         setSearchResults([]);
+      } finally {
+         setIsSearching(false);
+      }
+   };
+
+   // Debounce para busca
+   useEffect(() => {
+      const timeoutId = setTimeout(() => {
+         if (searchQuery.trim()) {
+            searchLocations(searchQuery);
+         } else {
+            setSearchResults([]);
+            setShowSearchResults(false);
+         }
+      }, 300);
+
+      return () => clearTimeout(timeoutId);
+   }, [searchQuery]);
+
+   // Função para navegar para localização
+   const navigateToLocation = (result) => {
+      if (mapRef.current) {
+         // Primeiro definir a região selecionada
+         setSelectedRegion(result);
+         setSearchQuery(result.name);
+
+         // Depois navegar no mapa
+         mapRef.current.flyTo({
+            center: [result.lon, result.lat],
+            zoom: 13,
+            duration: 2000,
+         });
+
+         // Por último fechar o modal
+         setShowSearchResults(false);
+      }
+   };
+
+   // Função para limpar seleção da região
+   const clearSelectedRegion = () => {
+      setSelectedRegion(null);
+      setSearchQuery("");
+   };
+
+   // Fechar resultados da busca ao clicar fora
+   useEffect(() => {
+      const handleClickOutside = (event) => {
+         if (showSearchResults && !event.target.closest(".search-container")) {
+            setShowSearchResults(false);
+         }
+         if (isFilterOpen && !event.target.closest(".filter-container")) {
+            setIsFilterOpen(false);
+         }
+         if (isSelectionOpen && !event.target.closest(".selection-container")) {
+            setIsSelectionOpen(false);
+         }
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+         document.removeEventListener("mousedown", handleClickOutside);
+   }, [showSearchResults, isFilterOpen, isSelectionOpen]);
+
+   // Funções para filtros e seleção de pontos críticos
+   const getFilteredPoints = () => {
+      if (activeFilter === "all") return criticalPoints;
+
+      return criticalPoints.filter((point) => {
+         const severity = point.properties.severity;
+         switch (activeFilter) {
+            case "critical":
+               return severity === "critical";
+            case "moderate":
+               return severity === "moderate";
+            case "healthy":
+               return severity === "healthy";
+            default:
+               return true;
+         }
+      });
+   };
+
+   const handleSelectAllPoints = () => {
+      const filteredPoints = getFilteredPoints();
+      const allSelected = filteredPoints.every((point) =>
+         selectedPoints.includes(
+            point.properties.id || point.geometry.coordinates.join(",")
+         )
+      );
+
+      if (allSelected) {
+         // Desmarcar todos os pontos filtrados
+         const filteredIds = filteredPoints.map(
+            (point) =>
+               point.properties.id || point.geometry.coordinates.join(",")
+         );
+         setSelectedPoints(
+            selectedPoints.filter((id) => !filteredIds.includes(id))
+         );
+      } else {
+         // Marcar todos os pontos filtrados
+         const filteredIds = filteredPoints.map(
+            (point) =>
+               point.properties.id || point.geometry.coordinates.join(",")
+         );
+         setSelectedPoints([...new Set([...selectedPoints, ...filteredIds])]);
+      }
+   };
+
+   const handlePointSelection = (point) => {
+      const pointId =
+         point.properties.id || point.geometry.coordinates.join(",");
+      if (selectedPoints.includes(pointId)) {
+         setSelectedPoints(selectedPoints.filter((id) => id !== pointId));
+      } else {
+         setSelectedPoints([...selectedPoints, pointId]);
+      }
+   };
+
+   // Função para calcular número de colunas baseado na largura do painel
+   const calculateGridColumns = (width) => {
+      // Largura mínima do card: 200px
+      // Padding: 24px (12px de cada lado)
+      const availableWidth = width - 24;
+      const cardMinWidth = 200;
+      const gap = 12; // gap entre cards
+
+      // Calcular quantos cards cabem
+      let columns = Math.floor(availableWidth / (cardMinWidth + gap));
+
+      // Garantir pelo menos 1 coluna e no máximo 4
+      columns = Math.max(1, Math.min(4, columns));
+
+      return columns;
+   };
+
+   // Calcular colunas baseado na largura atual
+   const gridColumns = calculateGridColumns(panelWidth);
+
+   // Funções para redimensionamento horizontal
+   const handleResizeStart = (e) => {
+      e.preventDefault();
+      setIsResizing(true);
+      setResizeStartX(e.clientX);
+      setResizeStartWidth(panelWidth);
+      document.body.style.cursor = "ew-resize";
+      document.body.style.userSelect = "none";
+   };
+
+   const handleResizeMove = (e) => {
+      if (!isResizing) return;
+      e.preventDefault();
+
+      const deltaX = e.clientX - resizeStartX;
+      const newWidth = Math.max(280, Math.min(800, resizeStartWidth + deltaX)); // Min: 280px, Max: 800px
+      setPanelWidth(newWidth);
+
+      // Adicionar feedback visual durante o redimensionamento
+      if (newWidth <= 300) {
+         document.body.style.cursor = "ew-resize";
+      } else if (newWidth >= 750) {
+         document.body.style.cursor = "ew-resize";
+      }
+   };
+
+   const handleResizeEnd = () => {
+      if (!isResizing) return;
+
+      setIsResizing(false);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+
+      // Salvar largura no localStorage
+      localStorage.setItem("orbee-panel-width", panelWidth.toString());
+   };
+
+   // Adicionar event listeners para redimensionamento
+   useEffect(() => {
+      if (isResizing) {
+         document.addEventListener("mousemove", handleResizeMove);
+         document.addEventListener("mouseup", handleResizeEnd);
+         return () => {
+            document.removeEventListener("mousemove", handleResizeMove);
+            document.removeEventListener("mouseup", handleResizeEnd);
+         };
+      }
+   }, [isResizing, resizeStartX, resizeStartWidth, panelWidth]);
+
+   // Funções para redimensionamento da seção de acompanhamentos
+   const handleAcompanhamentosResizeStart = (e) => {
+      e.preventDefault();
+      setIsAcompanhamentosResizing(true);
+      setAcompanhamentosResizeStartX(e.clientX);
+      setAcompanhamentosResizeStartWidth(acompanhamentosWidth);
+      document.body.style.cursor = "ew-resize";
+      document.body.style.userSelect = "none";
+   };
+
+   const handleAcompanhamentosResizeMove = (e) => {
+      if (!isAcompanhamentosResizing) return;
+      e.preventDefault();
+
+      const deltaX = e.clientX - acompanhamentosResizeStartX;
+      const newWidth = Math.max(
+         250,
+         Math.min(600, acompanhamentosResizeStartWidth + deltaX)
+      );
+      setAcompanhamentosWidth(newWidth);
+
+      // Adicionar feedback visual durante o redimensionamento
+      if (newWidth <= 280) {
+         document.body.style.cursor = "ew-resize";
+      } else if (newWidth >= 550) {
+         document.body.style.cursor = "ew-resize";
+      }
+   };
+
+   const handleAcompanhamentosResizeEnd = () => {
+      if (!isAcompanhamentosResizing) return;
+
+      setIsAcompanhamentosResizing(false);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+
+      // Salvar largura no localStorage
+      localStorage.setItem(
+         "orbee-acompanhamentos-width",
+         acompanhamentosWidth.toString()
+      );
+   };
+
+   // Adicionar event listeners para redimensionamento de acompanhamentos
+   useEffect(() => {
+      if (isAcompanhamentosResizing) {
+         document.addEventListener(
+            "mousemove",
+            handleAcompanhamentosResizeMove
+         );
+         document.addEventListener("mouseup", handleAcompanhamentosResizeEnd);
+         return () => {
+            document.removeEventListener(
+               "mousemove",
+               handleAcompanhamentosResizeMove
+            );
+            document.removeEventListener(
+               "mouseup",
+               handleAcompanhamentosResizeEnd
+            );
+         };
+      }
+   }, [
+      isAcompanhamentosResizing,
+      acompanhamentosResizeStartX,
+      acompanhamentosResizeStartWidth,
+      acompanhamentosWidth,
+   ]);
 
    // Função para criar card de ponto crítico
    const createCriticalPointCard = (point, index) => {
       const props = point.properties;
       const coords = point.geometry.coordinates;
-      
+      const pointId = props.id || coords.join(",");
+
       // Determinar cor baseada na severidade
       const getColorClasses = (severity) => {
          switch (severity) {
@@ -1091,6 +1095,7 @@ export default function AOIViewer() {
 
       const colors = getColorClasses(props.severity);
       const isSelected = selectedPoint === index;
+      const isPointSelected = selectedPoints.includes(pointId);
 
       // Determinar tendência baseada no NDVI
       const getTrend = () => {
@@ -1105,36 +1110,49 @@ export default function AOIViewer() {
       return (
          <div
             key={index}
-            className={`group relative overflow-hidden rounded-xl border ${
+            className={`group relative overflow-hidden rounded-lg sm:rounded-xl border ${
                colors.border
-            } bg-white/90 backdrop-blur-sm p-4 shadow-xl transition-all duration-300 ease-in-out ${
+            } bg-white/90 backdrop-blur-sm p-3 sm:p-4 shadow-lg sm:shadow-xl transition-all duration-300 ease-in-out ${
                colors.shadow
             } cursor-pointer hover:-translate-y-1 hover:bg-white/95 ${
                isSelected ? "scale-105 ring-2 ring-blue-400/50" : ""
-            }`}
-            onClick={() => setSelectedPoint(isSelected ? null : index)}
+            } ${
+               isPointSelected ? "ring-2 ring-blue-500/50 bg-blue-50/50" : ""
+            } h-fit`}
+            onClick={() => {
+               setSelectedPoint(isSelected ? null : index);
+               handlePointSelection(point);
+            }}
          >
             <div
                className={`absolute inset-0 bg-gradient-to-br ${colors.gradient} to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100`}
             ></div>
 
             <div className="relative z-10">
-               <div className="mb-3 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                     <div className={`h-3 w-3 rounded-full ${colors.indicator}`}></div>
-                     <h4 className="text-sm font-semibold text-gray-900">
+               <div className="mb-2 sm:mb-3 flex items-center justify-between">
+                  <div className="flex items-center gap-1 sm:gap-2">
+                     <div
+                        className={`h-2 w-2 sm:h-3 sm:w-3 rounded-full ${colors.indicator}`}
+                     ></div>
+                     <h4 className="text-xs sm:text-sm font-semibold text-gray-900">
                         Ponto #{index + 1}
                      </h4>
+                     {isPointSelected && (
+                        <Check className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600" />
+                     )}
                   </div>
                   <span
-                     className={`rounded-full ${colors.badge} px-2 py-1 text-xs font-semibold`}
+                     className={`rounded-full ${colors.badge} px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold`}
                   >
-                     {props.severity === "critical" ? "Crítico" : 
-                      props.severity === "moderate" ? "Moderado" : "Saudável"}
+                     {props.severity === "critical"
+                        ? "Crítico"
+                        : props.severity === "moderate"
+                          ? "Moderado"
+                          : "Saudável"}
                   </span>
                </div>
 
-               <div className="space-y-2 text-xs text-gray-600">
+               <div className="space-y-1 sm:space-y-2 text-[10px] sm:text-xs text-gray-600">
                   <div className="flex justify-between items-center">
                      <span>NDVI:</span>
                      <span className={`font-medium ${colors.text}`}>
@@ -1150,7 +1168,9 @@ export default function AOIViewer() {
                   <div className="flex justify-between items-center">
                      <span>Distância do rio:</span>
                      <span className="text-gray-500 font-mono">
-                        {props.distance_to_river_m ? `${props.distance_to_river_m}m` : "N/A"}
+                        {props.distance_to_river_m
+                           ? `${props.distance_to_river_m}m`
+                           : "N/A"}
                      </span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -1162,24 +1182,26 @@ export default function AOIViewer() {
                </div>
 
                {/* Evolução NDVI */}
-               <div className="mt-3 pt-3 border-t border-gray-200">
-                  <div className="flex items-center justify-between mb-2">
-                     <span className="text-gray-700 text-xs font-medium">
+               <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-200">
+                  <div className="flex items-center justify-between mb-1 sm:mb-2">
+                     <span className="text-gray-700 text-[10px] sm:text-xs font-medium">
                         Tendência NDVI
                      </span>
                   </div>
                   <div className="flex items-center justify-between">
-                     <span className="text-gray-500 text-xs">Status:</span>
+                     <span className="text-gray-500 text-[10px] sm:text-xs">
+                        Status:
+                     </span>
                      <div className="flex items-center gap-1">
                         {trend === "improving" ? (
-                           <TrendingUp className="w-3 h-3 text-green-600" />
+                           <TrendingUp className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-green-600" />
                         ) : trend === "declining" ? (
-                           <TrendingDown className="w-3 h-3 text-red-600" />
+                           <TrendingDown className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-600" />
                         ) : (
-                           <div className="w-3 h-3 rounded-full bg-gray-400" />
+                           <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-gray-400" />
                         )}
                         <span
-                           className={`text-xs ${
+                           className={`text-[10px] sm:text-xs ${
                               trend === "improving"
                                  ? "text-green-600"
                                  : trend === "declining"
@@ -1198,18 +1220,18 @@ export default function AOIViewer() {
                </div>
 
                {/* Informações adicionais */}
-               <div className="mt-3 pt-3 border-t border-gray-200">
-                  <div className="flex items-center justify-between text-xs">
-                     <div className="flex items-center gap-1 text-gray-500">
-                        <MapPin className="h-3 w-3" />
+               <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-200">
+                  <div className="flex items-center justify-between text-[9px] sm:text-xs">
+                     <div className="flex items-center gap-0.5 sm:gap-1 text-gray-500">
+                        <MapPin className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                         <span>HLS</span>
                      </div>
-                     <div className="flex items-center gap-1 text-gray-500">
-                        <BarChart3 className="h-3 w-3" />
+                     <div className="flex items-center gap-0.5 sm:gap-1 text-gray-500">
+                        <BarChart3 className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                         <span>Análise</span>
                      </div>
-                     <div className="flex items-center gap-1 text-gray-500">
-                        <Leaf className="h-3 w-3" />
+                     <div className="flex items-center gap-0.5 sm:gap-1 text-gray-500">
+                        <Leaf className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                         <span>Vegetação</span>
                      </div>
                   </div>
@@ -1221,13 +1243,16 @@ export default function AOIViewer() {
 
    return (
       <div className="h-screen w-full relative">
-         <div ref={containerRef} className="h-full w-full" />
-         
+         <div ref={containerRef} className="w-full h-full absolute" />
+
          {/* Header da Plataforma */}
-         <div className="absolute top-0 left-0 right-0 z-20 bg-white/95 backdrop-blur-sm border-b border-gray-200">
-            <div className="px-6 py-3 flex items-center justify-between">
+         <div className="absolute top-0 left-0 right-0 z-20">
+            <div className="px-4 py-3 flex items-center justify-between ">
                {/* Logo */}
-               <Link to="/" className="flex items-center gap-1">
+               <Link
+                  to="/"
+                  className="flex items-center gap-1 bg-white p-2 rounded-lg"
+               >
                   <svg
                      xmlns="http://www.w3.org/2000/svg"
                      width="28"
@@ -1261,99 +1286,527 @@ export default function AOIViewer() {
                      orbee
                   </span>
                </Link>
-
-               {/* Ações: Controles do Mapa + Avatar */}
-               <div className="flex items-center gap-2 sm:gap-3">
-                  {/* Controles de Camada */}
-                  <div className="flex items-center gap-2 bg-white/90 shadow rounded px-3 py-1.5">
-                     <div className="flex items-center gap-1.5 text-sm">
-                        <label className="flex items-center gap-1 cursor-pointer">
-                           <input
-                              type="radio"
-                              name="base"
-                              checked={baseLayer === "osm"}
-                              onChange={() => setBaseLayer("osm")}
-                              className="w-3 h-3"
-                           />
-                           <Globe className="h-3 w-3" />
-                           <span className="text-xs">OSM</span>
-                        </label>
-                        <label className="flex items-center gap-1 cursor-pointer">
-                           <input
-                              type="radio"
-                              name="base"
-                              checked={baseLayer === "sat"}
-                              onChange={() => setBaseLayer("sat")}
-                              className="w-3 h-3"
-                           />
-                           <Search className="h-3 w-3" />
-                           <span className="text-xs">Satélite</span>
-                        </label>
-                     </div>
-                  </div>
-
-                  {/* Avatar / Perfil */}
-                  <Link
-                     to="/profile"
-                     title={user?.name || "Perfil"}
-                     className="inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-gray-300 bg-gray-100 text-xs font-semibold text-gray-700 hover:ring-2 hover:ring-[#2f4538]/30"
-                     aria-label="Abrir perfil"
-                  >
-                     {user?.avatarUrl ? (
-                        // eslint-disable-next-line jsx-a11y/alt-text
-                        <img
-                           src={user.avatarUrl}
-                           className="h-full w-full object-cover"
-                        />
-                     ) : (
-                        <span>{(user?.name?.[0] || "U").toUpperCase()}</span>
-                     )}
-                  </Link>
-               </div>
             </div>
          </div>
 
-         {/* Cards Flutuantes dos Pontos Críticos */}
-         {showCards && criticalPoints.length > 0 && (
-            <div className="absolute right-4 top-20 bottom-4 w-80 z-10 flex flex-col">
-               {/* Header dos Cards */}
-               <div className="bg-white/95 backdrop-blur-sm rounded-t-xl border border-gray-200 px-4 py-3 mb-2">
-                  <div className="flex items-center justify-between">
-                     <h3 className="text-sm font-semibold text-gray-900">
-                        Pontos Críticos ({criticalPoints.length})
-                     </h3>
-                     <button
-                        onClick={() => setShowCards(false)}
-                        className="p-1 hover:bg-gray-100 rounded-md transition-colors"
-                        title="Fechar cards"
+         {/* Atalhos do Mapa */}
+         <MapShortcuts
+            mapRef={mapRef}
+            baseLayer={baseLayer}
+            setBaseLayer={setBaseLayer}
+            criticalPoints={criticalPoints}
+            setShowCards={setShowCards}
+            showCards={showCards}
+            setShowAcompanhamentos={setShowAcompanhamentos}
+            showAcompanhamentos={showAcompanhamentos}
+            // Props para busca
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            searchResults={searchResults}
+            setSearchResults={setSearchResults}
+            showSearchResults={showSearchResults}
+            setShowSearchResults={setShowSearchResults}
+            isSearching={isSearching}
+            navigateToLocation={navigateToLocation}
+            selectedRegion={selectedRegion}
+            clearSelectedRegion={clearSelectedRegion}
+         />
+
+         {/* Painéis Colapsados Lado a Lado - Parte Inferior Esquerda */}
+         <div className="absolute left-2 bottom-2 sm:bottom-4 z-10 flex gap-2">
+            {/* Painel de Acompanhamentos */}
+            <div>
+               {/* Painel Expandido de Acompanhamentos */}
+               {showAcompanhamentos && (
+                  <div
+                     className="mb-2 animate-in slide-in-from-left duration-300 h-[calc(100vh-100px)] flex flex-col relative"
+                     style={{ width: `${acompanhamentosWidth}px` }}
+                  >
+                     {/* Header dos Acompanhamentos */}
+                     <div className="bg-white/95 backdrop-blur-sm rounded-t-xl border border-gray-200 px-3 sm:px-4 py-3 shadow-lg flex-shrink-0">
+                        <div className="flex items-center justify-between mb-3">
+                           <div className="flex items-center gap-2">
+                              <h3 className="text-xs sm:text-sm font-semibold text-gray-900">
+                                 Meus Acompanhamentos
+                              </h3>
+                           </div>
+                           <button
+                              onClick={() => setShowAcompanhamentos(false)}
+                              className="p-1 hover:bg-gray-100 rounded-md transition-colors"
+                              title="Fechar acompanhamentos"
+                           >
+                              <X className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500" />
+                           </button>
+                        </div>
+                     </div>
+
+                     {/* Área Scrollável dos Acompanhamentos */}
+                     <div className="flex-1 overflow-y-auto bg-white/95 backdrop-blur-sm rounded-b-xl border border-gray-200 border-t-0 p-3 sm:p-4 shadow-lg">
+                        <div className="space-y-3">
+                           {/* Card de Acompanhamento Exemplo */}
+                           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 p-4 hover:shadow-md transition-all duration-200">
+                              <div className="flex items-center justify-between mb-2">
+                                 <div className="flex items-center gap-2">
+                                    <Bookmark className="h-4 w-4 text-blue-600" />
+                                    <span className="text-sm font-semibold text-blue-800">
+                                       Mata Ciliar - RS
+                                    </span>
+                                 </div>
+                                 <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
+                                    Ativo
+                                 </span>
+                              </div>
+                              <div className="text-xs text-blue-700 space-y-1">
+                                 <div>• 15 pontos críticos identificados</div>
+                                 <div>
+                                    • Última análise:{" "}
+                                    {new Date().toLocaleDateString()}
+                                 </div>
+                                 <div>• Próxima verificação: em 3 dias</div>
+                              </div>
+                              <div className="flex items-center gap-2 mt-3">
+                                 <button className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 transition-colors">
+                                    <Eye className="h-3 w-3" />
+                                    Visualizar
+                                 </button>
+                                 <button className="flex items-center gap-1 text-xs text-gray-600 hover:text-gray-800 transition-colors">
+                                    <Clock className="h-3 w-3" />
+                                    Histórico
+                                 </button>
+                              </div>
+                           </div>
+
+                           {/* Card de Acompanhamento Exemplo 2 */}
+                           <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200 p-4 hover:shadow-md transition-all duration-200">
+                              <div className="flex items-center justify-between mb-2">
+                                 <div className="flex items-center gap-2">
+                                    <Bookmark className="h-4 w-4 text-green-600" />
+                                    <span className="text-sm font-semibold text-green-800">
+                                       Área de Preservação
+                                    </span>
+                                 </div>
+                                 <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">
+                                    Monitorando
+                                 </span>
+                              </div>
+                              <div className="text-xs text-green-700 space-y-1">
+                                 <div>• 8 pontos em recuperação</div>
+                                 <div>• Última análise: há 2 dias</div>
+                                 <div>• Tendência: Melhorando</div>
+                              </div>
+                              <div className="flex items-center gap-2 mt-3">
+                                 <button className="flex items-center gap-1 text-xs text-green-600 hover:text-green-800 transition-colors">
+                                    <Eye className="h-3 w-3" />
+                                    Visualizar
+                                 </button>
+                                 <button className="flex items-center gap-1 text-xs text-gray-600 hover:text-gray-800 transition-colors">
+                                    <Clock className="h-3 w-3" />
+                                    Histórico
+                                 </button>
+                              </div>
+                           </div>
+
+                           {/* Card de Acompanhamento Exemplo 3 */}
+                           <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-lg border border-orange-200 p-4 hover:shadow-md transition-all duration-200">
+                              <div className="flex items-center justify-between mb-2">
+                                 <div className="flex items-center gap-2">
+                                    <Bookmark className="h-4 w-4 text-orange-600" />
+                                    <span className="text-sm font-semibold text-orange-800">
+                                       Zona de Risco
+                                    </span>
+                                 </div>
+                                 <span className="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
+                                    Alerta
+                                 </span>
+                              </div>
+                              <div className="text-xs text-orange-700 space-y-1">
+                                 <div>• 23 pontos críticos</div>
+                                 <div>• Última análise: hoje</div>
+                                 <div>• Ação necessária: Urgente</div>
+                              </div>
+                              <div className="flex items-center gap-2 mt-3">
+                                 <button className="flex items-center gap-1 text-xs text-orange-600 hover:text-orange-800 transition-colors">
+                                    <Eye className="h-3 w-3" />
+                                    Visualizar
+                                 </button>
+                                 <button className="flex items-center gap-1 text-xs text-gray-600 hover:text-gray-800 transition-colors">
+                                    <Clock className="h-3 w-3" />
+                                    Histórico
+                                 </button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     {/* Handle de Redimensionamento */}
+                     <div
+                        className="absolute right-0 top-0 bottom-0 w-1 bg-gray-300 hover:bg-blue-500 cursor-ew-resize transition-colors duration-200 group"
+                        onMouseDown={handleAcompanhamentosResizeStart}
+                        title="Arraste para redimensionar"
                      >
-                        <X className="h-4 w-4 text-gray-500" />
-                     </button>
+                        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-8 bg-gray-300 group-hover:bg-blue-500 rounded-l-sm transition-colors duration-200 flex items-center justify-center">
+                           <div className="w-0.5 h-4 bg-white/60 rounded-full"></div>
+                        </div>
+                        {isAcompanhamentosResizing && (
+                           <>
+                              <div className="absolute right-0 top-0 bottom-0 w-1 bg-blue-500"></div>
+                              {/* Indicador de largura durante redimensionamento */}
+                              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white text-xs px-2 py-1 rounded shadow-lg z-50">
+                                 {acompanhamentosWidth}px
+                              </div>
+                           </>
+                        )}
+                     </div>
                   </div>
-               </div>
-
-               {/* Área Scrollável dos Cards */}
-               <div className="flex-1 overflow-y-auto bg-white/95 backdrop-blur-sm rounded-b-xl border border-gray-200 border-t-0 p-4 space-y-3">
-                  {criticalPoints.map((point, index) => createCriticalPointCard(point, index))}
-               </div>
+               )}
             </div>
-         )}
 
-         {/* Botão para mostrar cards quando ocultos */}
-         {!showCards && criticalPoints.length > 0 && (
-            <button
-               onClick={() => setShowCards(true)}
-               className="absolute right-4 top-20 z-10 bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg px-3 py-2 shadow-lg hover:bg-white transition-colors"
-               title="Mostrar pontos críticos"
-            >
-               <div className="flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4 text-gray-600" />
-                  <span className="text-sm font-medium text-gray-700">
-                     {criticalPoints.length} pontos
-                  </span>
-               </div>
-            </button>
-         )}
+            {/* Painel de Pontos Críticos */}
+            <div>
+               {/* Painel Expandido */}
+               {showCards && (
+                  <div
+                     className="mb-2 animate-in slide-in-from-left duration-300 h-[calc(100vh-100px)] flex flex-col relative"
+                     style={{ width: `${panelWidth}px` }}
+                  >
+                     {/* Header dos Cards */}
+                     <div className="bg-white/95 backdrop-blur-sm rounded-t-xl border border-gray-200 px-3 sm:px-4 py-3 shadow-lg flex-shrink-0">
+                        <div className="flex items-center justify-between mb-3">
+                           <div className="flex items-center gap-2">
+                              <h3 className="text-xs sm:text-sm font-semibold text-gray-900">
+                                 Pontos Críticos ({criticalPoints.length})
+                              </h3>
+                           </div>
+                           <button
+                              onClick={() => setShowCards(false)}
+                              className="p-1 hover:bg-gray-100 rounded-md transition-colors"
+                              title="Fechar cards"
+                           >
+                              <X className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500" />
+                           </button>
+                        </div>
+
+                        {/* Filtros e Seleção */}
+                        <div className="flex items-center gap-2">
+                           {(() => {
+                              const filteredPoints = getFilteredPoints();
+                              const totalAll = criticalPoints.length;
+                              const totalCritical = criticalPoints.filter(
+                                 (p) => p.properties.severity === "critical"
+                              ).length;
+                              const totalModerate = criticalPoints.filter(
+                                 (p) => p.properties.severity === "moderate"
+                              ).length;
+                              const totalHealthy = criticalPoints.filter(
+                                 (p) => p.properties.severity === "healthy"
+                              ).length;
+
+                              const currentLabel =
+                                 activeFilter === "all"
+                                    ? `Todas (${totalAll})`
+                                    : activeFilter === "critical"
+                                      ? `Críticos (${totalCritical})`
+                                      : activeFilter === "moderate"
+                                        ? `Moderados (${totalModerate})`
+                                        : `Saudáveis (${totalHealthy})`;
+
+                              return (
+                                 <div className="relative inline-block text-left filter-container">
+                                    <button
+                                       onClick={() =>
+                                          setIsFilterOpen((v) => !v)
+                                       }
+                                       className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-2 py-1 text-[10px] sm:text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
+                                    >
+                                       <span className="flex items-center gap-1">
+                                          {activeFilter === "all" && (
+                                             <Globe className="h-3 w-3" />
+                                          )}
+                                          {activeFilter === "critical" && (
+                                             <Activity className="h-3 w-3" />
+                                          )}
+                                          {activeFilter === "moderate" && (
+                                             <BarChart3 className="h-3 w-3" />
+                                          )}
+                                          {activeFilter === "healthy" && (
+                                             <Leaf className="h-3 w-3" />
+                                          )}
+                                          <span className="hidden sm:inline">
+                                             {activeFilter === "all"
+                                                ? "Todas"
+                                                : activeFilter === "critical"
+                                                  ? "Críticos"
+                                                  : activeFilter === "moderate"
+                                                    ? "Moderados"
+                                                    : "Saudáveis"}
+                                          </span>
+                                       </span>
+                                       <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[9px] sm:text-xs text-gray-600">
+                                          {activeFilter === "all"
+                                             ? totalAll
+                                             : activeFilter === "critical"
+                                               ? totalCritical
+                                               : activeFilter === "moderate"
+                                                 ? totalModerate
+                                                 : totalHealthy}
+                                       </span>
+                                       <svg
+                                          className="ml-1 h-2 w-2 text-gray-500"
+                                          viewBox="0 0 20 20"
+                                          fill="currentColor"
+                                       >
+                                          <path
+                                             fillRule="evenodd"
+                                             d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                                             clipRule="evenodd"
+                                          />
+                                       </svg>
+                                    </button>
+                                    {isFilterOpen && (
+                                       <div className="absolute right-0 z-20 mt-2 w-48 origin-top-right rounded-lg border border-gray-200 bg-white shadow-lg focus:outline-none">
+                                          <div className="py-1 text-xs text-gray-700">
+                                             <button
+                                                onClick={() => {
+                                                   setActiveFilter("all");
+                                                   setIsFilterOpen(false);
+                                                }}
+                                                className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${activeFilter === "all" ? "bg-[#2f4538]/10" : ""}`}
+                                             >
+                                                <span className="flex items-center gap-2">
+                                                   <Globe className="h-3 w-3" />
+                                                   Todas
+                                                </span>
+                                                <span className="text-gray-500">
+                                                   {totalAll}
+                                                </span>
+                                             </button>
+                                             <button
+                                                onClick={() => {
+                                                   setActiveFilter("critical");
+                                                   setIsFilterOpen(false);
+                                                }}
+                                                className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${activeFilter === "critical" ? "bg-red-500/10" : ""}`}
+                                             >
+                                                <span className="flex items-center gap-2">
+                                                   <Activity className="h-3 w-3" />
+                                                   Críticos
+                                                </span>
+                                                <span className="text-gray-500">
+                                                   {totalCritical}
+                                                </span>
+                                             </button>
+                                             <button
+                                                onClick={() => {
+                                                   setActiveFilter("moderate");
+                                                   setIsFilterOpen(false);
+                                                }}
+                                                className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${activeFilter === "moderate" ? "bg-orange-500/10" : ""}`}
+                                             >
+                                                <span className="flex items-center gap-2">
+                                                   <BarChart3 className="h-3 w-3" />
+                                                   Moderados
+                                                </span>
+                                                <span className="text-gray-500">
+                                                   {totalModerate}
+                                                </span>
+                                             </button>
+                                             <button
+                                                onClick={() => {
+                                                   setActiveFilter("healthy");
+                                                   setIsFilterOpen(false);
+                                                }}
+                                                className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${activeFilter === "healthy" ? "bg-green-500/10" : ""}`}
+                                             >
+                                                <span className="flex items-center gap-2">
+                                                   <Leaf className="h-3 w-3" />
+                                                   Saudáveis
+                                                </span>
+                                                <span className="text-gray-500">
+                                                   {totalHealthy}
+                                                </span>
+                                             </button>
+                                          </div>
+                                       </div>
+                                    )}
+                                 </div>
+                              );
+                           })()}
+
+                           {/* Dropdown Seleção */}
+                           <div className="relative inline-block text-left selection-container">
+                              <button
+                                 onClick={() => setIsSelectionOpen((v) => !v)}
+                                 className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-2 py-1 text-[10px] sm:text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
+                              >
+                                 <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[9px] sm:text-xs text-gray-600">
+                                    {selectedPoints.length}
+                                 </span>
+                                 <span className="hidden sm:inline">
+                                    Selecionados
+                                 </span>
+                                 <svg
+                                    className="ml-1 h-2 w-2 text-gray-500"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                 >
+                                    <path
+                                       fillRule="evenodd"
+                                       d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                                       clipRule="evenodd"
+                                    />
+                                 </svg>
+                              </button>
+                              {isSelectionOpen && (
+                                 <div className="absolute right-0 z-20 mt-2 w-56 origin-top-right rounded-lg border border-gray-200 bg-white shadow-lg focus:outline-none">
+                                    <div className="py-1 text-xs text-gray-700">
+                                       <div className="px-3 py-2 text-[10px] text-gray-500">
+                                          {selectedPoints.length} ponto
+                                          {selectedPoints.length !== 1
+                                             ? "s"
+                                             : ""}{" "}
+                                          selecionado
+                                          {selectedPoints.length !== 1
+                                             ? "s"
+                                             : ""}
+                                       </div>
+                                       <button
+                                          onClick={() => {
+                                             handleSelectAllPoints();
+                                             setIsSelectionOpen(false);
+                                          }}
+                                          className="flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50"
+                                       >
+                                          <span className="flex items-center gap-2">
+                                             <Check className="h-3 w-3 text-[#2f4538]" />
+                                             {getFilteredPoints().every(
+                                                (point) =>
+                                                   selectedPoints.includes(
+                                                      point.properties.id ||
+                                                         point.geometry.coordinates.join(
+                                                            ","
+                                                         )
+                                                   )
+                                             )
+                                                ? "Desmarcar Todos"
+                                                : "Selecionar Todos"}
+                                          </span>
+                                          <span className="text-gray-500">
+                                             {getFilteredPoints().length}
+                                          </span>
+                                       </button>
+                                       <div className="my-1 h-px bg-gray-100" />
+                                       <button
+                                          disabled={selectedPoints.length === 0}
+                                          onClick={() => {
+                                             // Aqui você pode adicionar ações para os pontos selecionados
+                                             console.log(
+                                                "Pontos selecionados:",
+                                                selectedPoints
+                                             );
+                                             setIsSelectionOpen(false);
+                                          }}
+                                          className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${selectedPoints.length === 0 ? "cursor-not-allowed opacity-50" : ""}`}
+                                       >
+                                          <span className="flex items-center gap-2">
+                                             <BarChart3 className="h-3 w-3 text-blue-600" />
+                                             Análise
+                                          </span>
+                                          <span className="text-gray-500">
+                                             {selectedPoints.length}
+                                          </span>
+                                       </button>
+                                       <button
+                                          disabled={selectedPoints.length === 0}
+                                          onClick={() => {
+                                             // Aqui você pode adicionar ações para os pontos selecionados
+                                             console.log(
+                                                "Exportar pontos:",
+                                                selectedPoints
+                                             );
+                                             setIsSelectionOpen(false);
+                                          }}
+                                          className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${selectedPoints.length === 0 ? "cursor-not-allowed opacity-50" : ""}`}
+                                       >
+                                          <span className="flex items-center gap-2">
+                                             <Camera className="h-3 w-3 text-green-600" />
+                                             Exportar
+                                          </span>
+                                          <span className="text-gray-500">
+                                             {selectedPoints.length}
+                                          </span>
+                                       </button>
+                                       <div className="my-1 h-px bg-gray-100" />
+                                       <button
+                                          onClick={() => {
+                                             setSelectedPoints([]);
+                                             setIsSelectionOpen(false);
+                                          }}
+                                          className="flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50"
+                                       >
+                                          <span className="flex items-center gap-2">
+                                             <X className="h-3 w-3 text-gray-600" />
+                                             Limpar seleção
+                                          </span>
+                                       </button>
+                                    </div>
+                                 </div>
+                              )}
+                           </div>
+                        </div>
+                     </div>
+
+                     {/* Área Scrollável dos Cards */}
+                     <div className="flex-1 overflow-y-auto bg-white/95 backdrop-blur-sm rounded-b-xl border border-gray-200 border-t-0 p-3 sm:p-4 shadow-lg">
+                        {(() => {
+                           const filteredPoints = getFilteredPoints();
+                           return filteredPoints.length > 0 ? (
+                              <div
+                                 className="grid gap-3 transition-all duration-300 ease-in-out"
+                                 style={{
+                                    gridTemplateColumns: `repeat(${gridColumns}, 1fr)`,
+                                    gridAutoRows: "minmax(200px, auto)",
+                                 }}
+                              >
+                                 {filteredPoints.map((point, index) =>
+                                    createCriticalPointCard(point, index)
+                                 )}
+                              </div>
+                           ) : (
+                              <div className="text-center text-gray-500 py-8">
+                                 <BarChart3 className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                                 <p className="text-sm">
+                                    {criticalPoints.length === 0
+                                       ? "Carregando pontos críticos..."
+                                       : `Nenhum ponto ${activeFilter === "all" ? "" : activeFilter === "critical" ? "crítico" : activeFilter === "moderate" ? "moderado" : "saudável"} encontrado.`}
+                                 </p>
+                              </div>
+                           );
+                        })()}
+                     </div>
+
+                     {/* Handle de Redimensionamento */}
+                     <div
+                        className="absolute right-0 top-0 bottom-0 w-1 bg-gray-300 hover:bg-blue-500 cursor-ew-resize transition-colors duration-200 group"
+                        onMouseDown={handleResizeStart}
+                        title="Arraste para redimensionar"
+                     >
+                        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-8 bg-gray-300 group-hover:bg-blue-500 rounded-l-sm transition-colors duration-200 flex items-center justify-center">
+                           <div className="w-0.5 h-4 bg-white/60 rounded-full"></div>
+                        </div>
+                        {isResizing && (
+                           <>
+                              <div className="absolute right-0 top-0 bottom-0 w-1 bg-blue-500"></div>
+                              {/* Indicador de largura durante redimensionamento */}
+                              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white text-xs px-2 py-1 rounded shadow-lg z-50">
+                                 {panelWidth}px
+                              </div>
+                           </>
+                        )}
+                     </div>
+                  </div>
+               )}
+            </div>
+         </div>
       </div>
    );
 }

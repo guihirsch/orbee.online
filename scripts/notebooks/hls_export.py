@@ -72,8 +72,16 @@ def export_geojson_results(critical_points_data, degradation_analysis, output_pa
         # Combinar todos os pontos
         all_points = []
 
-        # Adicionar pontos críticos (prioridade máxima)
-        for point in critical_points_data.get('critical', []):
+        # Adicionar APENAS pontos críticos (NDVI < 0.2)
+        critical_points = critical_points_data.get('critical', [])
+        print(f"🔴 Exportando {len(critical_points)} pontos críticos (NDVI < 0.2)")
+        
+        for point in critical_points:
+            # Verificar se realmente é crítico
+            if point['ndvi'] >= 0.2:
+                print(f"⚠️  AVISO: Ponto com NDVI {point['ndvi']:.3f} foi filtrado (não é crítico)")
+                continue
+                
             # Converter coordenadas UTM para WGS84
             lon_wgs84, lat_wgs84 = convert_utm_to_wgs84(point['lon'], point['lat'], zone=22, southern=True)
             
@@ -84,7 +92,7 @@ def export_geojson_results(critical_points_data, degradation_analysis, output_pa
                     "coordinates": [lon_wgs84, lat_wgs84]
                 },
                 "properties": {
-                    "severity": point['severity'],
+                    "severity": "critical",  # Forçar severidade crítica
                     "ndvi": point['ndvi'],
                     "description": point['description'],
                     "type": "critical_point",
@@ -95,50 +103,8 @@ def export_geojson_results(critical_points_data, degradation_analysis, output_pa
                 }  
             })
 
-        # Adicionar pontos moderados
-        for point in critical_points_data.get('moderate', []):
-            # Converter coordenadas UTM para WGS84
-            lon_wgs84, lat_wgs84 = convert_utm_to_wgs84(point['lon'], point['lat'], zone=22, southern=True)
-            
-            all_points.append({
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [lon_wgs84, lat_wgs84]
-                },
-                "properties": {
-                    "severity": point['severity'],
-                    "ndvi": point['ndvi'],
-                    "description": point['description'],
-                    "type": "moderate_point",
-                    "level": point['level'],
-                    "color": point['color'],
-                    "label": point['label']
-                }
-            })
-
-        # Adicionar alguns pontos regulares para contexto (limitado)
-        fair_points = critical_points_data.get('fair', [])[:50]  # Máximo 50 pontos regulares
-        for point in fair_points:
-            # Converter coordenadas UTM para WGS84
-            lon_wgs84, lat_wgs84 = convert_utm_to_wgs84(point['lon'], point['lat'], zone=22, southern=True)
-            
-            all_points.append({
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [lon_wgs84, lat_wgs84]
-                },
-                "properties": {
-                    "severity": point['severity'],
-                    "ndvi": point['ndvi'],
-                    "description": point['description'],
-                    "type": "fair_point",
-                    "level": point['level'],
-                    "color": point['color'],
-                    "label": point['label']
-                }
-            })
+        # GARANTIR: Não adicionar pontos moderados, saudáveis ou de água
+        print(f"✅ Exportação concluída: {len(all_points)} pontos críticos")
 
         # Metadados da análise
         stats = degradation_analysis['statistics'] if degradation_analysis else {}
@@ -176,8 +142,8 @@ def export_geojson_results(critical_points_data, degradation_analysis, output_pa
                     "overall_status": stats.get('overall_status', 'unknown')
                 },
                 "total_critical_points": len(critical_points_data.get('critical', [])),
-                "total_moderate_points": len(critical_points_data.get('moderate', [])),
-                "total_fair_points": len(fair_points),
+                "total_moderate_points": 0,  # Não gerar pontos moderados
+                "total_fair_points": 0,     # Não gerar pontos regulares
                 "processing_params": {
                     "min_distance_points": generation_params.get('min_distance', 100),
                     "sampling_step": generation_params.get('sampling_step', 3),
@@ -195,8 +161,7 @@ def export_geojson_results(critical_points_data, degradation_analysis, output_pa
         print(f"✅ GeoJSON exportado com sucesso")
         print(f"   📊 Total de features: {len(all_points)}")
         print(f"   🔴 Pontos críticos: {len(critical_points_data.get('critical', []))}")
-        print(f"   🟡 Pontos moderados: {len(critical_points_data.get('moderate', []))}")
-        print(f"   🟨 Pontos regulares: {len(fair_points)}")
+        print(f"   ℹ️ Apenas pontos críticos são gerados (NDVI < 0.2)")
 
         return True
 

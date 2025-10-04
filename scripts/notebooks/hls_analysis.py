@@ -82,11 +82,31 @@ def check_hls_coverage(bounds):
     print("✅ Região dentro dos parâmetros esperados para HLS")
     return True
 
-def load_aoi_data():
-    """Carrega dados da AOI com múltiplas opções de fonte"""
+def load_aoi_data(region_name=None):
+    """
+    Carrega dados da AOI com múltiplas opções de fonte.
+    Se region_name for fornecido, busca rios da região com filtro preciso.
+    
+    Args:
+        region_name: Nome da região para buscar rios (ex: "Sinimbu, Rio Grande do Sul, Brasil")
+    
+    Returns:
+        tuple: (GeoDataFrame da AOI, caminho da fonte)
+    """
+    
+    # Se uma região foi especificada, buscar rios da região
+    if region_name:
+        print(f"🌍 Buscando AOI para região: {region_name}")
+        try:
+            aoi_gdf = find_rivers_in_region_with_filter(region_name)
+            return aoi_gdf, f"rios_region_{region_name.replace(',', '_').replace(' ', '_')}"
+        except Exception as e:
+            print(f"⚠️ Erro ao buscar rios da região: {e}")
+            print("🔄 Tentando carregar arquivo local...")
     
     # Opção 1: Tentar carregar arquivo local do projeto
     local_paths = [
+        "../../public/aoi.geojson",
         "../../export.geojson",
         "../data/export.geojson",
         "export.geojson",
@@ -110,6 +130,116 @@ def load_aoi_data():
     example_geom = Polygon(example_coords)
     gdf = gpd.GeoDataFrame([1], geometry=[example_geom], crs=CRS_WGS84)
     return gdf, "exemplo_sinimbu"
+
+def find_rivers_in_region_with_filter(regiao: str, buffer_distance: float = 200) -> gpd.GeoDataFrame:
+    """
+    Busca todos os rios na região especificada com filtro preciso por limites administrativos.
+    Cria uma AOI unificada com buffer para análise de mata ciliar.
+    
+    Args:
+        regiao: Nome da região para buscar rios
+        buffer_distance: Distância do buffer em metros
+    
+    Returns:
+        GeoDataFrame: AOI unificada dos rios da região
+    """
+    import osmnx as ox
+    
+    print(f"🔍 Buscando rios na região '{regiao}'...")
+    
+    try:
+        # 1. Busca os limites administrativos do município
+        print("  📍 Obtendo limites administrativos...")
+        boundary = ox.geocode_to_gdf(regiao)
+        municipality_bounds = boundary.geometry.iloc[0]
+        
+        # 2. Busca todos os rios na região
+        print("  🌊 Buscando rios na região...")
+        rivers = ox.features_from_place(regiao, tags={'waterway': 'river'})
+        
+        if rivers.empty:
+            raise ValueError(f"Nenhum rio encontrado na região '{regiao}'")
+        
+        print(f"  📊 Encontrados {len(rivers)} rios na região")
+        
+        # 3. Filtra apenas geometrias lineares
+        linear_rivers = rivers[rivers.geometry.type.isin(['LineString', 'MultiLineString'])]
+        
+        if linear_rivers.empty:
+            raise ValueError("Nenhum rio com geometria linear encontrado")
+        
+        print(f"  📏 {len(linear_rivers)} rios com geometrias lineares")
+        
+        # 4. Filtra rios que intersectam com os limites do município
+        print("  🔍 Filtrando rios dentro dos limites do município...")
+        rivers_within_municipality = []
+        
+        for idx, river_row in linear_rivers.iterrows():
+            river_geom = river_row.geometry
+            
+            # Verifica se o rio intersecta com os limites do município
+            if river_geom.intersects(municipality_bounds):
+                # Verifica se pelo menos 10% do rio está dentro do município
+                intersection = river_geom.intersection(municipality_bounds)
+                if intersection.length > 0:
+                    # Calcula a porcentagem do rio dentro do município
+                    river_length = river_geom.length
+                    intersection_length = intersection.length
+                    percentage = (intersection_length / river_length) * 100
+                    
+                    if percentage >= 10:  # Pelo menos 10% do rio deve estar no município
+                        rivers_within_municipality.append(river_row)
+                        print(f"    ✅ {river_row.get('name', 'Sem nome')}: {percentage:.1f}% dentro do município")
+                    else:
+                        print(f"    ❌ {river_row.get('name', 'Sem nome')}: apenas {percentage:.1f}% dentro do município")
+        
+        if not rivers_within_municipality:
+            raise ValueError("Nenhum rio encontrado dentro dos limites do município")
+        
+        # 5. Cria AOI unificada com buffer
+        print(f"  🏞️ Criando AOI unificada com buffer de {buffer_distance}m...")
+        
+        # Converte para CRS métrico para buffer
+        rivers_gdf = gpd.GeoDataFrame(rivers_within_municipality, crs=rivers.crs)
+        
+        # Converte para UTM para cálculos em metros
+        centroid = rivers_gdf.geometry.centroid.iloc[0]
+        utm_zone = int((centroid.x + 180) / 6) + 1
+        utm_crs = f"EPSG:{32700 + utm_zone}" if centroid.y < 0 else f"EPSG:{32600 + utm_zone}"
+        
+        rivers_utm = rivers_gdf.to_crs(utm_crs)
+        
+        # Cria buffer para cada rio
+        rivers_buffered = rivers_utm.buffer(buffer_distance)
+        
+        # Unifica todos os buffers
+        unified_buffer = rivers_buffered.unary_union
+        
+        # Cria GeoDataFrame da AOI unificada
+        aoi_gdf = gpd.GeoDataFrame(
+            [1], 
+            geometry=[unified_buffer], 
+            crs=utm_crs
+        ).to_crs(CRS_WGS84)
+        
+        # Adiciona metadados
+        aoi_gdf['region'] = regiao
+        aoi_gdf['created_at'] = pd.Timestamp.now().isoformat()
+        aoi_gdf['total_rivers'] = len(rivers_within_municipality)
+        aoi_gdf['buffer_distance'] = buffer_distance
+        
+        # Calcula área
+        area_km2 = unified_buffer.area / 1_000_000
+        print(f"  📏 Área da AOI: {area_km2:.2f} km²")
+        
+        print(f"✅ {len(rivers_within_municipality)} rios dentro dos limites do município")
+        print(f"✅ AOI unificada criada com área de {area_km2:.2f} km²")
+        
+        return aoi_gdf
+        
+    except Exception as e:
+        print(f"❌ Erro ao buscar rios: {e}")
+        raise
 
 def search_hls_data(bounds, start_date, end_date, max_cloud=50):
     """Busca dados HLS via Microsoft Planetary Computer STAC API"""

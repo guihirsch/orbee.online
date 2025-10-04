@@ -482,35 +482,31 @@ def generate_points_from_real_ndvi(degradation_analysis, river_buffer_geom, max_
         
         return points
     
-    # Gerar pontos para cada categoria
+    # Gerar APENAS pontos críticos (NDVI < 0.2)
     critical_points = find_pixel_coordinates(ndvi_clipped, critical_mask_2d, 
                                         min(max_points_per_category, critical_pixels_count))
-    moderate_points = find_pixel_coordinates(ndvi_clipped, moderate_mask_2d, 
-                                        min(max_points_per_category, moderate_pixels_count))
-    healthy_points = find_pixel_coordinates(ndvi_clipped, healthy_mask_2d, 
-                                        min(max_points_per_category, healthy_pixels_count))
     
-    total_points = len(critical_points) + len(moderate_points) + len(healthy_points)
+    total_points = len(critical_points)
     
-    print(f"\n📊 Pontos gerados com NDVI real:")
+    print(f"\n📊 Pontos gerados com NDVI real (APENAS CRÍTICOS):")
     print(f"   🔴 Críticos: {len(critical_points)}")
-    print(f"   🟡 Moderados: {len(moderate_points)}")
-    print(f"   🟢 Saudáveis: {len(healthy_points)}")
     print(f"   📊 Total: {total_points}")
+    print(f"   ⚠️  IMPORTANTE: Apenas pontos com NDVI < {NDVI_CRITICAL_THRESHOLD} são incluídos")
     
     return {
         'critical': critical_points,
-        'moderate': moderate_points,
-        'fair': healthy_points,  # Manter compatibilidade
-        'water': [],
+        'moderate': [],  # SEMPRE vazio - não gerar pontos moderados
+        'fair': [],      # SEMPRE vazio - não gerar pontos saudáveis  
+        'water': [],     # SEMPRE vazio - não gerar pontos de água
         'total_points': total_points,
-        'generation_method': 'real_ndvi_based',
+        'generation_method': 'real_ndvi_based_critical_only',
         'generation_params': {
             'min_distance': MIN_DISTANCE_POINTS,
             'max_points_per_category': max_points_per_category,
             'buffer_distance_m': BUFFER_DISTANCE_RIVER,
             'buffer_constrained': True,
             'real_ndvi_based': True,
+            'critical_only': True,  # Flag indicando que apenas pontos críticos são gerados
             'thresholds': {
                 'critical': NDVI_CRITICAL_THRESHOLD,
                 'moderate': NDVI_MODERATE_THRESHOLD
