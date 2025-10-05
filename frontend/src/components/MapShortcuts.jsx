@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
    Plus,
    Minus,
@@ -15,6 +15,7 @@ import {
    Search,
    User,
 } from "lucide-react";
+import useAuth from "../hooks/useAuth";
 
 export default function MapShortcuts({
    mapRef,
@@ -37,8 +38,11 @@ export default function MapShortcuts({
    selectedRegion,
    clearSelectedRegion,
 }) {
+   const { user, isAuthenticated, logout } = useAuth();
    const [showLayerMenu, setShowLayerMenu] = useState(false);
    const [showSatelliteInfo, setShowSatelliteInfo] = useState(false);
+   const [showUserMenu, setShowUserMenu] = useState(false);
+   const userMenuRef = useRef(null);
 
    // Estados para redimensionamento do painel de satélite
    const [satellitePanelWidth, setSatellitePanelWidth] = useState(() => {
@@ -271,6 +275,22 @@ export default function MapShortcuts({
       satellitePanelWidth,
    ]);
 
+   // Fechar dropdown do usuário ao clicar fora
+   useEffect(() => {
+      const handleClickOutside = (e) => {
+         if (
+            showUserMenu &&
+            userMenuRef.current &&
+            !userMenuRef.current.contains(e.target)
+         ) {
+            setShowUserMenu(false);
+         }
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+         document.removeEventListener("mousedown", handleClickOutside);
+   }, [showUserMenu]);
+
    return (
       <>
          {/* Atalhos do Mapa - Lado Direito */}
@@ -279,10 +299,10 @@ export default function MapShortcuts({
             <div className="relative search-container">
                <button
                   onClick={() => setShowSearchResults(!showSearchResults)}
-                  className={`w-10 h-10 backdrop-blur-sm border-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group relative ${
+                  className={`w-10 h-10 backdrop-blur-sm border rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group relative ${
                      selectedRegion
                         ? "bg-white border-[#2f4538] text-[#2f4538] hover:bg-[#2f4538]/5"
-                        : "bg-white/95 border-gray-200 hover:bg-white text-gray-700 hover:border-gray-300"
+                        : "bg-white/95 border-gray-100 hover:bg-white text-gray-700 hover:border-gray-200"
                   }`}
                   style={{
                      borderColor: selectedRegion ? "#2f4538" : undefined,
@@ -423,7 +443,7 @@ export default function MapShortcuts({
             <div className="flex flex-col gap-2">
                <button
                   onClick={handleZoomIn}
-                  className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-200 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-300"
+                  className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-100 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-200"
                   title="Aumentar zoom"
                >
                   <Plus className="h-4 w-4" />
@@ -431,7 +451,7 @@ export default function MapShortcuts({
 
                <button
                   onClick={handleZoomOut}
-                  className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-200 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-300"
+                  className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-100 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-200"
                   title="Diminuir zoom"
                >
                   <Minus className="h-4 w-4" />
@@ -439,7 +459,7 @@ export default function MapShortcuts({
 
                <button
                   onClick={handleLocate}
-                  className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-200 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-300"
+                  className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-100 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-200"
                   title="Minha localização"
                >
                   <Navigation className="h-4 w-4" />
@@ -451,7 +471,7 @@ export default function MapShortcuts({
                <div className="relative">
                   <button
                      onClick={() => setShowLayerMenu(!showLayerMenu)}
-                     className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-200 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-300"
+                     className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-100 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-200"
                      title="Camadas do mapa"
                   >
                      <Layers className="h-4 w-4" />
@@ -489,7 +509,7 @@ export default function MapShortcuts({
 
                <button
                   onClick={handleShare}
-                  className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-200 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-300"
+                  className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-100 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-200"
                   title="Compartilhar localização"
                >
                   <Share2 className="h-4 w-4" />
@@ -500,19 +520,56 @@ export default function MapShortcuts({
             <div className="flex flex-col gap-2">
                <button
                   onClick={handleFeedback}
-                  className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-200 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-300"
+                  className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-100 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-200"
                   title="Enviar feedback"
                >
                   <MessageSquarePlus className="h-4 w-4" />
                </button>
 
-               <button
-                  onClick={() => (window.location.href = "/profile")}
-                  className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-200 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-300"
-                  title="Perfil do usuário"
-               >
-                  <User className="h-4 w-4" />
-               </button>
+               <div className="relative" ref={userMenuRef}>
+                  <button
+                     onClick={() => setShowUserMenu((v) => !v)}
+                     className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-100 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-200"
+                     title="Perfil do usuário"
+                  >
+                     <User className="h-4 w-4" />
+                  </button>
+                  {showUserMenu && (
+                     <div className="absolute right-12 top-0 bg-white/95 backdrop-blur-sm rounded-lg shadow-xl border border-gray-200 py-2 min-w-40 z-50">
+                        <div className="px-3 py-2 text-xs text-gray-600 border-b border-gray-100">
+                           {isAuthenticated && user?.email
+                              ? user.email
+                              : "Conta"}
+                        </div>
+
+                        {isAuthenticated ? (
+                           <button
+                              onClick={() => {
+                                 try {
+                                    logout();
+                                 } finally {
+                                    setShowUserMenu(false);
+                                    window.location.href = "/";
+                                 }
+                              }}
+                              className="w-full text-left px-3 py-2 hover:bg-gray-50 text-sm text-red-600"
+                           >
+                              Sair
+                           </button>
+                        ) : (
+                           <button
+                              onClick={() => {
+                                 setShowUserMenu(false);
+                                 window.location.href = "/profile";
+                              }}
+                              className="w-full text-left px-3 py-2 hover:bg-gray-50 text-sm"
+                           >
+                              Entrar
+                           </button>
+                        )}
+                     </div>
+                  )}
+               </div>
             </div>
          </div>
 

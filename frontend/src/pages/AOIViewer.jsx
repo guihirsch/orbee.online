@@ -1579,7 +1579,7 @@ export default function AOIViewer() {
                <div className="flex items-center gap-2">
                   <Link
                      to="/"
-                     className="flex items-center gap-1 bg-white p-2 rounded-lg h-12"
+                     className="flex items-center gap-1 bg-white p-2 rounded-lg h-10 border border-[#2f4538]"
                   >
                      <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -1616,7 +1616,7 @@ export default function AOIViewer() {
                   </Link>
                   <button
                      onClick={() => setShowCards(true)}
-                     className="h-12 px-4 bg-red-50 border-2 border-red-300 text-red-700 rounded-full shadow-sm hover:bg-red-100 hover:border-red-400 transition-colors duration-200 flex items-center gap-2 justify-center"
+                     className="h-10 px-4 bg-red-50 border border-red-300 text-red-700 rounded-full shadow-sm hover:bg-red-100 hover:border-red-400 transition-colors duration-200 flex items-center gap-2 justify-center"
                      title="Abrir pontos críticos"
                   >
                      <MapPin className="h-4 w-4 text-red-700" />

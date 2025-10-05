@@ -135,7 +135,7 @@ const Header = () => {
                </div>
                <div className="flex items-center gap-4">
                   <Link
-                     to="/plataforma"
+                     to="/aoi-viewer"
                      onClick={handlePlataformaClick}
                      className="hidden rounded-full bg-[#2f4538] px-6 py-2 font-medium text-white shadow-sm transition-colors hover:bg-[#2f4538]/80 md:block"
                   >
@@ -213,7 +213,7 @@ const Header = () => {
                      )}
                   </nav>
                   <Link
-                     to="/plataforma"
+                     to="/aoi-viewer"
                      onClick={handlePlataformaClick}
                      className="mt-4 rounded-full bg-[#2f4538] px-6 py-2 text-center font-medium text-white shadow-sm transition-colors hover:bg-[#2f4538]/80"
                   >
