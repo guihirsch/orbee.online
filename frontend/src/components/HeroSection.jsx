@@ -7,7 +7,6 @@ const HeroSection = () => {
 
    const handleSearch = () => {
       if (!searchTerm.trim()) return;
-      console.log("Buscando por:", searchTerm);
    };
 
    return (

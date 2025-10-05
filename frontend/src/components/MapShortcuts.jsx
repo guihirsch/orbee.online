@@ -189,7 +189,6 @@ export default function MapShortcuts({
    const handleFeedback = () => {
       const feedback = prompt("Deixe seu feedback sobre o mapa:");
       if (feedback) {
-         console.log("Feedback recebido:", feedback);
          alert("Obrigado pelo seu feedback!");
       }
    };

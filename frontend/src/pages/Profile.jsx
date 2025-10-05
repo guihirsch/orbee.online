@@ -74,7 +74,6 @@ const Profile = () => {
 
    const handleProfileUpdate = (e) => {
       e.preventDefault();
-      console.log("Perfil atualizado:", profile);
    };
 
    const handleNotificationUpdate = (key) => {

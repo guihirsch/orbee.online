@@ -209,18 +209,12 @@ export default function AOIViewer() {
 
             // PONTOS CRÍTICOS COM PINS - FILTRADOS POR DENSIDADE E ZOOM
             try {
-               console.log("🔄 Carregando pontos críticos...");
                const criticalRes = await fetch(
                   "/critical_points_mata_ciliar.geojson"
                );
-               console.log(
-                  `📡 Status da resposta: ${criticalRes.status} ${criticalRes.statusText}`
-               );
+
                if (criticalRes.ok) {
                   const criticalGeo = await criticalRes.json();
-                  console.log(
-                     `✅ ${criticalGeo.features.length} pontos carregados`
-                  );
 
                   // Armazenar dados globalmente para acesso no useEffect
                   window.criticalGeoData = criticalGeo;
@@ -307,10 +301,6 @@ export default function AOIViewer() {
                         },
                      };
 
-                     console.log(
-                        `🎯 Configuração fixa: ${config.minDistance}m distância mínima, todos os críticos visíveis`
-                     );
-
                      // Classificar todos os pontos usando dados reais do GeoJSON
                      const classifiedFeatures = features.map((f) => ({
                         ...f,
@@ -390,9 +380,6 @@ export default function AOIViewer() {
                            config.maxPointsPerType.critical
                         );
                         result = [...result, ...filteredCritical];
-                        console.log(
-                           `🔴 Críticos incluídos: ${filteredCritical.length}/${critical.length}`
-                        );
                      }
 
                      // MODERADOS: Com limite
@@ -403,9 +390,6 @@ export default function AOIViewer() {
                            config.maxPointsPerType.moderate
                         );
                         result = [...result, ...filteredModerate];
-                        console.log(
-                           `🟡 Moderados incluídos: ${filteredModerate.length}/${moderate.length}`
-                        );
                      }
 
                      // SAUDÁVEIS: Sem limite
@@ -416,14 +400,7 @@ export default function AOIViewer() {
                            config.maxPointsPerType.healthy
                         );
                         result = [...result, ...filteredHealthy];
-                        console.log(
-                           `🟢 Saudáveis incluídos: ${filteredHealthy.length}/${healthy.length}`
-                        );
                      }
-
-                     console.log(
-                        `📊 Total final: ${result.length} pontos (${result.filter((f) => f.properties.severity === "critical").length} críticos, ${result.filter((f) => f.properties.severity === "moderate").length} moderados, ${result.filter((f) => f.properties.severity === "healthy").length} saudáveis)`
-                     );
 
                      return result;
                   };
@@ -440,9 +417,7 @@ export default function AOIViewer() {
                   };
 
                   // Atualizar estado dos pontos críticos com os dados filtrados
-                  console.log(
-                     `🎯 Definindo ${filteredFeatures.length} pontos críticos no estado`
-                  );
+
                   setCriticalPoints(filteredFeatures);
 
                   mapRef.current.addSource("critical-points", {
@@ -522,9 +497,7 @@ export default function AOIViewer() {
                         try {
                            mapRef.current.addImage(`${pinType.name}-pin`, img);
                            loadedImages++;
-                           console.log(
-                              `✅ Pin ${pinType.name} carregado (${loadedImages}/${totalImages})`
-                           );
+
                            // Verificar se todas as imagens foram carregadas
                            checkImagesLoaded();
                         } catch (error) {
@@ -541,9 +514,7 @@ export default function AOIViewer() {
                            `\n🔍 URL: ${img.src.substring(0, 100)}...`
                         );
                         // Tentar criar um pin mais simples
-                        console.log(
-                           `🔄 Tentando pin simplificado para ${pinType.name}...`
-                        );
+
                         const fallbackSvg = `<svg width="24" height="32" viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg">
                            <circle cx="12" cy="12" r="10" fill="${pinType.color}" stroke="white" stroke-width="2"/>
                            <circle cx="12" cy="12" r="4" fill="white"/>
@@ -567,9 +538,7 @@ export default function AOIViewer() {
                            pinType.size,
                            pinType.name
                         );
-                        console.log(
-                           `🎨 Criando pin ${pinType.name} (${pinType.color}, ${pinType.size}px)`
-                        );
+
                         img.src = pinSrc;
                      } catch (error) {
                         console.error(
@@ -582,10 +551,6 @@ export default function AOIViewer() {
                   // Aguardar todas as imagens carregarem antes de criar a camada
                   const checkImagesLoaded = () => {
                      if (loadedImages === totalImages) {
-                        console.log(
-                           `✅ Todas as ${totalImages} imagens carregadas, criando camada...`
-                        );
-
                         try {
                            mapRef.current.addLayer({
                               id: "critical-points-symbols",
@@ -632,9 +597,6 @@ export default function AOIViewer() {
                                  "icon-ignore-placement": true,
                               },
                            });
-                           console.log(
-                              "✅ Camada de símbolos criada com sucesso"
-                           );
 
                            // Adicionar event listeners apenas após a camada ser criada
                            setupEventListeners();
@@ -718,8 +680,6 @@ export default function AOIViewer() {
                            // Zoom removido - apenas popup
                         }
                      );
-
-                     console.log("✅ Event listeners configurados");
                   };
 
                   // Função para descrição da vegetação
@@ -744,9 +704,6 @@ export default function AOIViewer() {
                   };
 
                   // Pontos estáticos - não mudam com zoom
-                  console.log(
-                     "✅ Pontos configurados estaticamente - sem mudança por zoom"
-                  );
                } else {
                   console.error(
                      `❌ Erro ao carregar pontos críticos: ${criticalRes.status} ${criticalRes.statusText}`
@@ -2189,6 +2146,22 @@ export default function AOIViewer() {
                      {/* Área Scrollável dos Cards */}
                      <div className="flex-1 overflow-y-auto bg-white/95 backdrop-blur-sm rounded-b-xl border border-gray-200 border-t-0 p-3 sm:p-4 shadow-lg">
                         {(() => {
+                           if (!selectedRegion) {
+                              return (
+                                 <div className="text-center text-gray-500 py-8">
+                                    <Search className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                                    <p className="text-sm">
+                                       Busque uma região de interesse para ver
+                                       pontos críticos.
+                                    </p>
+                                    <p className="text-xs mt-1">
+                                       Ou abra "Meus acompanhamentos" para seus
+                                       pontos salvos.
+                                    </p>
+                                 </div>
+                              );
+                           }
+
                            const filteredPoints = getFilteredPoints();
                            return filteredPoints.length > 0 ? (
                               <div
