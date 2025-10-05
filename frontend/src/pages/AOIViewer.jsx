@@ -40,6 +40,17 @@ export default function AOIViewer() {
    const [showAcompanhamentos, setShowAcompanhamentos] = useState(false);
    const [searchQuery, setSearchQuery] = useState("");
    const [searchResults, setSearchResults] = useState([]);
+   const actionFileInputRef = useRef(null);
+   const [pendingActionDescription, setPendingActionDescription] = useState("");
+   const [pendingActionTargets, setPendingActionTargets] = useState([]);
+   const [watchlist, setWatchlist] = useState(() => {
+      try {
+         const saved = localStorage.getItem("orbee-watchlist");
+         return saved ? JSON.parse(saved) : [];
+      } catch {
+         return [];
+      }
+   });
 
    // Funções para integração com backend
    const saveObservation = async (observationData) => {
@@ -108,11 +119,12 @@ export default function AOIViewer() {
    const [isFilterOpen, setIsFilterOpen] = useState(false);
    const [selectedPoints, setSelectedPoints] = useState([]);
    const [isSelectionOpen, setIsSelectionOpen] = useState(false);
+   const [isStatsOpen, setIsStatsOpen] = useState(false);
 
    // Estados para expansão horizontal
    const [panelWidth, setPanelWidth] = useState(() => {
       const saved = localStorage.getItem("orbee-panel-width");
-      return saved ? parseInt(saved) : 320; // Largura padrão em pixels
+      return saved ? parseInt(saved) : 360; // Largura padrão em pixels (acompanha largura mínima dos cards)
    });
    const [isResizing, setIsResizing] = useState(false);
    const [resizeStartX, setResizeStartX] = useState(0);
@@ -904,26 +916,46 @@ export default function AOIViewer() {
          if (isSelectionOpen && !event.target.closest(".selection-container")) {
             setIsSelectionOpen(false);
          }
+         if (isStatsOpen && !event.target.closest(".stats-container")) {
+            setIsStatsOpen(false);
+         }
       };
 
       document.addEventListener("mousedown", handleClickOutside);
       return () =>
          document.removeEventListener("mousedown", handleClickOutside);
-   }, [showSearchResults, isFilterOpen, isSelectionOpen]);
+   }, [showSearchResults, isFilterOpen, isSelectionOpen, isStatsOpen]);
 
    // Funções para filtros e seleção de pontos críticos
    const getFilteredPoints = () => {
-      if (activeFilter === "all") return criticalPoints;
+      if (activeFilter === "all") {
+         // Todas = Críticos da região + Meus acompanhamentos (união)
+         const watchSet = new Set(watchlist);
+         const resultMap = new Map();
+         for (const point of criticalPoints) {
+            const id =
+               point.properties.id || point.geometry.coordinates.join(",");
+            if (point.properties.severity === "critical" || watchSet.has(id)) {
+               resultMap.set(id, point);
+            }
+         }
+         return Array.from(resultMap.values());
+      }
+
+      if (activeFilter === "watchlist") {
+         const watchSet = new Set(watchlist);
+         return criticalPoints.filter((point) => {
+            const pointId =
+               point.properties.id || point.geometry.coordinates.join(",");
+            return watchSet.has(pointId);
+         });
+      }
 
       return criticalPoints.filter((point) => {
          const severity = point.properties.severity;
          switch (activeFilter) {
             case "critical":
                return severity === "critical";
-            case "moderate":
-               return severity === "moderate";
-            case "healthy":
-               return severity === "healthy";
             default:
                return true;
          }
@@ -967,12 +999,191 @@ export default function AOIViewer() {
       }
    };
 
+   // Ações por card (um único ponto)
+   const handleRegisterPhotoForPoint = (point) => {
+      const pointId =
+         point.properties.id || point.geometry.coordinates.join(",");
+      const description = window.prompt(
+         "Descrição (opcional) para a foto deste ponto:",
+         ""
+      );
+      if (description === null) return;
+      setPendingActionDescription(description || "");
+      setPendingActionTargets([pointId]);
+      actionFileInputRef.current?.click();
+   };
+
+   const handleRegisterActionForPoint = (point) => {
+      const pointId =
+         point.properties.id || point.geometry.coordinates.join(",");
+      const description = window.prompt("Descreva a ação realizada:", "");
+      if (description === null) return;
+      const timestamp = new Date().toISOString();
+      try {
+         const existing = JSON.parse(
+            localStorage.getItem("orbee-actions") || "[]"
+         );
+         const pt = point;
+         const record = {
+            kind: "action",
+            pointId,
+            coords: pt?.geometry?.coordinates || null,
+            severity: pt?.properties?.severity || null,
+            ndvi: pt?.properties?.ndvi ?? null,
+            description: description || "",
+            files: [],
+            timestamp,
+         };
+         localStorage.setItem(
+            "orbee-actions",
+            JSON.stringify([...existing, record])
+         );
+         alert("Ação registrada para 1 ponto.");
+      } catch (err) {
+         console.error("Erro ao registrar ação:", err);
+         alert("Não foi possível salvar a ação.");
+      }
+   };
+
+   const handleAddToWatchlistForPoint = (point) => {
+      const pointId =
+         point.properties.id || point.geometry.coordinates.join(",");
+      try {
+         const existing = new Set(watchlist);
+         existing.add(pointId);
+         const updated = Array.from(existing);
+         setWatchlist(updated);
+         localStorage.setItem("orbee-watchlist", JSON.stringify(updated));
+         setShowAcompanhamentos(true);
+         alert("Ponto adicionado aos acompanhamentos.");
+      } catch (err) {
+         console.error("Erro ao salvar acompanhamentos:", err);
+      }
+   };
+
+   // Registrar foto para pontos selecionados (abre seletor de arquivos)
+   const handleRegisterPhoto = () => {
+      if (selectedPoints.length === 0) return;
+      const description = window.prompt(
+         "Descrição da ação/foto (opcional):",
+         ""
+      );
+      if (description === null) return; // cancelou
+      setPendingActionDescription(description || "");
+      setPendingActionTargets(selectedPoints);
+      if (actionFileInputRef.current) {
+         actionFileInputRef.current.click();
+      }
+      setIsSelectionOpen(false);
+   };
+
+   const handleActionFilesSelected = (e) => {
+      const files = Array.from(e.target.files || []);
+      const timestamp = new Date().toISOString();
+      try {
+         const existing = JSON.parse(
+            localStorage.getItem("orbee-actions") || "[]"
+         );
+         const pointRecords = pendingActionTargets.map((id) => {
+            const pt = criticalPoints.find(
+               (p) =>
+                  (p.properties.id || p.geometry.coordinates.join(",")) === id
+            );
+            return {
+               kind: "photo",
+               pointId: id,
+               coords: pt?.geometry?.coordinates || null,
+               severity: pt?.properties?.severity || null,
+               ndvi: pt?.properties?.ndvi ?? null,
+               description: pendingActionDescription,
+               files: files.map((f) => ({
+                  name: f.name,
+                  size: f.size,
+                  type: f.type,
+               })),
+               timestamp,
+            };
+         });
+         localStorage.setItem(
+            "orbee-actions",
+            JSON.stringify([...existing, ...pointRecords])
+         );
+         alert(`Registro salvo para ${pointRecords.length} ponto(s).`);
+      } catch (err) {
+         console.error("Erro salvando ação/foto:", err);
+         alert("Não foi possível salvar o registro localmente.");
+      } finally {
+         setPendingActionDescription("");
+         setPendingActionTargets([]);
+         e.target.value = "";
+      }
+   };
+
+   // Registrar ação (texto) para pontos selecionados
+   const handleRegisterAction = () => {
+      if (selectedPoints.length === 0) return;
+      const description = window.prompt("Descreva a ação realizada:", "");
+      if (description === null) return; // cancelado
+      const timestamp = new Date().toISOString();
+      try {
+         const existing = JSON.parse(
+            localStorage.getItem("orbee-actions") || "[]"
+         );
+         const pointRecords = selectedPoints.map((id) => {
+            const pt = criticalPoints.find(
+               (p) =>
+                  (p.properties.id || p.geometry.coordinates.join(",")) === id
+            );
+            return {
+               kind: "action",
+               pointId: id,
+               coords: pt?.geometry?.coordinates || null,
+               severity: pt?.properties?.severity || null,
+               ndvi: pt?.properties?.ndvi ?? null,
+               description: description || "",
+               files: [],
+               timestamp,
+            };
+         });
+         localStorage.setItem(
+            "orbee-actions",
+            JSON.stringify([...existing, ...pointRecords])
+         );
+         alert(`Ação registrada para ${pointRecords.length} ponto(s).`);
+      } catch (err) {
+         console.error("Erro ao registrar ação:", err);
+         alert("Não foi possível salvar a ação.");
+      } finally {
+         setIsSelectionOpen(false);
+      }
+   };
+
+   // Adicionar pontos selecionados à lista de acompanhamento
+   const handleAddToWatchlist = () => {
+      if (selectedPoints.length === 0) return;
+      try {
+         const existing = new Set(watchlist);
+         selectedPoints.forEach((id) => existing.add(id));
+         const updated = Array.from(existing);
+         setWatchlist(updated);
+         localStorage.setItem("orbee-watchlist", JSON.stringify(updated));
+         alert(
+            `${selectedPoints.length} ponto(s) adicionado(s) aos acompanhamentos.`
+         );
+         setShowAcompanhamentos(true);
+      } catch (err) {
+         console.error("Erro ao salvar acompanhamentos:", err);
+      } finally {
+         setIsSelectionOpen(false);
+      }
+   };
+
    // Função para calcular número de colunas baseado na largura do painel
    const calculateGridColumns = (width) => {
       // Largura mínima do card: 200px
       // Padding: 24px (12px de cada lado)
       const availableWidth = width - 24;
-      const cardMinWidth = 200;
+      const cardMinWidth = 300;
       const gap = 12; // gap entre cards
 
       // Calcular quantos cards cabem
@@ -1002,7 +1213,7 @@ export default function AOIViewer() {
       e.preventDefault();
 
       const deltaX = e.clientX - resizeStartX;
-      const newWidth = Math.max(280, Math.min(800, resizeStartWidth + deltaX)); // Min: 280px, Max: 800px
+      const newWidth = Math.max(340, Math.min(800, resizeStartWidth + deltaX)); // Min: 340px, Max: 800px
       setPanelWidth(newWidth);
 
       // Adicionar feedback visual durante o redimensionamento
@@ -1288,19 +1499,41 @@ export default function AOIViewer() {
 
                {/* Informações adicionais */}
                <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-200">
-                  <div className="flex items-center justify-between text-[9px] sm:text-xs">
-                     <div className="flex items-center gap-0.5 sm:gap-1 text-gray-500">
-                        <MapPin className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                        <span>HLS</span>
-                     </div>
-                     <div className="flex items-center gap-0.5 sm:gap-1 text-gray-500">
-                        <BarChart3 className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                        <span>Análise</span>
-                     </div>
-                     <div className="flex items-center gap-0.5 sm:gap-1 text-gray-500">
-                        <Leaf className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                        <span>Vegetação</span>
-                     </div>
+                  {/* Ações rápidas */}
+                  <div className="flex items-center justify-between gap-2">
+                     <button
+                        onClick={(e) => {
+                           e.stopPropagation();
+                           handleRegisterPhotoForPoint(point);
+                        }}
+                        className="flex-1 inline-flex items-center justify-center gap-1 rounded-md border border-gray-200 bg-white px-2 py-1 text-[10px] sm:text-xs text-gray-700 hover:bg-gray-50"
+                        title="Registrar foto"
+                     >
+                        <Camera className="h-3 w-3 text-emerald-600" />
+                        Foto
+                     </button>
+                     <button
+                        onClick={(e) => {
+                           e.stopPropagation();
+                           handleRegisterActionForPoint(point);
+                        }}
+                        className="flex-1 inline-flex items-center justify-center gap-1 rounded-md border border-gray-200 bg-white px-2 py-1 text-[10px] sm:text-xs text-gray-700 hover:bg-gray-50"
+                        title="Registrar ação"
+                     >
+                        <Leaf className="h-3 w-3 text-green-700" />
+                        Ação
+                     </button>
+                     <button
+                        onClick={(e) => {
+                           e.stopPropagation();
+                           handleAddToWatchlistForPoint(point);
+                        }}
+                        className="flex-1 inline-flex items-center justify-center gap-1 rounded-md border border-gray-200 bg-white px-2 py-1 text-[10px] sm:text-xs text-gray-700 hover:bg-gray-50"
+                        title="Acompanhar"
+                     >
+                        <Bookmark className="h-3 w-3 text-indigo-600" />
+                        Acompanhar
+                     </button>
                   </div>
                </div>
             </div>
@@ -1311,48 +1544,68 @@ export default function AOIViewer() {
    return (
       <div className="h-screen w-full relative">
          <div ref={containerRef} className="w-full h-full absolute" />
+         <input
+            ref={actionFileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={handleActionFilesSelected}
+         />
 
          {/* Header da Plataforma */}
          <div className="absolute top-0 left-0 right-0 z-20">
             <div className="px-4 py-3 flex items-center justify-between ">
-               {/* Logo */}
-               <Link
-                  to="/"
-                  className="flex items-center gap-1 bg-white p-2 rounded-lg"
-               >
-                  <svg
-                     xmlns="http://www.w3.org/2000/svg"
-                     width="28"
-                     height="28"
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     strokeWidth="2"
-                     strokeLinecap="round"
-                     strokeLinejoin="round"
-                     className="lucide lucide-bee-icon lucide-bee"
+               {/* Logo + Botão Pontos Críticos */}
+               <div className="flex items-center gap-2">
+                  <Link
+                     to="/"
+                     className="flex items-center gap-1 bg-white p-2 rounded-lg h-12"
                   >
-                     <path d="m8 2 1.88 1.88" stroke="#2f4538" />
-                     <path d="M14.12 3.88 16 2" stroke="#2f4538" />
-                     <path d="M9 7V6a3 3 0 1 1 6 0v1" stroke="#2f4538" />
-                     <path
-                        d="M5 7a3 3 0 1 0 2.2 5.1C9.1 10 12 7 12 7s2.9 3 4.8 5.1A3 3 0 1 0 19 7Z"
-                        stroke="#2f4538"
-                     />
-                     <path d="M7.56 12h8.87" stroke="#2f4538" />
-                     <path d="M7.5 17h9" stroke="#2f4538" />
-                     <path
-                        d="M15.5 10.7c.9.9 1.4 2.1 1.5 3.3 0 5.8-5 8-5 8s-5-2.2-5-8c.1-1.2.6-2.4 1.5-3.3"
-                        stroke="#2f4538"
-                     />
-                  </svg>
-                  <span
-                     className="text-xl font-medium text-[#2f4538]"
-                     style={{ fontFamily: '"Fraunces", serif' }}
+                     <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-bee-icon lucide-bee"
+                     >
+                        <path d="m8 2 1.88 1.88" stroke="#2f4538" />
+                        <path d="M14.12 3.88 16 2" stroke="#2f4538" />
+                        <path d="M9 7V6a3 3 0 1 1 6 0v1" stroke="#2f4538" />
+                        <path
+                           d="M5 7a3 3 0 1 0 2.2 5.1C9.1 10 12 7 12 7s2.9 3 4.8 5.1A3 3 0 1 0 19 7Z"
+                           stroke="#2f4538"
+                        />
+                        <path d="M7.56 12h8.87" stroke="#2f4538" />
+                        <path d="M7.5 17h9" stroke="#2f4538" />
+                        <path
+                           d="M15.5 10.7c.9.9 1.4 2.1 1.5 3.3 0 5.8-5 8-5 8s-5-2.2-5-8c.1-1.2.6-2.4 1.5-3.3"
+                           stroke="#2f4538"
+                        />
+                     </svg>
+                     <span
+                        className="text-xl font-medium text-[#2f4538]"
+                        style={{ fontFamily: '"Fraunces", serif' }}
+                     >
+                        orbee
+                     </span>
+                  </Link>
+                  <button
+                     onClick={() => setShowCards(true)}
+                     className="h-12 px-4 bg-red-50 border-2 border-red-300 text-red-700 rounded-full shadow-sm hover:bg-red-100 hover:border-red-400 transition-colors duration-200 flex items-center gap-2 justify-center"
+                     title="Abrir pontos críticos"
                   >
-                     orbee
-                  </span>
-               </Link>
+                     <MapPin className="h-4 w-4 text-red-700" />
+                     <span className="text-sm font-semibold hidden sm:inline">
+                        Pontos críticos
+                     </span>
+                  </button>
+               </div>
             </div>
          </div>
 
@@ -1507,7 +1760,7 @@ export default function AOIViewer() {
 
                      {/* Handle de Redimensionamento */}
                      <div
-                        className="absolute right-0 top-0 bottom-0 w-1 bg-gray-300 hover:bg-blue-500 cursor-ew-resize transition-colors duration-200 group"
+                        className="absolute right-0 top-0 bottom-0 cursor-ew-resize"
                         onMouseDown={handleAcompanhamentosResizeStart}
                         title="Arraste para redimensionar"
                      >
@@ -1533,11 +1786,11 @@ export default function AOIViewer() {
                {/* Painel Expandido */}
                {showCards && (
                   <div
-                     className="mb-2 animate-in slide-in-from-left duration-300 h-[calc(100vh-100px)] flex flex-col relative"
+                     className="mb-2 animate-in slide-in-from-left duration-300 h-[calc(100vh-100px)] flex flex-col relative z-[1000] overflow-visible"
                      style={{ width: `${panelWidth}px` }}
                   >
                      {/* Header dos Cards */}
-                     <div className="bg-white/95 backdrop-blur-sm rounded-t-xl border border-gray-200 px-3 sm:px-4 py-3 shadow-lg flex-shrink-0">
+                     <div className="bg-white/95 backdrop-blur-sm rounded-t-xl border border-gray-200 px-3 sm:px-4 py-3 flex-shrink-0 relative z-50 overflow-visible">
                         <div className="flex items-center justify-between mb-3">
                            <div className="flex items-center gap-2">
                               <h3 className="text-xs sm:text-sm font-semibold text-gray-900">
@@ -1557,268 +1810,359 @@ export default function AOIViewer() {
                         <div className="flex items-center gap-2">
                            {(() => {
                               const filteredPoints = getFilteredPoints();
-                              const totalAll = criticalPoints.length;
                               const totalCritical = criticalPoints.filter(
                                  (p) => p.properties.severity === "critical"
                               ).length;
-                              const totalModerate = criticalPoints.filter(
-                                 (p) => p.properties.severity === "moderate"
+                              const watchSet = new Set(watchlist);
+                              const totalWatchlist = criticalPoints.filter(
+                                 (p) => {
+                                    const id =
+                                       p.properties.id ||
+                                       p.geometry.coordinates.join(",");
+                                    return watchSet.has(id);
+                                 }
                               ).length;
-                              const totalHealthy = criticalPoints.filter(
-                                 (p) => p.properties.severity === "healthy"
-                              ).length;
+
+                              // Todas = união de críticos + watchlist
+                              const totalAll = (() => {
+                                 const union = new Set();
+                                 criticalPoints.forEach((p) => {
+                                    const id =
+                                       p.properties.id ||
+                                       p.geometry.coordinates.join(",");
+                                    if (
+                                       p.properties.severity === "critical" ||
+                                       watchSet.has(id)
+                                    ) {
+                                       union.add(id);
+                                    }
+                                 });
+                                 return union.size;
+                              })();
 
                               const currentLabel =
                                  activeFilter === "all"
                                     ? `Todas (${totalAll})`
                                     : activeFilter === "critical"
                                       ? `Críticos (${totalCritical})`
-                                      : activeFilter === "moderate"
-                                        ? `Moderados (${totalModerate})`
-                                        : `Saudáveis (${totalHealthy})`;
+                                      : `Meus acompanhamentos (${totalWatchlist})`;
 
                               return (
-                                 <div className="relative inline-block text-left filter-container">
-                                    <button
-                                       onClick={() =>
-                                          setIsFilterOpen((v) => !v)
-                                       }
-                                       className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-2 py-1 text-[10px] sm:text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
-                                    >
-                                       <span className="flex items-center gap-1">
-                                          {activeFilter === "all" && (
-                                             <Globe className="h-3 w-3" />
-                                          )}
-                                          {activeFilter === "critical" && (
-                                             <Activity className="h-3 w-3" />
-                                          )}
-                                          {activeFilter === "moderate" && (
-                                             <BarChart3 className="h-3 w-3" />
-                                          )}
-                                          {activeFilter === "healthy" && (
-                                             <Leaf className="h-3 w-3" />
-                                          )}
-                                          <span className="hidden sm:inline">
-                                             {activeFilter === "all"
-                                                ? "Todas"
-                                                : activeFilter === "critical"
-                                                  ? "Críticos"
-                                                  : activeFilter === "moderate"
-                                                    ? "Moderados"
-                                                    : "Saudáveis"}
-                                          </span>
-                                       </span>
-                                       <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[9px] sm:text-xs text-gray-600">
-                                          {activeFilter === "all"
-                                             ? totalAll
-                                             : activeFilter === "critical"
-                                               ? totalCritical
-                                               : activeFilter === "moderate"
-                                                 ? totalModerate
-                                                 : totalHealthy}
-                                       </span>
-                                       <svg
-                                          className="ml-1 h-2 w-2 text-gray-500"
-                                          viewBox="0 0 20 20"
-                                          fill="currentColor"
+                                 <div className="relative inline-flex items-center gap-2 z-50">
+                                    {/* Filtro */}
+                                    <div className="relative inline-block text-left filter-container">
+                                       <button
+                                          onClick={() =>
+                                             setIsFilterOpen((v) => !v)
+                                          }
+                                          className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-2 py-1 h-8 sm:h-9 text-[10px] sm:text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
                                        >
-                                          <path
-                                             fillRule="evenodd"
-                                             d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
-                                             clipRule="evenodd"
-                                          />
-                                       </svg>
-                                    </button>
-                                    {isFilterOpen && (
-                                       <div className="absolute right-0 z-20 mt-2 w-48 origin-top-right rounded-lg border border-gray-200 bg-white shadow-lg focus:outline-none">
-                                          <div className="py-1 text-xs text-gray-700">
-                                             <button
-                                                onClick={() => {
-                                                   setActiveFilter("all");
-                                                   setIsFilterOpen(false);
-                                                }}
-                                                className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${activeFilter === "all" ? "bg-[#2f4538]/10" : ""}`}
-                                             >
-                                                <span className="flex items-center gap-2">
-                                                   <Globe className="h-3 w-3" />
-                                                   Todas
-                                                </span>
-                                                <span className="text-gray-500">
-                                                   {totalAll}
-                                                </span>
-                                             </button>
-                                             <button
-                                                onClick={() => {
-                                                   setActiveFilter("critical");
-                                                   setIsFilterOpen(false);
-                                                }}
-                                                className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${activeFilter === "critical" ? "bg-red-500/10" : ""}`}
-                                             >
-                                                <span className="flex items-center gap-2">
-                                                   <Activity className="h-3 w-3" />
-                                                   Críticos
-                                                </span>
-                                                <span className="text-gray-500">
-                                                   {totalCritical}
-                                                </span>
-                                             </button>
-                                             <button
-                                                onClick={() => {
-                                                   setActiveFilter("moderate");
-                                                   setIsFilterOpen(false);
-                                                }}
-                                                className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${activeFilter === "moderate" ? "bg-orange-500/10" : ""}`}
-                                             >
-                                                <span className="flex items-center gap-2">
-                                                   <BarChart3 className="h-3 w-3" />
-                                                   Moderados
-                                                </span>
-                                                <span className="text-gray-500">
-                                                   {totalModerate}
-                                                </span>
-                                             </button>
-                                             <button
-                                                onClick={() => {
-                                                   setActiveFilter("healthy");
-                                                   setIsFilterOpen(false);
-                                                }}
-                                                className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${activeFilter === "healthy" ? "bg-green-500/10" : ""}`}
-                                             >
-                                                <span className="flex items-center gap-2">
-                                                   <Leaf className="h-3 w-3" />
-                                                   Saudáveis
-                                                </span>
-                                                <span className="text-gray-500">
-                                                   {totalHealthy}
-                                                </span>
-                                             </button>
+                                          <span className="flex items-center gap-1">
+                                             {activeFilter === "all" && (
+                                                <Globe className="h-3 w-3" />
+                                             )}
+                                             {activeFilter === "critical" && (
+                                                <Activity className="h-3 w-3" />
+                                             )}
+                                             {activeFilter === "watchlist" && (
+                                                <Bookmark className="h-3 w-3" />
+                                             )}
+                                             <span className="hidden sm:inline">
+                                                {activeFilter === "all"
+                                                   ? "Todas"
+                                                   : activeFilter === "critical"
+                                                     ? "Críticos"
+                                                     : "Meus acompanhamentos"}
+                                             </span>
+                                          </span>
+                                          <span className="rounded bg-gray-100 px-1.5 py-0.5 leading-none text-[9px] sm:text-xs text-gray-600">
+                                             {activeFilter === "all"
+                                                ? totalAll
+                                                : activeFilter === "critical"
+                                                  ? totalCritical
+                                                  : totalWatchlist}
+                                          </span>
+                                          <svg
+                                             className="ml-1 h-2 w-2 text-gray-500"
+                                             viewBox="0 0 20 20"
+                                             fill="currentColor"
+                                          >
+                                             <path
+                                                fillRule="evenodd"
+                                                d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                                                clipRule="evenodd"
+                                             />
+                                          </svg>
+                                       </button>
+                                       {isFilterOpen && (
+                                          <div className="absolute left-0 z-[9999] mt-2 w-56 origin-top-left rounded-lg border border-gray-200 bg-white shadow-lg focus:outline-none">
+                                             <div className="py-1 text-xs text-gray-700">
+                                                <button
+                                                   onClick={() => {
+                                                      setActiveFilter("all");
+                                                      setIsFilterOpen(false);
+                                                   }}
+                                                   className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${activeFilter === "all" ? "bg-[#2f4538]/10" : ""}`}
+                                                >
+                                                   <span className="flex items-center gap-2">
+                                                      <Globe className="h-3 w-3" />
+                                                      Todas
+                                                   </span>
+                                                   <span className="text-gray-500">
+                                                      {totalAll}
+                                                   </span>
+                                                </button>
+                                                <button
+                                                   onClick={() => {
+                                                      setActiveFilter(
+                                                         "critical"
+                                                      );
+                                                      setIsFilterOpen(false);
+                                                   }}
+                                                   className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${activeFilter === "critical" ? "bg-red-500/10" : ""}`}
+                                                >
+                                                   <span className="flex items-center gap-2">
+                                                      <Activity className="h-3 w-3" />
+                                                      Críticos
+                                                   </span>
+                                                   <span className="text-gray-500">
+                                                      {totalCritical}
+                                                   </span>
+                                                </button>
+                                                <button
+                                                   onClick={() => {
+                                                      setActiveFilter(
+                                                         "watchlist"
+                                                      );
+                                                      setIsFilterOpen(false);
+                                                   }}
+                                                   className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${activeFilter === "watchlist" ? "bg-indigo-500/10" : ""}`}
+                                                >
+                                                   <span className="flex items-center gap-2">
+                                                      <Bookmark className="h-3 w-3" />
+                                                      Meus acompanhamentos
+                                                   </span>
+                                                   <span className="text-gray-500">
+                                                      {totalWatchlist}
+                                                   </span>
+                                                </button>
+                                             </div>
                                           </div>
-                                       </div>
-                                    )}
+                                       )}
+                                    </div>
+
+                                    {/* Botão de Estatísticas */}
+                                    <div className="relative stats-container">
+                                       <button
+                                          onClick={() =>
+                                             setIsStatsOpen((v) => !v)
+                                          }
+                                          className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-2 py-1 h-8 sm:h-9 text-[10px] sm:text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
+                                          title="Estatísticas dos pontos críticos"
+                                       >
+                                          <BarChart3 className="h-3 w-3" />
+                                          <span className="hidden sm:inline">
+                                             Estatísticas
+                                          </span>
+                                       </button>
+                                       {isStatsOpen && (
+                                          <div className="absolute left-0 z-[9999] mt-2 w-72 origin-top-left rounded-lg border border-gray-200 bg-white shadow-lg p-3">
+                                             {(() => {
+                                                const watchSetLocal = new Set(
+                                                   watchlist
+                                                );
+                                                // Conjunto "todas" conforme regra atual (união críticos + watchlist)
+                                                const allPoints =
+                                                   criticalPoints.filter(
+                                                      (p) => {
+                                                         const id =
+                                                            p.properties.id ||
+                                                            p.geometry.coordinates.join(
+                                                               ","
+                                                            );
+                                                         return (
+                                                            p.properties
+                                                               .severity ===
+                                                               "critical" ||
+                                                            watchSetLocal.has(
+                                                               id
+                                                            )
+                                                         );
+                                                      }
+                                                   );
+                                                const regionCritical =
+                                                   criticalPoints.filter(
+                                                      (p) =>
+                                                         p.properties
+                                                            .severity ===
+                                                         "critical"
+                                                   );
+
+                                                const ndvis = regionCritical
+                                                   .map(
+                                                      (p) => p.properties.ndvi
+                                                   )
+                                                   .filter(
+                                                      (v) =>
+                                                         typeof v === "number"
+                                                   );
+                                                const ndviAvg = ndvis.length
+                                                   ? ndvis.reduce(
+                                                        (a, b) => a + b,
+                                                        0
+                                                     ) / ndvis.length
+                                                   : null;
+                                                const ndviMin = ndvis.length
+                                                   ? Math.min(...ndvis)
+                                                   : null;
+                                                const ndviMax = ndvis.length
+                                                   ? Math.max(...ndvis)
+                                                   : null;
+                                                const dists = regionCritical
+                                                   .map(
+                                                      (p) =>
+                                                         p.properties
+                                                            .distance_to_river_m
+                                                   )
+                                                   .filter(
+                                                      (v) =>
+                                                         typeof v === "number"
+                                                   );
+                                                const distAvg = dists.length
+                                                   ? Math.round(
+                                                        dists.reduce(
+                                                           (a, b) => a + b,
+                                                           0
+                                                        ) / dists.length
+                                                     )
+                                                   : null;
+
+                                                const meta =
+                                                   (window.criticalGeoData &&
+                                                      window.criticalGeoData
+                                                         .metadata) ||
+                                                   {};
+                                                const satName =
+                                                   meta.sensor ||
+                                                   meta.satellite ||
+                                                   meta.platform ||
+                                                   "Desconhecido";
+                                                const satDate =
+                                                   meta.date ||
+                                                   meta.acquisition_date ||
+                                                   meta.collection_date ||
+                                                   null;
+                                                const satNote =
+                                                   meta.note ||
+                                                   meta.notes ||
+                                                   null;
+
+                                                return (
+                                                   <div className="text-[11px] sm:text-xs text-gray-700 space-y-2">
+                                                      <div className="font-semibold text-gray-900">
+                                                         Resumo da região
+                                                      </div>
+                                                      <div className="grid grid-cols-2 gap-2">
+                                                         <div className="bg-gray-50 rounded-md p-2 border border-gray-200">
+                                                            <div className="text-[10px] text-gray-600">
+                                                               Críticos (região)
+                                                            </div>
+                                                            <div className="text-sm font-semibold text-gray-900">
+                                                               {
+                                                                  regionCritical.length
+                                                               }
+                                                            </div>
+                                                         </div>
+                                                         <div className="bg-gray-50 rounded-md p-2 border border-gray-200">
+                                                            <div className="text-[10px] text-gray-600">
+                                                               Todas (regra
+                                                               atual)
+                                                            </div>
+                                                            <div className="text-sm font-semibold text-gray-900">
+                                                               {
+                                                                  allPoints.length
+                                                               }
+                                                            </div>
+                                                         </div>
+                                                         <div className="bg-gray-50 rounded-md p-2 border border-gray-200">
+                                                            <div className="text-[10px] text-gray-600">
+                                                               NDVI médio
+                                                            </div>
+                                                            <div className="text-sm font-semibold text-gray-900">
+                                                               {ndviAvg !== null
+                                                                  ? ndviAvg.toFixed(
+                                                                       3
+                                                                    )
+                                                                  : "N/A"}
+                                                            </div>
+                                                         </div>
+                                                         <div className="bg-gray-50 rounded-md p-2 border border-gray-200">
+                                                            <div className="text-[10px] text-gray-600">
+                                                               NDVI min/max
+                                                            </div>
+                                                            <div className="text-sm font-semibold text-gray-900">
+                                                               {ndviMin !== null
+                                                                  ? ndviMin.toFixed(
+                                                                       3
+                                                                    )
+                                                                  : "N/A"}{" "}
+                                                               /{" "}
+                                                               {ndviMax !== null
+                                                                  ? ndviMax.toFixed(
+                                                                       3
+                                                                    )
+                                                                  : "N/A"}
+                                                            </div>
+                                                         </div>
+                                                         <div className="bg-gray-50 rounded-md p-2 border border-gray-200 col-span-2">
+                                                            <div className="text-[10px] text-gray-600">
+                                                               Distância média
+                                                               ao rio
+                                                            </div>
+                                                            <div className="text-sm font-semibold text-gray-900">
+                                                               {distAvg !== null
+                                                                  ? `${distAvg} m`
+                                                                  : "N/A"}
+                                                            </div>
+                                                         </div>
+                                                      </div>
+                                                      <div className="font-semibold text-gray-900 pt-1">
+                                                         Dados do satélite
+                                                      </div>
+                                                      <div className="space-y-1">
+                                                         <div>
+                                                            <span className="text-gray-600">
+                                                               Harmonized
+                                                               Landsat and
+                                                               Sentinel-2 (HLS)
+                                                            </span>
+                                                         </div>
+                                                         {satDate && (
+                                                            <div>
+                                                               <span className="text-gray-600">
+                                                                  Data de
+                                                                  aquisição:{" "}
+                                                               </span>
+                                                               <span className="font-medium text-gray-900">
+                                                                  {satDate}
+                                                               </span>
+                                                            </div>
+                                                         )}
+                                                         {satNote && (
+                                                            <div className="text-gray-600">
+                                                               {satNote}
+                                                            </div>
+                                                         )}
+                                                      </div>
+                                                   </div>
+                                                );
+                                             })()}
+                                          </div>
+                                       )}
+                                    </div>
                                  </div>
                               );
                            })()}
-
-                           {/* Dropdown Seleção */}
-                           <div className="relative inline-block text-left selection-container">
-                              <button
-                                 onClick={() => setIsSelectionOpen((v) => !v)}
-                                 className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-2 py-1 text-[10px] sm:text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
-                              >
-                                 <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[9px] sm:text-xs text-gray-600">
-                                    {selectedPoints.length}
-                                 </span>
-                                 <span className="hidden sm:inline">
-                                    Selecionados
-                                 </span>
-                                 <svg
-                                    className="ml-1 h-2 w-2 text-gray-500"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor"
-                                 >
-                                    <path
-                                       fillRule="evenodd"
-                                       d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
-                                       clipRule="evenodd"
-                                    />
-                                 </svg>
-                              </button>
-                              {isSelectionOpen && (
-                                 <div className="absolute right-0 z-20 mt-2 w-56 origin-top-right rounded-lg border border-gray-200 bg-white shadow-lg focus:outline-none">
-                                    <div className="py-1 text-xs text-gray-700">
-                                       <div className="px-3 py-2 text-[10px] text-gray-500">
-                                          {selectedPoints.length} ponto
-                                          {selectedPoints.length !== 1
-                                             ? "s"
-                                             : ""}{" "}
-                                          selecionado
-                                          {selectedPoints.length !== 1
-                                             ? "s"
-                                             : ""}
-                                       </div>
-                                       <button
-                                          onClick={() => {
-                                             handleSelectAllPoints();
-                                             setIsSelectionOpen(false);
-                                          }}
-                                          className="flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50"
-                                       >
-                                          <span className="flex items-center gap-2">
-                                             <Check className="h-3 w-3 text-[#2f4538]" />
-                                             {getFilteredPoints().every(
-                                                (point) =>
-                                                   selectedPoints.includes(
-                                                      point.properties.id ||
-                                                         point.geometry.coordinates.join(
-                                                            ","
-                                                         )
-                                                   )
-                                             )
-                                                ? "Desmarcar Todos"
-                                                : "Selecionar Todos"}
-                                          </span>
-                                          <span className="text-gray-500">
-                                             {getFilteredPoints().length}
-                                          </span>
-                                       </button>
-                                       <div className="my-1 h-px bg-gray-100" />
-                                       <button
-                                          disabled={selectedPoints.length === 0}
-                                          onClick={() => {
-                                             // Aqui você pode adicionar ações para os pontos selecionados
-                                             console.log(
-                                                "Pontos selecionados:",
-                                                selectedPoints
-                                             );
-                                             setIsSelectionOpen(false);
-                                          }}
-                                          className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${selectedPoints.length === 0 ? "cursor-not-allowed opacity-50" : ""}`}
-                                       >
-                                          <span className="flex items-center gap-2">
-                                             <BarChart3 className="h-3 w-3 text-blue-600" />
-                                             Análise
-                                          </span>
-                                          <span className="text-gray-500">
-                                             {selectedPoints.length}
-                                          </span>
-                                       </button>
-                                       <button
-                                          disabled={selectedPoints.length === 0}
-                                          onClick={() => {
-                                             // Aqui você pode adicionar ações para os pontos selecionados
-                                             console.log(
-                                                "Exportar pontos:",
-                                                selectedPoints
-                                             );
-                                             setIsSelectionOpen(false);
-                                          }}
-                                          className={`flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50 ${selectedPoints.length === 0 ? "cursor-not-allowed opacity-50" : ""}`}
-                                       >
-                                          <span className="flex items-center gap-2">
-                                             <Camera className="h-3 w-3 text-green-600" />
-                                             Exportar
-                                          </span>
-                                          <span className="text-gray-500">
-                                             {selectedPoints.length}
-                                          </span>
-                                       </button>
-                                       <div className="my-1 h-px bg-gray-100" />
-                                       <button
-                                          onClick={() => {
-                                             setSelectedPoints([]);
-                                             setIsSelectionOpen(false);
-                                          }}
-                                          className="flex w-full items-center justify-between px-3 py-2 hover:bg-gray-50"
-                                       >
-                                          <span className="flex items-center gap-2">
-                                             <X className="h-3 w-3 text-gray-600" />
-                                             Limpar seleção
-                                          </span>
-                                       </button>
-                                    </div>
-                                 </div>
-                              )}
-                           </div>
                         </div>
                      </div>
 
@@ -1844,7 +2188,7 @@ export default function AOIViewer() {
                                  <p className="text-sm">
                                     {criticalPoints.length === 0
                                        ? "Carregando pontos críticos..."
-                                       : `Nenhum ponto ${activeFilter === "all" ? "" : activeFilter === "critical" ? "crítico" : activeFilter === "moderate" ? "moderado" : "saudável"} encontrado.`}
+                                       : `Nenhum ponto ${activeFilter === "all" ? "" : activeFilter === "critical" ? "crítico" : "dos acompanhamentos"} encontrado.`}
                                  </p>
                               </div>
                            );
@@ -1853,16 +2197,16 @@ export default function AOIViewer() {
 
                      {/* Handle de Redimensionamento */}
                      <div
-                        className="absolute right-0 top-0 bottom-0 w-1 bg-gray-300 hover:bg-blue-500 cursor-ew-resize transition-colors duration-200 group"
+                        className="absolute right-0 top-0 bottom-0 cursor-ew-resize"
                         onMouseDown={handleResizeStart}
                         title="Arraste para redimensionar"
                      >
-                        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-8 bg-gray-300 group-hover:bg-blue-500 rounded-l-sm transition-colors duration-200 flex items-center justify-center">
+                        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-8 bg-gray-300 group-hover:bg-gray-400 rounded-l-sm transition-colors duration-200 flex items-center justify-center">
                            <div className="w-0.5 h-4 bg-white/60 rounded-full"></div>
                         </div>
                         {isResizing && (
                            <>
-                              <div className="absolute right-0 top-0 bottom-0 w-1 bg-blue-500"></div>
+                              <div className="absolute right-0 top-0 bottom-0"></div>
                               {/* Indicador de largura durante redimensionamento */}
                               <div className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white text-xs px-2 py-1 rounded shadow-lg z-50">
                                  {panelWidth}px

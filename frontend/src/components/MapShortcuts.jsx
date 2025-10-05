@@ -273,20 +273,6 @@ export default function MapShortcuts({
 
    return (
       <>
-         {/* Botões da Lateral Esquerda - Escondidos quando painel estiver aberto */}
-         {!showCards && !showAcompanhamentos && (
-            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-30 flex flex-col gap-2">
-               {/* Botão de Pontos Críticos */}
-               <button
-                  onClick={handleOpenCriticalPoints}
-                  className="w-12 h-12 bg-red-500/90 backdrop-blur-sm border border-red-400 hover:bg-red-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-red-500"
-                  title="Abrir pontos críticos"
-               >
-                  <MapPin className="h-5 w-5" />
-               </button>
-            </div>
-         )}
-
          {/* Atalhos do Mapa - Lado Direito */}
          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-30 flex flex-col gap-2">
             {/* Botão de Busca - Acima do zoom */}
@@ -674,7 +660,7 @@ export default function MapShortcuts({
 
                {/* Handle de Redimensionamento */}
                <div
-                  className="absolute right-0 top-0 bottom-0 w-1 bg-gray-300 hover:bg-blue-500 cursor-ew-resize transition-colors duration-200 group"
+                  className="absolute right-0 top-0 bottom-0 cursor-ew-resize"
                   onMouseDown={handleSatelliteResizeStart}
                   title="Arraste para redimensionar"
                >
