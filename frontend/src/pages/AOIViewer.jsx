@@ -684,7 +684,6 @@ export default function AOIViewer() {
                                  `
                               <div style="min-width:220px">
                                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                                    <span style="font-size:20px">${icons[classification.level]}</span>
                                     <div>
                                        <div><b style="color:${classification.color}">${classification.label}</b></div>
                                        <div style="font-size:12px;color:#666">NDVI: ${ndvi.toFixed(3)}</div>
@@ -697,7 +696,7 @@ export default function AOIViewer() {
                                  </div>
                                  <div style="font-size:10px;color:#888;border-top:1px solid #eee;padding-top:6px">
                                     📍 ${f.geometry.coordinates[1].toFixed(6)}, ${f.geometry.coordinates[0].toFixed(6)}
-                                    <br/>🛰️ Fonte: ${p.type || "HLS"} | 📅 ${criticalGeo.metadata?.analysis_date ? new Date(criticalGeo.metadata.analysis_date).toLocaleDateString() : "N/A"}
+                                    
                                  </div>
                              </div>
                            `
@@ -1203,7 +1202,7 @@ export default function AOIViewer() {
                         className={`h-2 w-2 sm:h-3 sm:w-3 rounded-full ${colors.indicator}`}
                      ></div>
                      <h4 className="text-xs sm:text-sm font-semibold text-gray-900">
-                        Ponto #{index + 1}
+                        {`Ponto #${props.id ?? index + 1}`}
                      </h4>
                      {isPointSelected && (
                         <Check className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600" />
