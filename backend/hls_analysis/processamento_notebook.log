@@ -1,0 +1,53 @@
+================================================================================
+HLS Analysis - Log de Processamento
+Data/Hora: 2025-10-04T21:10:08.310922
+================================================================================
+
+📋 CONFIGURAÇÕES:
+  - Período de análise: 2022-06-01 a 2022-09-30
+  - Cobertura máxima de nuvens: 50%
+  - Buffer mata ciliar: 200m
+  - Threshold crítico: 0.2
+  - Threshold moderado: 0.5
+  - Distância mínima entre pontos: 100m
+
+🛰️ DADOS HLS PROCESSADOS:
+  1. hls2-l30
+     Data: 2025-08-30
+     Nuvens: 0.0%
+     NDVI médio: 0.754
+     Pixels válidos: 969,943
+  2. hls2-s30
+     Data: 2025-09-13
+     Nuvens: 0.0%
+     NDVI médio: 0.753
+     Pixels válidos: 970,197
+  3. hls2-s30
+     Data: 2025-06-25
+     Nuvens: 0.0%
+     NDVI médio: 0.814
+     Pixels válidos: 964,578
+
+🌊 ANÁLISE DE DEGRADAÇÃO:
+  - Status geral: healthy
+  - NDVI médio: 0.708
+  - NDVI mín/máx: -0.472 / 0.965
+  - Pixels críticos: 1,147 (2.3%)
+  - Pixels moderados: 6,798 (13.7%)
+  - Pixels saudáveis: 41,786 (84.0%)
+
+📍 PONTOS CRÍTICOS GERADOS:
+  - Críticos: 14
+  - Moderados: 0
+  - Regulares: 0
+  - Água/Solo: 0
+  - Total: 14
+
+💾 ARQUIVOS GERADOS:
+  - GeoJSON: critical_points_mata_ciliar.geojson
+  - GeoTIFF: ndvi_mata_ciliar_wgs84_normalized.geotiff
+  - Log: processamento_notebook.log
+
+================================================================================
+Processamento concluído com sucesso!
+================================================================================
