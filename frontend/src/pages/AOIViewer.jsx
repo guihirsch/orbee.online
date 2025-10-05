@@ -1399,7 +1399,21 @@ export default function AOIViewer() {
             } h-fit`}
             onClick={() => {
                setSelectedPoint(isSelected ? null : index);
-               handlePointSelection(point);
+               if (
+                  mapRef.current &&
+                  Array.isArray(coords) &&
+                  coords.length === 2
+               ) {
+                  try {
+                     mapRef.current.flyTo({
+                        center: [coords[0], coords[1]],
+                        zoom: 16,
+                        speed: 1.2,
+                        curve: 1.42,
+                        essential: true,
+                     });
+                  } catch {}
+               }
             }}
          >
             <div
@@ -1409,15 +1423,20 @@ export default function AOIViewer() {
             <div className="relative z-10">
                <div className="mb-2 sm:mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-1 sm:gap-2">
-                     <div
-                        className={`h-2 w-2 sm:h-3 sm:w-3 rounded-full ${colors.indicator}`}
-                     ></div>
+                     <input
+                        type="checkbox"
+                        checked={isPointSelected}
+                        onChange={(e) => {
+                           e.stopPropagation();
+                           handlePointSelection(point);
+                        }}
+                        className="h-3 w-3 sm:h-4 sm:w-4 accent-[#2f4538] cursor-pointer"
+                        title="Selecionar ponto"
+                        onClick={(e) => e.stopPropagation()}
+                     />
                      <h4 className="text-xs sm:text-sm font-semibold text-gray-900">
                         {`Ponto #${props.id ?? index + 1}`}
                      </h4>
-                     {isPointSelected && (
-                        <Check className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600" />
-                     )}
                   </div>
                   <span
                      className={`rounded-full ${colors.badge} px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold`}
@@ -1810,35 +1829,36 @@ export default function AOIViewer() {
                         <div className="flex items-center gap-2">
                            {(() => {
                               const filteredPoints = getFilteredPoints();
-                              const totalCritical = criticalPoints.filter(
-                                 (p) => p.properties.severity === "critical"
-                              ).length;
-                              const watchSet = new Set(watchlist);
-                              const totalWatchlist = criticalPoints.filter(
-                                 (p) => {
-                                    const id =
-                                       p.properties.id ||
-                                       p.geometry.coordinates.join(",");
-                                    return watchSet.has(id);
-                                 }
-                              ).length;
 
-                              // Todas = união de críticos + watchlist
-                              const totalAll = (() => {
-                                 const union = new Set();
-                                 criticalPoints.forEach((p) => {
-                                    const id =
-                                       p.properties.id ||
-                                       p.geometry.coordinates.join(",");
-                                    if (
-                                       p.properties.severity === "critical" ||
-                                       watchSet.has(id)
-                                    ) {
-                                       union.add(id);
-                                    }
-                                 });
-                                 return union.size;
-                              })();
+                              // Conjuntos de IDs para contagens consistentes
+                              const toId = (p) =>
+                                 p.properties.id ||
+                                 p.geometry.coordinates.join(",");
+                              const watchSet = new Set(watchlist);
+
+                              const criticalIdSet = new Set(
+                                 criticalPoints
+                                    .filter(
+                                       (p) =>
+                                          p.properties.severity === "critical"
+                                    )
+                                    .map((p) => toId(p))
+                              );
+
+                              const watchlistIdSet = new Set(
+                                 criticalPoints
+                                    .filter((p) => watchSet.has(toId(p)))
+                                    .map((p) => toId(p))
+                              );
+
+                              const unionAllIdSet = new Set([
+                                 ...criticalIdSet,
+                                 ...watchlistIdSet,
+                              ]);
+
+                              const totalCritical = criticalIdSet.size;
+                              const totalWatchlist = watchlistIdSet.size;
+                              const totalAll = unionAllIdSet.size;
 
                               const currentLabel =
                                  activeFilter === "all"
