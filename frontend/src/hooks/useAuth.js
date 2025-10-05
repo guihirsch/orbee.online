@@ -1,7 +1,5 @@
-import { useAuthContext } from "../contexts/AuthContext";
+import { useAuth as useAuthContext } from "../components/contexts/AuthContext";
 
-export function useAuth() {
+export default function useAuth() {
    return useAuthContext();
 }
-
-export default useAuth;

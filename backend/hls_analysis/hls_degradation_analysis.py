@@ -11,13 +11,49 @@ import geopandas as gpd
 from shapely.geometry import Point
 import rasterio
 from pyproj import Transformer
+import hashlib
+from datetime import datetime
 
-# Configurações globais
-NDVI_CRITICAL_THRESHOLD = 0.2
-NDVI_MODERATE_THRESHOLD = 0.5
-MIN_DISTANCE_POINTS = 100
-MAX_POINTS_PER_SEVERITY = 50
-BUFFER_DISTANCE_RIVER = 200
+# Importar configurações centralizadas
+try:
+    from .config_hls import get_config
+except ImportError:
+    from config_hls import get_config
+
+# Carregar configurações centralizadas
+config = get_config()
+
+# Configurações globais (usando configurações centralizadas)
+NDVI_CRITICAL_THRESHOLD = config['ndvi']['critical_threshold']
+NDVI_MODERATE_THRESHOLD = config['ndvi']['moderate_threshold']
+MIN_DISTANCE_POINTS = config['points']['min_distance']
+MAX_POINTS_PER_SEVERITY = config['points']['max_per_severity']
+BUFFER_DISTANCE_RIVER = config['degradation']['buffer_distance_river']
+
+def generate_unique_point_id(lat, lon, ndvi_value=None, timestamp=None):
+    """
+    Gera um ID único para cada ponto baseado APENAS nas coordenadas geográficas
+    Isso permite referenciar o mesmo local em análises futuras
+    
+    Args:
+        lat: Latitude do ponto (WGS84)
+        lon: Longitude do ponto (WGS84)
+        ndvi_value: Valor NDVI (não usado no ID, apenas para compatibilidade)
+        timestamp: Timestamp (não usado no ID, apenas para compatibilidade)
+    
+    Returns:
+        str: ID único no formato 'hls_point_<hash>' baseado apenas nas coordenadas
+    """
+    # Criar string única baseada APENAS nas coordenadas
+    # Usar precisão de 6 casas decimais para coordenadas (aproximadamente 0.1m de precisão)
+    # Isso garante que o mesmo local geográfico sempre tenha o mesmo ID
+    unique_string = f"{lat:.6f}_{lon:.6f}"
+    
+    # Gerar hash SHA-256 e usar primeiros 12 caracteres
+    hash_object = hashlib.sha256(unique_string.encode())
+    hash_hex = hash_object.hexdigest()[:12]
+    
+    return f"hls_point_{hash_hex}"
 
 def classify_vegetation_degradation(ndvi_value):
     """Classifica a cobertura/condição da vegetação baseada no NDVI"""
@@ -357,6 +393,34 @@ def generate_points_from_real_ndvi(degradation_analysis, river_buffer_geom, max_
     print(f"      - Bounds: {river_buffer_geom.bounds}")
     print(f"      - Área: {river_buffer_geom.area:.2f} graus²")
     
+    # Usar a geometria do rio que foi carregada durante a busca da AOI
+    print(f"   🌊 Usando geometria do rio da análise de degradação para cálculo de distância...")
+    
+    # Extrair a geometria do rio do buffer da análise de degradação
+    # O buffer foi criado a partir dos rios originais, então podemos usar isso
+    river_geom_utm = None
+    
+    # Tentar obter a geometria do rio original do buffer
+    try:
+        # O buffer contém a geometria dos rios + 200m, então vamos extrair apenas os rios
+        # Para isso, vamos usar uma aproximação: assumir que o centro do buffer está próximo ao rio
+        buffer_centroid = river_buffer_geom.centroid
+        print(f"   📍 Centro do buffer (aproximação do rio): ({buffer_centroid.x:.6f}, {buffer_centroid.y:.6f})")
+        
+        # Converter para UTM para cálculo de distância
+        ndvi_crs = ndvi_clipped.rio.crs
+        buffer_gdf_temp = gpd.GeoDataFrame([1], geometry=[buffer_centroid], crs='EPSG:4326')
+        river_centroid_utm = buffer_gdf_temp.to_crs(ndvi_crs).geometry.iloc[0]
+        
+        # Usar o centro como aproximação do rio para cálculo de distância
+        river_geom_utm = river_centroid_utm
+        print(f"   ✅ Usando centro do buffer como aproximação do rio para cálculo de distância")
+        
+    except Exception as e:
+        print(f"   ⚠️ Erro ao extrair geometria do rio: {e}")
+        print("   ⚠️ Usando distância padrão de 0m")
+        river_geom_utm = None
+    
     # Converter buffer do rio para o mesmo CRS do NDVI
     ndvi_crs = ndvi_clipped.rio.crs
     print(f"   🔄 Convertendo buffer do rio para CRS do NDVI: {ndvi_crs}")
@@ -364,14 +428,58 @@ def generate_points_from_real_ndvi(degradation_analysis, river_buffer_geom, max_
     # Verificar se o CRS está correto (agora as bandas já vêm com CRS correto)
     print(f"   ✅ NDVI já está no CRS correto: {ndvi_crs}")
     
-    # Criar GeoDataFrame temporário para conversão
-    river_gdf_temp = gpd.GeoDataFrame([1], geometry=[river_buffer_geom], crs='EPSG:4326')
-    river_buffer_utm = river_gdf_temp.to_crs(ndvi_crs)
-    river_buffer_geom_utm = river_buffer_utm.geometry.iloc[0]
+    # Verificar se o buffer já está no CRS correto
+    print(f"   🔍 Verificando CRS do buffer:")
+    print(f"      - Buffer bounds: {river_buffer_geom.bounds}")
+    print(f"      - NDVI CRS: {ndvi_crs}")
     
-    print(f"   ✅ Buffer convertido para UTM")
-    print(f"      - Bounds UTM: {river_buffer_geom_utm.bounds}")
-    print(f"      - Área UTM: {river_buffer_geom_utm.area:.2f} m²")
+    # Verificar se as coordenadas já estão em UTM (valores grandes)
+    bounds = river_buffer_geom.bounds
+    minx, miny, maxx, maxy = bounds
+    
+    # Se as coordenadas são grandes (> 1000), provavelmente já estão em UTM
+    if minx > 1000 and miny > 1000:
+        print(f"   ✅ Buffer já está em UTM, usando diretamente")
+        river_buffer_geom_utm = river_buffer_geom
+    else:
+        print(f"   🔄 Convertendo buffer de WGS84 para UTM...")
+        
+        # Validar geometria original antes da conversão
+        print(f"   🔍 Validando geometria original:")
+        print(f"      - Buffer WGS84 válido: {river_buffer_geom.is_valid}")
+        print(f"      - Buffer WGS84 bounds: {river_buffer_geom.bounds}")
+        print(f"      - Buffer WGS84 área: {river_buffer_geom.area:.10f}")
+        
+        if not river_buffer_geom.is_valid:
+            print(f"   ⚠️ Geometria inválida detectada! Aplicando correção...")
+            river_buffer_geom = river_buffer_geom.buffer(0)  # Correção de geometria inválida
+            print(f"      - Após correção - Válido: {river_buffer_geom.is_valid}")
+        
+        # Verificar se a geometria está vazia
+        if river_buffer_geom.is_empty:
+            print(f"   ❌ Geometria do buffer está vazia!")
+            return None
+        
+        try:
+            # Criar GeoDataFrame temporário para conversão
+            river_gdf_temp = gpd.GeoDataFrame([1], geometry=[river_buffer_geom], crs='EPSG:4326')
+            river_buffer_utm = river_gdf_temp.to_crs(ndvi_crs)
+            river_buffer_geom_utm = river_buffer_utm.geometry.iloc[0]
+            
+            print(f"   ✅ Buffer convertido para UTM")
+            print(f"      - Bounds UTM: {river_buffer_geom_utm.bounds}")
+            print(f"      - Área UTM: {river_buffer_geom_utm.area:.2f} m²")
+            
+            # Verificar se a conversão resultou em geometria válida
+            if not river_buffer_geom_utm.is_valid or river_buffer_geom_utm.is_empty:
+                print(f"   ❌ Conversão UTM resultou em geometria inválida ou vazia!")
+                print(f"      - Válido: {river_buffer_geom_utm.is_valid}")
+                print(f"      - Vazio: {river_buffer_geom_utm.is_empty}")
+                return None
+                
+        except Exception as e:
+            print(f"   ❌ Erro na conversão UTM: {e}")
+            return None
     
     # Verificar se há problema de hemisfério (coordenadas Y negativas vs positivas)
     ndvi_bounds = ndvi_clipped.rio.bounds()
@@ -382,8 +490,32 @@ def generate_points_from_real_ndvi(degradation_analysis, river_buffer_geom, max_
     print(f"      - NDVI Y center: {ndvi_y_center}")
     print(f"      - Buffer Y center: {buffer_y_center}")
     
+    # Verificar se há bounds infinitos (problema de conversão)
+    bounds = river_buffer_geom_utm.bounds
+    if any(not np.isfinite(b) for b in bounds):
+        print(f"   ❌ Bounds infinitos detectados após conversão UTM!")
+        print(f"   🔧 Aplicando fallback: usando buffer da AOI diretamente...")
+        
+        # Fallback: usar o buffer da análise de degradação diretamente
+        if 'buffer_geometry' in degradation_analysis:
+            print(f"   📍 Usando buffer da análise de degradação como fallback")
+            buffer_gdf = degradation_analysis['buffer_geometry']
+            buffer_geom_wgs84 = buffer_gdf.geometry.iloc[0]
+            
+            # Converter para UTM usando o mesmo CRS do NDVI
+            buffer_gdf_temp = gpd.GeoDataFrame([1], geometry=[buffer_geom_wgs84], crs='EPSG:4326')
+            buffer_utm = buffer_gdf_temp.to_crs(ndvi_crs)
+            river_buffer_geom_utm = buffer_utm.geometry.iloc[0]
+            
+            print(f"   ✅ Fallback aplicado com sucesso")
+            print(f"      - Bounds UTM fallback: {river_buffer_geom_utm.bounds}")
+            print(f"      - Área UTM fallback: {river_buffer_geom_utm.area:.2f} m²")
+        else:
+            print(f"   ❌ Nenhum fallback disponível!")
+            return None
+    
     # Se há incompatibilidade de hemisfério, corrigir
-    if (ndvi_y_center < 0 and buffer_y_center > 0) or (ndvi_y_center > 0 and buffer_y_center < 0):
+    elif (ndvi_y_center < 0 and buffer_y_center > 0) or (ndvi_y_center > 0 and buffer_y_center < 0):
         print(f"   ⚠️ Incompatibilidade de hemisfério detectada!")
         print(f"   🔧 Aplicando correção de hemisfério...")
         
@@ -451,6 +583,19 @@ def generate_points_from_real_ndvi(degradation_analysis, river_buffer_geom, max_
             if is_inside:
                 ndvi_value = float(ndvi_array.values[y_idx, x_idx])
                 
+                # Calcular distância do rio
+                distance_to_river_m = 0
+                if river_geom_utm is not None:
+                    try:
+                        point_geom = Point(easting, northing)
+                        distance_to_river_m = float(point_geom.distance(river_geom_utm))
+                        # Debug: mostrar algumas distâncias calculadas
+                        if len(points) < 3:  # Mostrar apenas os primeiros 3 para debug
+                            print(f"      Debug - Distância do rio: {distance_to_river_m:.1f}m")
+                    except Exception as e:
+                        print(f"      ⚠️ Erro ao calcular distância do rio: {e}")
+                        distance_to_river_m = 0
+                
                 # Determinar categoria baseada no valor NDVI
                 if ndvi_value < NDVI_CRITICAL_THRESHOLD:
                     severity = 'critical'
@@ -468,16 +613,27 @@ def generate_points_from_real_ndvi(degradation_analysis, river_buffer_geom, max_
                     color = '#228B22'
                     label = 'Vegetação densa e saudável'
                 
+                # Converter coordenadas UTM para WGS84 para gerar ID único
+                transformer = Transformer.from_crs("EPSG:32722", "EPSG:4326", always_xy=True)
+                lon_wgs84, lat_wgs84 = transformer.transform(easting, northing)
+                
+                # Gerar ID único para o ponto
+                point_id = generate_unique_point_id(lat_wgs84, lon_wgs84, ndvi_value)
+                
                 points.append({
+                    'id': point_id,  # ID único gerado
                     'lat': northing,  # northing é a coordenada Y UTM
                     'lon': easting,   # easting é a coordenada X UTM
+                    'lat_wgs84': lat_wgs84,  # Latitude WGS84 para referência
+                    'lon_wgs84': lon_wgs84,  # Longitude WGS84 para referência
                     'ndvi': ndvi_value,
                     'severity': severity,
                     'level': level,
                     'color': color,
                     'label': label,
                     'description': f"Área real - NDVI {ndvi_value:.3f}",
-                    'source': 'real_ndvi_analysis'
+                    'source': 'real_ndvi_analysis',
+                    'distance_to_river_m': distance_to_river_m
                 })
         
         return points

@@ -18,6 +18,12 @@ from pathlib import Path
 # Configurações de warnings
 warnings.filterwarnings('ignore')
 
+# Importar configurações centralizadas
+try:
+    from .config_hls import get_config
+except ImportError:
+    from config_hls import get_config
+
 # Importações principais
 import pystac_client
 import planetary_computer as pc
@@ -36,20 +42,23 @@ import stackstac
 import xarray as xr
 from pyproj import Transformer
 
-# Configurações globais
+# Carregar configurações centralizadas
+config = get_config()
+
+# Configurações globais (usando configurações centralizadas)
 AOI_FILE = "export.geojson"
-BUFFER_DISTANCE = 200  # Buffer de mata ciliar em metros
+BUFFER_DISTANCE = config['degradation']['buffer_distance']
 CRS_WGS84 = "EPSG:4326"
-START_DATE = "2022-06-01"
-END_DATE = "2022-09-30"
-CLOUD_COVERAGE_MAX = 50
-NDVI_CRITICAL_THRESHOLD = 0.2
-NDVI_MODERATE_THRESHOLD = 0.5
-MIN_VALID_PIXELS = 0.05
-MIN_DISTANCE_POINTS = 100
-MAX_POINTS_PER_SEVERITY = 50
-BUFFER_DISTANCE_RIVER = 200
-SAMPLING_STEP = 3
+START_DATE = config['search']['start_date']
+END_DATE = config['search']['end_date']
+CLOUD_COVERAGE_MAX = config['search']['cloud_coverage_max']
+NDVI_CRITICAL_THRESHOLD = config['ndvi']['critical_threshold']
+NDVI_MODERATE_THRESHOLD = config['ndvi']['moderate_threshold']
+MIN_VALID_PIXELS = config['ndvi']['min_valid_pixels']
+MIN_DISTANCE_POINTS = config['points']['min_distance']
+MAX_POINTS_PER_SEVERITY = config['points']['max_per_severity']
+BUFFER_DISTANCE_RIVER = config['degradation']['buffer_distance_river']
+SAMPLING_STEP = config['points']['sampling_step']
 
 # Nomes das coleções HLS
 HLS_COLLECTIONS = [

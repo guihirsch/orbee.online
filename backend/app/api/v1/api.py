@@ -10,7 +10,8 @@ from app.api.v1.endpoints import (
     aoi,
     geo,
     plan,
-    cache
+    cache,
+    hls_analysis_points
 )
 
 api_router = APIRouter()
@@ -74,4 +75,10 @@ api_router.include_router(
     cache.router,
     prefix="/cache",
     tags=["cache"]
+)
+
+api_router.include_router(
+    hls_analysis_points.router,
+    prefix="/hls-analysis-points",
+    tags=["hls-analysis-points"]
 )

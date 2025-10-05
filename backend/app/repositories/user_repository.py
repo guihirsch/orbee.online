@@ -79,14 +79,26 @@ class UserRepository:
                 raise UserAlreadyExistsError(f"Usuário com email {user_data.email} já existe")
             
             print(f"DEBUG: Preparando dados do usuário...")
-            # Preparar dados do usuário
-            user_dict = user_data.dict(exclude={"password", "role"})  # Excluir role temporariamente
-            print(f"DEBUG: Dados do usuário (sem senha e role): {user_dict}")
+            # Preparar dados do usuário - apenas campos obrigatórios
+            user_dict = {
+                "email": user_data.email,
+                "full_name": user_data.full_name,
+                "password_hash": self._hash_password(user_data.password),
+                "username": user_data.email.split("@")[0],  # Username baseado no email
+                "role": "citizen",  # Role padrão
+                "is_active": True
+            }
             
-            print(f"DEBUG: Fazendo hash da senha...")
-            user_dict["password_hash"] = self._hash_password(user_data.password)
-            user_dict["username"] = user_data.email.split("@")[0]  # Username temporário
-            
+            # Adicionar campos opcionais apenas se fornecidos
+            if user_data.username:
+                user_dict["username"] = user_data.username
+            if user_data.bio:
+                user_dict["bio"] = user_data.bio
+            if user_data.location:
+                user_dict["location"] = user_data.location
+            if user_data.avatar_url:
+                user_dict["avatar_url"] = user_data.avatar_url
+                
             print(f"DEBUG: Dados finais para inserção: {user_dict}")
             print(f"DEBUG: Inserindo no Supabase...")
             
@@ -157,62 +169,71 @@ class UserRepository:
             logger.error(f"Erro ao desativar usuário: {e}")
             return False
     
-    async def get_top_users_by_points(self, limit: int = 10) -> List[User]:
-        """Retorna usuários com mais pontos"""
+    async def get_recent_users(self, limit: int = 10) -> List[User]:
+        """Retorna usuários mais recentes"""
         try:
             self._check_supabase()
             response = (
                 self.supabase.table(self.table)
                 .select("*")
                 .eq("is_active", True)
-                .order("points", desc=True)
+                .order("created_at", desc=True)
                 .limit(limit)
                 .execute()
             )
             if response.data:
                 return [User(**user) for user in response.data]
         except Exception as e:
-            logger.error(f"Erro ao buscar top usuários: {e}")
+            logger.error(f"Erro ao buscar usuários recentes: {e}")
             pass
         
         # Dados mockados para desenvolvimento
-        mock_leaderboard = [
+        mock_users = [
             User(
                 id="maria-user-id",
                 email="maria@example.com",
-                name="Maria Silva",
+                full_name="Maria Silva",
+                username="maria_silva",
+                role="citizen",
+                bio="Pesquisadora em ecologia",
                 location="Campinas, SP",
-                created_at="2024-01-01T00:00:00Z",
+                avatar_url=None,
                 is_active=True,
-                points=250,
-                observations_count=8,
-                validations_count=15
+                created_at=datetime.utcnow(),
+                updated_at=datetime.utcnow(),
+                last_login=None
             ),
             User(
                 id="joao-user-id",
                 email="joao@example.com",
-                name="João Santos",
+                full_name="João Santos",
+                username="joao_santos",
+                role="researcher",
+                bio="Especialista em sensoriamento remoto",
                 location="São Paulo, SP",
-                created_at="2024-01-01T00:00:00Z",
+                avatar_url=None,
                 is_active=True,
-                points=180,
-                observations_count=6,
-                validations_count=12
+                created_at=datetime.utcnow(),
+                updated_at=datetime.utcnow(),
+                last_login=None
             ),
             User(
                 id="ana-user-id",
                 email="ana@example.com",
-                name="Ana Costa",
+                full_name="Ana Costa",
+                username="ana_costa",
+                role="citizen",
+                bio="Ativista ambiental",
                 location="Rio de Janeiro, RJ",
-                created_at="2024-01-01T00:00:00Z",
+                avatar_url=None,
                 is_active=True,
-                points=150,
-                observations_count=5,
-                validations_count=10
+                created_at=datetime.utcnow(),
+                updated_at=datetime.utcnow(),
+                last_login=None
             )
         ]
         
-        return mock_leaderboard[:limit]
+        return mock_users[:limit]
     
     async def search_users(self, query: str, limit: int = 20) -> List[User]:
         """Busca usuários por nome ou localização"""
@@ -221,7 +242,7 @@ class UserRepository:
             response = (
                 self.supabase.table(self.table)
                 .select("*")
-                .or_(f"name.ilike.%{query}%,location.ilike.%{query}%")
+                .or_(f"full_name.ilike.%{query}%,location.ilike.%{query}%")
                 .eq("is_active", True)
                 .limit(limit)
                 .execute()
@@ -233,12 +254,12 @@ class UserRepository:
             pass
         
         # Busca mockada para desenvolvimento
-        all_users = await self.get_top_users_by_points(50)
+        all_users = await self.get_recent_users(50)
         query_lower = query.lower()
         
         filtered_users = [
             user for user in all_users
-            if query_lower in user.name.lower() or 
+            if query_lower in user.full_name.lower() or 
                (user.location and query_lower in user.location.lower())
         ]
         

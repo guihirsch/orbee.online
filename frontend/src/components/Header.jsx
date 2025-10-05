@@ -1,11 +1,38 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import AuthButton from "./auth/AuthButton";
-import AuthModal from "./auth/AuthModal";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, X, User, LogOut } from "lucide-react";
+import useAuth from "../hooks/useAuth";
+import AuthModal from "./AuthModal";
 
 const Header = () => {
    const [isMenuOpen, setIsMenuOpen] = useState(false);
    const [showAuthModal, setShowAuthModal] = useState(false);
+   const [authMode, setAuthMode] = useState("login");
+   const { user, logout, isAuthenticated } = useAuth();
+   const navigate = useNavigate();
+
+   const handleAuthClick = (mode) => {
+      setAuthMode(mode);
+      setShowAuthModal(true);
+   };
+
+   const handleLogout = () => {
+      logout();
+      setIsMenuOpen(false);
+   };
+
+   const handlePlataformaClick = (e) => {
+      if (!isAuthenticated) {
+         e.preventDefault();
+         setAuthMode("login");
+         setShowAuthModal(true);
+         setIsMenuOpen(false);
+      }
+   };
+
+   const handleLoginSuccess = () => {
+      navigate("/aoi-viewer");
+   };
 
    const navItems = [
       { name: "Início", href: "#hero" },
@@ -109,28 +136,49 @@ const Header = () => {
                <div className="flex items-center gap-4">
                   <Link
                      to="/plataforma"
+                     onClick={handlePlataformaClick}
                      className="hidden rounded-full bg-[#2f4538] px-6 py-2 font-medium text-white shadow-sm transition-colors hover:bg-[#2f4538]/80 md:block"
                   >
                      Plataforma
                   </Link>
-                  <AuthButton onOpenAuthModal={() => setShowAuthModal(true)} />
+
+                  {/* Auth Section */}
+                  {isAuthenticated ? (
+                     <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 text-sm text-gray-700">
+                           <User className="w-4 h-4" />
+                           <span className="hidden sm:inline">
+                              {user?.full_name}
+                           </span>
+                        </div>
+                        <button
+                           onClick={handleLogout}
+                           className="flex items-center gap-1 text-sm text-gray-600 hover:text-[#2f4538] transition-colors"
+                        >
+                           <LogOut className="w-4 h-4" />
+                           <span className="hidden sm:inline">Sair</span>
+                        </button>
+                     </div>
+                  ) : (
+                     <div className="flex items-center gap-2">
+                        <button
+                           onClick={() => handleAuthClick("login")}
+                           className="text-gray-700 hover:text-[#2f4538] transition-colors"
+                        >
+                           Entrar
+                        </button>
+                     </div>
+                  )}
+
                   <button
                      className="p-2 text-[#2f4538] md:hidden"
                      onClick={() => setIsMenuOpen(!isMenuOpen)}
                   >
-                     <svg
-                        className="h-6 w-6"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                     >
-                        <path
-                           strokeLinecap="round"
-                           strokeLinejoin="round"
-                           strokeWidth={2}
-                           d="M4 6h16M4 12h16M4 18h16"
-                        />
-                     </svg>
+                     {isMenuOpen ? (
+                        <X className="w-6 h-6" />
+                     ) : (
+                        <Menu className="w-6 h-6" />
+                     )}
                   </button>
                </div>
             </div>
@@ -166,13 +214,34 @@ const Header = () => {
                   </nav>
                   <Link
                      to="/plataforma"
-                     onClick={() => {
-                        setIsMenuOpen(false);
-                     }}
+                     onClick={handlePlataformaClick}
                      className="mt-4 rounded-full bg-[#2f4538] px-6 py-2 text-center font-medium text-white shadow-sm transition-colors hover:bg-[#2f4538]/80"
                   >
                      Plataforma
                   </Link>
+
+                  {!isAuthenticated && (
+                     <div className="pt-4 border-t border-gray-200 space-y-2">
+                        <button
+                           onClick={() => {
+                              handleAuthClick("login");
+                              setIsMenuOpen(false);
+                           }}
+                           className="block w-full text-left text-gray-700 hover:text-[#2f4538] transition-colors"
+                        >
+                           Entrar
+                        </button>
+                        <button
+                           onClick={() => {
+                              handleAuthClick("register");
+                              setIsMenuOpen(false);
+                           }}
+                           className="block w-full text-left bg-[#2f4538] text-white px-4 py-2 rounded-lg hover:bg-[#1f2e1f] transition-colors"
+                        >
+                           Criar Conta
+                        </button>
+                     </div>
+                  )}
                </div>
             )}
          </header>
@@ -181,7 +250,8 @@ const Header = () => {
          <AuthModal
             isOpen={showAuthModal}
             onClose={() => setShowAuthModal(false)}
-            initialMode="login"
+            initialMode={authMode}
+            onSuccessRedirect={handleLoginSuccess}
          />
       </>
    );

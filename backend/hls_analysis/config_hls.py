@@ -9,8 +9,8 @@ Arquivo centralizado de configurações para personalizar a análise
 # =============================================================================
 
 # Período de análise
-START_DATE = "2022-06-01"
-END_DATE = "2022-09-30"
+START_DATE = "2025-06-01"
+END_DATE = "2025-09-30"
 
 # Cobertura máxima de nuvens (0-100%)
 CLOUD_COVERAGE_MAX = 50
@@ -20,9 +20,6 @@ HLS_COLLECTIONS = [
     "hls2-l30",  # HLS Landsat 30m v2.0
     "hls2-s30"   # HLS Sentinel-2 30m v2.0
 ]
-
-# Máximo de itens HLS a serem processados
-MAX_HLS_ITEMS = 3
 
 # =============================================================================
 # CONFIGURAÇÕES DE PROCESSAMENTO NDVI
@@ -35,9 +32,6 @@ NDVI_MODERATE_THRESHOLD = 0.5   # Limite para separar vegetação esparsa de den
 # Mínimo de pixels válidos para análise (fração 0-1)
 MIN_VALID_PIXELS = 0.05
 
-# Configurações de escala HLS
-HLS_SCALE_FACTOR = 10000.0  # Fator para converter valores HLS para reflectância
-
 # =============================================================================
 # CONFIGURAÇÕES DE ANÁLISE DE DEGRADAÇÃO
 # =============================================================================
@@ -47,14 +41,6 @@ BUFFER_DISTANCE = 200
 
 # Buffer específico do rio em metros
 BUFFER_DISTANCE_RIVER = 200
-
-# Configurações de classificação de status geral
-STATUS_THRESHOLDS = {
-    'severely_degraded': 0.3,    # Fração crítica > 30%
-    'moderately_degraded': 0.1,  # Fração crítica > 10% OU moderada > 40%
-    'at_risk': 0.2,              # Fração moderada > 20%
-    'healthy': 0.0                # Demais casos
-}
 
 # =============================================================================
 # CONFIGURAÇÕES DE GERAÇÃO DE PONTOS CRÍTICOS
@@ -81,117 +67,6 @@ GEOJSON_FILENAME = "critical_points_mata_ciliar.geojson"
 GEOTIFF_FILENAME = "ndvi_mata_ciliar_wgs84_normalized.geotiff"
 LOG_FILENAME = "processamento_notebook.log"
 
-# Configurações do GeoTIFF
-GEOTIFF_CONFIG = {
-    'driver': 'GTiff',
-    'compress': 'lzw',
-    'dtype': 'float32'
-}
-
-# =============================================================================
-# CONFIGURAÇÕES DE VISUALIZAÇÃO
-# =============================================================================
-
-# Configurações de cores para classificação
-COLORS = {
-    'no_data': '#808080',
-    'non_vegetated': '#0066CC',
-    'very_sparse': '#DC143C',
-    'sparse': '#FF8C00',
-    'dense': '#228B22',
-    'extremely_dense': '#006400'
-}
-
-# Configurações de labels
-LABELS = {
-    'no_data': 'Sem Dados',
-    'non_vegetated': 'Sem vegetação (água/nuvem/neve/rocha)',
-    'very_sparse': 'Vegetação muito rala / solo exposto',
-    'sparse': 'Vegetação esparsa / em regeneração',
-    'dense': 'Vegetação densa e saudável',
-    'extremely_dense': 'Cobertura extremamente densa (rara)'
-}
-
-# =============================================================================
-# CONFIGURAÇÕES DE LOGGING
-# =============================================================================
-
-# Nível de log (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-LOG_LEVEL = "INFO"
-
-# Formato do log
-LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-
-# =============================================================================
-# CONFIGURAÇÕES DE PERFORMANCE
-# =============================================================================
-
-# Tamanho dos chunks para processamento
-CHUNK_SIZE = {'x': 512, 'y': 512}
-
-# Configurações de memória
-MEMORY_LIMIT = "2GB"  # Limite de memória para processamento
-
-# Configurações de paralelização
-PARALLEL_WORKERS = 4
-
-# =============================================================================
-# CONFIGURAÇÕES DE FALLBACK
-# =============================================================================
-
-# Caminhos para arquivos de fallback
-FALLBACK_PATHS = {
-    'aoi': [
-        "../../export.geojson",
-        "../data/export.geojson",
-        "export.geojson",
-        "../scripts/data/export.geojson"
-    ],
-    'rio': [
-        "../../public/rio.geojson",
-        "../public/rio.geojson",
-        "rio.geojson",
-        "export.geojson",
-        "../data/export.geojson"
-    ]
-}
-
-# Configurações de AOI de exemplo
-EXAMPLE_AOI = {
-    'name': 'Sinimbu/RS',
-    'coordinates': [
-        [-52.5, -29.4], [-52.4, -29.4],
-        [-52.4, -29.5], [-52.5, -29.5], [-52.5, -29.4]
-    ]
-}
-
-# =============================================================================
-# CONFIGURAÇÕES DE VALIDAÇÃO
-# =============================================================================
-
-# Tolerância para validação de consistência
-VALIDATION_TOLERANCE = 0.2  # 20%
-
-# Configurações de validação de coordenadas
-COORDINATE_VALIDATION = {
-    'min_lat': -90.0,
-    'max_lat': 90.0,
-    'min_lon': -180.0,
-    'max_lon': 180.0
-}
-
-# =============================================================================
-# CONFIGURAÇÕES DE METADADOS
-# =============================================================================
-
-# Metadados padrão para exportação
-DEFAULT_METADATA = {
-    'data_source': 'HLS (Harmonized Landsat Sentinel)',
-    'processing_software': 'HLS Analysis Python Scripts',
-    'version': '1.0.0',
-    'contact': 'orbee.online',
-    'license': 'MIT'
-}
 
 # =============================================================================
 # FUNÇÕES DE CONFIGURAÇÃO
@@ -204,19 +79,16 @@ def get_config():
             'start_date': START_DATE,
             'end_date': END_DATE,
             'cloud_coverage_max': CLOUD_COVERAGE_MAX,
-            'hls_collections': HLS_COLLECTIONS,
-            'max_hls_items': MAX_HLS_ITEMS
+            'hls_collections': HLS_COLLECTIONS
         },
         'ndvi': {
             'critical_threshold': NDVI_CRITICAL_THRESHOLD,
             'moderate_threshold': NDVI_MODERATE_THRESHOLD,
-            'min_valid_pixels': MIN_VALID_PIXELS,
-            'scale_factor': HLS_SCALE_FACTOR
+            'min_valid_pixels': MIN_VALID_PIXELS
         },
         'degradation': {
             'buffer_distance': BUFFER_DISTANCE,
-            'buffer_distance_river': BUFFER_DISTANCE_RIVER,
-            'status_thresholds': STATUS_THRESHOLDS
+            'buffer_distance_river': BUFFER_DISTANCE_RIVER
         },
         'points': {
             'min_distance': MIN_DISTANCE_POINTS,
@@ -227,31 +99,8 @@ def get_config():
             'output_dir': OUTPUT_DIR,
             'geojson_filename': GEOJSON_FILENAME,
             'geotiff_filename': GEOTIFF_FILENAME,
-            'log_filename': LOG_FILENAME,
-            'geotiff_config': GEOTIFF_CONFIG
-        },
-        'visualization': {
-            'colors': COLORS,
-            'labels': LABELS
-        },
-        'logging': {
-            'level': LOG_LEVEL,
-            'format': LOG_FORMAT
-        },
-        'performance': {
-            'chunk_size': CHUNK_SIZE,
-            'memory_limit': MEMORY_LIMIT,
-            'parallel_workers': PARALLEL_WORKERS
-        },
-        'fallback': {
-            'paths': FALLBACK_PATHS,
-            'example_aoi': EXAMPLE_AOI
-        },
-        'validation': {
-            'tolerance': VALIDATION_TOLERANCE,
-            'coordinate_validation': COORDINATE_VALIDATION
-        },
-        'metadata': DEFAULT_METADATA
+            'log_filename': LOG_FILENAME
+        }
     }
 
 def update_config(**kwargs):

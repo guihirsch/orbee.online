@@ -1,6 +1,6 @@
 ================================================================================
 HLS Analysis - Log de Processamento
-Data/Hora: 2025-10-04T21:10:08.310922
+Data/Hora: 2025-10-05T05:07:58.967234
 ================================================================================
 
 📋 CONFIGURAÇÕES:
@@ -37,11 +37,11 @@ Data/Hora: 2025-10-04T21:10:08.310922
   - Pixels saudáveis: 41,786 (84.0%)
 
 📍 PONTOS CRÍTICOS GERADOS:
-  - Críticos: 14
+  - Críticos: 50
   - Moderados: 0
   - Regulares: 0
   - Água/Solo: 0
-  - Total: 14
+  - Total: 50
 
 💾 ARQUIVOS GERADOS:
   - GeoJSON: critical_points_mata_ciliar.geojson

@@ -7,6 +7,7 @@ Script principal que integra todas as funcionalidades do notebook HLS.ipynb
 import os
 import sys
 import warnings
+import hashlib
 from datetime import datetime
 
 # Configurações de warnings
@@ -15,6 +16,7 @@ warnings.filterwarnings('ignore')
 # Importar módulos locais
 try:
     # Tentar imports relativos (quando usado como módulo)
+    from .config_hls import get_config
     from .hls_analysis import (
         check_hls_coverage, load_aoi_data, search_hls_data, 
         select_best_item, convert_numpy_types
@@ -30,6 +32,7 @@ try:
     )
 except ImportError:
     # Fallback para imports absolutos (quando executado diretamente)
+    from config_hls import get_config
     from hls_analysis import (
         check_hls_coverage, load_aoi_data, search_hls_data, 
         select_best_item, convert_numpy_types
@@ -44,17 +47,98 @@ except ImportError:
         create_processing_log, validate_ndvi_consistency
     )
 
-# Configurações globais
-REGION_NAME = "Sinimbu, Rio Grande do Sul, Brasil"  # Região para análise
-BUFFER_DISTANCE = 200
-START_DATE = "2025-06-01"
-END_DATE = "2025-09-30"
-CLOUD_COVERAGE_MAX = 50
-NDVI_CRITICAL_THRESHOLD = 0.2
-NDVI_MODERATE_THRESHOLD = 0.5
-MIN_DISTANCE_POINTS = 100
-MAX_POINTS_PER_SEVERITY = 50
-BUFFER_DISTANCE_RIVER = 200
+# Carregar configurações centralizadas
+config = get_config()
+
+# Configurações globais (com fallback para compatibilidade)
+REGION_NAME = "Sinimbu, Rio Grande do Sul, Brasil" 
+BUFFER_DISTANCE = config['degradation']['buffer_distance']
+START_DATE = config['search']['start_date']
+END_DATE = config['search']['end_date']
+CLOUD_COVERAGE_MAX = config['search']['cloud_coverage_max']
+NDVI_CRITICAL_THRESHOLD = config['ndvi']['critical_threshold']
+NDVI_MODERATE_THRESHOLD = config['ndvi']['moderate_threshold']
+MIN_DISTANCE_POINTS = config['points']['min_distance']
+MAX_POINTS_PER_SEVERITY = config['points']['max_per_severity']
+BUFFER_DISTANCE_RIVER = config['degradation']['buffer_distance_river']
+
+def generate_unique_point_id(lat, lon, ndvi_value=None, timestamp=None):
+    """
+    Gera um ID único para cada ponto baseado APENAS nas coordenadas geográficas
+    Isso permite referenciar o mesmo local em análises futuras
+    
+    Args:
+        lat: Latitude do ponto (WGS84)
+        lon: Longitude do ponto (WGS84)
+        ndvi_value: Valor NDVI (não usado no ID, apenas para compatibilidade)
+        timestamp: Timestamp (não usado no ID, apenas para compatibilidade)
+    
+    Returns:
+        str: ID único no formato 'hls_point_<hash>' baseado apenas nas coordenadas
+    """
+    # Criar string única baseada APENAS nas coordenadas
+    # Usar precisão de 6 casas decimais para coordenadas (aproximadamente 0.1m de precisão)
+    # Isso garante que o mesmo local geográfico sempre tenha o mesmo ID
+    unique_string = f"{lat:.6f}_{lon:.6f}"
+    
+    # Gerar hash SHA-256 e usar primeiros 12 caracteres
+    hash_object = hashlib.sha256(unique_string.encode())
+    hash_hex = hash_object.hexdigest()[:12]
+    
+    return f"hls_point_{hash_hex}"
+
+def ensure_unique_ids_for_points(critical_points_data):
+    """
+    Garante que todos os pontos críticos tenham IDs únicos baseados em coordenadas
+    
+    Args:
+        critical_points_data: Dados dos pontos críticos
+    
+    Returns:
+        dict: Dados dos pontos com IDs únicos garantidos
+    """
+    if not critical_points_data or 'critical_points' not in critical_points_data:
+        return critical_points_data
+    
+    print("🔧 Garantindo IDs únicos baseados em coordenadas...")
+    
+    critical_points = critical_points_data['critical_points']
+    updated_count = 0
+    
+    for point in critical_points:
+        # Verificar se já tem ID válido baseado em coordenadas
+        current_id = point.get('id', '')
+        
+        if not current_id or not current_id.startswith('hls_point_'):
+            # Gerar novo ID baseado nas coordenadas
+            lat_wgs84 = point.get('lat_wgs84', point.get('lat', 0))
+            lon_wgs84 = point.get('lon_wgs84', point.get('lon', 0))
+            
+            # Se as coordenadas estão em UTM, converter para WGS84
+            if 'lat_wgs84' not in point and 'lon_wgs84' not in point:
+                # Assumir que lat/lon estão em UTM e converter
+                try:
+                    from pyproj import Transformer
+                    transformer = Transformer.from_crs("EPSG:32722", "EPSG:4326", always_xy=True)
+                    lon_wgs84, lat_wgs84 = transformer.transform(point['lon'], point['lat'])
+                except:
+                    # Fallback: usar coordenadas como estão
+                    lat_wgs84 = point.get('lat', 0)
+                    lon_wgs84 = point.get('lon', 0)
+            
+            # Gerar ID único baseado nas coordenadas WGS84
+            point_id = generate_unique_point_id(lat_wgs84, lon_wgs84)
+            point['id'] = point_id
+            updated_count += 1
+            
+            print(f"   🔧 ID gerado para ponto: {point_id}")
+    
+    if updated_count > 0:
+        print(f"✅ {updated_count} pontos receberam IDs únicos baseados em coordenadas")
+    else:
+        print("✅ Todos os pontos já possuem IDs únicos válidos")
+    
+    return critical_points_data
 
 def configure_region():
     """Configura a região para análise"""
@@ -234,10 +318,14 @@ def main():
         # Validar consistência entre análise e pontos críticos
         if critical_points_data:
             validate_ndvi_consistency(degradation_analysis, critical_points_data)
+            
+            # GARANTIR IDs únicos baseados em coordenadas para todos os pontos
+            critical_points_data = ensure_unique_ids_for_points(critical_points_data)
 
         if critical_points_data and critical_points_data['total_points'] > 0:
             print("✅ Geração de pontos críticos concluída com sucesso")
             print(f"   🔴 Total de pontos críticos: {critical_points_data['total_points']}")
+            print("   🆔 IDs únicos baseados em coordenadas garantidos")
         else:
             print("❌ Nenhum ponto crítico gerado")
             critical_points_data = None
@@ -254,10 +342,10 @@ def main():
 
         # Garantir diretório de saída
         if ensure_output_directory("."):
-            # Caminhos de saída
-            geojson_path = "critical_points_mata_ciliar.geojson"
-            geotiff_path = "ndvi_mata_ciliar_wgs84_normalized.geotiff"
-            log_path = "processamento_notebook.log"
+            # Caminhos de saída (usando configurações centralizadas)
+            geojson_path = config['export']['geojson_filename']
+            geotiff_path = config['export']['geotiff_filename']
+            log_path = config['export']['log_filename']
 
             print(f"📍 Caminhos de saída:")
             print(f"   📄 GeoJSON: {geojson_path}")
@@ -350,6 +438,8 @@ def main():
     print("- O script filtra automaticamente apenas rios dentro dos limites administrativos")
     print("\n📊 RESULTADOS GERADOS:")
     print("- critical_points_mata_ciliar.geojson: Pontos críticos de degradação (apenas críticos)")
+    print("  🆔 Cada ponto possui ID único baseado em coordenadas geográficas")
+    print("  📍 Permite referência temporal do mesmo local em análises futuras")
     print("- ndvi_mata_ciliar_wgs84_normalized.geotiff: Mapa NDVI processado")
     print("- processamento_notebook.log: Log detalhado do processamento")
     print("\n🔧 CONFIGURAÇÕES AVANÇADAS:")
@@ -358,6 +448,11 @@ def main():
     print("- CLOUD_COVERAGE_MAX: Máxima cobertura de nuvens aceita (%)")
     print("- NDVI_CRITICAL_THRESHOLD: Limiar crítico de NDVI")
     print("- NDVI_MODERATE_THRESHOLD: Limiar moderado de NDVI")
+    print("\n🆔 SISTEMA DE IDs ÚNICOS:")
+    print("- IDs baseados APENAS em coordenadas geográficas (WGS84)")
+    print("- Precisão de 6 casas decimais (~0.1m de precisão)")
+    print("- Mesmo local geográfico sempre terá o mesmo ID")
+    print("- Ideal para acompanhamento temporal e comparação de NDVI")
 
 if __name__ == "__main__":
     main()

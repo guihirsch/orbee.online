@@ -7,14 +7,49 @@ Funções para exportar resultados da análise HLS
 import os
 import json
 import numpy as np
+import hashlib
 from datetime import datetime
 from pyproj import Transformer
 
-# Configurações globais
-OUTPUT_DIR = "."
-GEOJSON_FILENAME = "critical_points_mata_ciliar.geojson"
-GEOTIFF_FILENAME = "ndvi_mata_ciliar_wgs84_normalized.geotiff"
-LOG_FILENAME = "processamento_notebook.log"
+# Importar configurações centralizadas
+try:
+    from .config_hls import get_config
+except ImportError:
+    from config_hls import get_config
+
+# Carregar configurações centralizadas
+config = get_config()
+
+# Configurações globais (usando configurações centralizadas)
+OUTPUT_DIR = config['export']['output_dir']
+GEOJSON_FILENAME = config['export']['geojson_filename']
+GEOTIFF_FILENAME = config['export']['geotiff_filename']
+LOG_FILENAME = config['export']['log_filename']
+
+def generate_unique_point_id(lat, lon, ndvi_value=None, timestamp=None):
+    """
+    Gera um ID único para cada ponto baseado APENAS nas coordenadas geográficas
+    Isso permite referenciar o mesmo local em análises futuras
+    
+    Args:
+        lat: Latitude do ponto (WGS84)
+        lon: Longitude do ponto (WGS84)
+        ndvi_value: Valor NDVI (não usado no ID, apenas para compatibilidade)
+        timestamp: Timestamp (não usado no ID, apenas para compatibilidade)
+    
+    Returns:
+        str: ID único no formato 'hls_point_<hash>' baseado apenas nas coordenadas
+    """
+    # Criar string única baseada APENAS nas coordenadas
+    # Usar precisão de 6 casas decimais para coordenadas (aproximadamente 0.1m de precisão)
+    # Isso garante que o mesmo local geográfico sempre tenha o mesmo ID
+    unique_string = f"{lat:.6f}_{lon:.6f}"
+    
+    # Gerar hash SHA-256 e usar primeiros 12 caracteres
+    hash_object = hashlib.sha256(unique_string.encode())
+    hash_hex = hash_object.hexdigest()[:12]
+    
+    return f"hls_point_{hash_hex}"
 
 def convert_utm_to_wgs84(easting, northing, zone=22, southern=False):
     """
@@ -85,6 +120,19 @@ def export_geojson_results(critical_points_data, degradation_analysis, output_pa
             # Converter coordenadas UTM para WGS84
             lon_wgs84, lat_wgs84 = convert_utm_to_wgs84(point['lon'], point['lat'], zone=22, southern=True)
             
+            # SEMPRE gerar ID único para cada ponto (garantir que todos tenham ID)
+            point_id = point.get('id')
+            if not point_id or not point_id.startswith('hls_point_'):
+                point_id = generate_unique_point_id(lat_wgs84, lon_wgs84, point['ndvi'])
+                print(f"   🔧 ID único gerado para ponto: {point_id}")
+            
+            # Sanitizar distância para JSON (Infinity/NaN -> null)
+            raw_distance = point.get('distance_to_river_m', 0)
+            if raw_distance is None or not np.isfinite(raw_distance):
+                distance_json = None
+            else:
+                distance_json = float(raw_distance)
+
             all_points.append({
                 "type": "Feature",
                 "geometry": {
@@ -92,6 +140,7 @@ def export_geojson_results(critical_points_data, degradation_analysis, output_pa
                     "coordinates": [lon_wgs84, lat_wgs84]
                 },
                 "properties": {
+                    "id": point_id,  # ID único para acompanhamento temporal
                     "severity": "critical",  # Forçar severidade crítica
                     "ndvi": point['ndvi'],
                     "description": point['description'],
@@ -99,7 +148,7 @@ def export_geojson_results(critical_points_data, degradation_analysis, output_pa
                     "level": point['level'],
                     "color": point['color'],
                     "label": point['label'],
-                    "distance_to_river_m": point.get('distance_to_river_m', 0)
+                    "distance_to_river_m": distance_json
                 }  
             })
 
@@ -122,6 +171,11 @@ def export_geojson_results(critical_points_data, degradation_analysis, output_pa
                     "values_real": True,
                     "geotiff_normalized": False,
                     "points_generation_method": "real_ndvi_based",
+                    "unique_ids_enabled": True,
+                    "id_format": "hls_point_<hash>",
+                    "id_description": "IDs únicos baseados APENAS nas coordenadas geográficas para referência temporal do mesmo local",
+                    "id_based_on": "coordinates_only",
+                    "coordinate_precision": "6_decimal_places_approx_0.1m",
                     "thresholds_applied": {
                         "critical": 0.2,
                         "moderate": 0.5

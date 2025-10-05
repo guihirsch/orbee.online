@@ -18,8 +18,14 @@ class UserBase(BaseModel):
     avatar_url: Optional[str] = None
     is_active: bool = True
 
-class UserCreate(UserBase):
+class UserCreate(BaseModel):
+    email: EmailStr
     password: str = Field(..., min_length=6)
+    full_name: str = Field(..., min_length=2, max_length=100)
+    username: Optional[str] = Field(None, min_length=3, max_length=50)
+    bio: Optional[str] = Field(None, max_length=500)
+    location: Optional[str] = Field(None, max_length=100)
+    avatar_url: Optional[str] = None
 
 class UserUpdate(BaseModel):
     full_name: Optional[str] = Field(None, min_length=2, max_length=100)
@@ -32,20 +38,12 @@ class UserInDB(UserBase):
     password_hash: str  # Mudado de hashed_password para password_hash
     created_at: datetime
     updated_at: datetime
-    observation_count: int = 0
-    validation_count: int = 0
-    points: int = 0
-    level: int = 1
     last_login: Optional[datetime] = None
 
 class User(UserBase):
     id: str
     created_at: datetime
     updated_at: datetime
-    observation_count: int = 0
-    validation_count: int = 0
-    points: int = 0
-    level: int = 1
     last_login: Optional[datetime] = None
 
 class UserProfile(BaseModel):
@@ -57,11 +55,6 @@ class UserProfile(BaseModel):
     location: Optional[str]
     avatar_url: Optional[str]
     created_at: datetime
-    observation_count: int
-    validation_count: int
-    points: int
-    level: int
-    achievements: List[str] = []
 
 class Token(BaseModel):
     access_token: str
@@ -93,9 +86,5 @@ class SocialLoginRequest(BaseModel):
 class UserStats(BaseModel):
     total_observations: int
     total_validations: int
-    points: int
-    level: int
-    rank: Optional[int] = None
-    achievements_count: int
     areas_monitored: int
     recent_activity: List[dict] = []

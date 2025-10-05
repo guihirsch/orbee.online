@@ -27,17 +27,78 @@ import {
 export default function AOIViewer() {
    const mapRef = useRef(null);
    const containerRef = useRef(null);
-   const { user } = useAuth();
+   const { user, isAuthenticated, apiRequest } = useAuth();
    const [loaded, setLoaded] = useState(false);
    const [baseLayer, setBaseLayer] = useState("osm");
    const [rgbVisible, setRgbVisible] = useState(false);
    const [rgbAvailable, setRgbAvailable] = useState(false);
    const [criticalPoints, setCriticalPoints] = useState([]);
+   const [savedObservations, setSavedObservations] = useState([]);
+   const [loading, setLoading] = useState(false);
    const [selectedPoint, setSelectedPoint] = useState(null);
    const [showCards, setShowCards] = useState(false);
    const [showAcompanhamentos, setShowAcompanhamentos] = useState(false);
    const [searchQuery, setSearchQuery] = useState("");
    const [searchResults, setSearchResults] = useState([]);
+
+   // Funções para integração com backend
+   const saveObservation = async (observationData) => {
+      if (!isAuthenticated) {
+         alert("Você precisa estar logado para salvar observações");
+         return;
+      }
+
+      try {
+         setLoading(true);
+         const response = await apiRequest("/observations/", {
+            method: "POST",
+            body: JSON.stringify(observationData),
+         });
+
+         setSavedObservations((prev) => [...prev, response]);
+         alert("Observação salva com sucesso!");
+      } catch (error) {
+         console.error("Erro ao salvar observação:", error);
+         alert("Erro ao salvar observação");
+      } finally {
+         setLoading(false);
+      }
+   };
+
+   const loadUserObservations = async () => {
+      if (!isAuthenticated) return;
+
+      try {
+         setLoading(true);
+         const response = await apiRequest("/observations/");
+         setSavedObservations(response);
+      } catch (error) {
+         console.error("Erro ao carregar observações:", error);
+      } finally {
+         setLoading(false);
+      }
+   };
+
+   const deleteObservation = async (observationId) => {
+      if (!isAuthenticated) return;
+
+      try {
+         setLoading(true);
+         await apiRequest(`/observations/${observationId}`, {
+            method: "DELETE",
+         });
+
+         setSavedObservations((prev) =>
+            prev.filter((obs) => obs.id !== observationId)
+         );
+         alert("Observação removida com sucesso!");
+      } catch (error) {
+         console.error("Erro ao remover observação:", error);
+         alert("Erro ao remover observação");
+      } finally {
+         setLoading(false);
+      }
+   };
    const [showSearchResults, setShowSearchResults] = useState(false);
    const [isSearching, setIsSearching] = useState(false);
    const [selectedRegion, setSelectedRegion] = useState(null);
@@ -1020,6 +1081,13 @@ export default function AOIViewer() {
    };
 
    // Adicionar event listeners para redimensionamento de acompanhamentos
+   // Carregar observações do usuário
+   useEffect(() => {
+      if (isAuthenticated) {
+         loadUserObservations();
+      }
+   }, [isAuthenticated]);
+
    useEffect(() => {
       if (isAcompanhamentosResizing) {
          document.addEventListener(

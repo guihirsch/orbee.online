@@ -11,10 +11,19 @@ import rasterio
 from pyproj import Transformer
 import planetary_computer as pc
 
-# Configurações globais
-NDVI_CRITICAL_THRESHOLD = 0.2
-NDVI_MODERATE_THRESHOLD = 0.5
-MIN_VALID_PIXELS = 0.05
+# Importar configurações centralizadas
+try:
+    from .config_hls import get_config
+except ImportError:
+    from config_hls import get_config
+
+# Carregar configurações centralizadas
+config = get_config()
+
+# Configurações globais (usando configurações centralizadas)
+NDVI_CRITICAL_THRESHOLD = config['ndvi']['critical_threshold']
+NDVI_MODERATE_THRESHOLD = config['ndvi']['moderate_threshold']
+MIN_VALID_PIXELS = config['ndvi']['min_valid_pixels']
 
 def load_and_process_hls_data(item, aoi_bounds):
     """Carrega e processa dados HLS para cálculo NDVI"""

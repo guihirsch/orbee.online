@@ -6,19 +6,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.5243158020201,
-          -29.522140367185333
+          -52.731729057423756,
+          -29.342293141898622
         ]
       },
       "properties": {
+        "id": "hls_point_4f5daf8c7846",
         "severity": "critical",
-        "ndvi": 0.18474483363065822,
-        "description": "Área real - NDVI 0.185",
+        "ndvi": 0.06923111661184693,
+        "description": "Área real - NDVI 0.069",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 20.8
       }
     },
     {
@@ -26,19 +27,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.49470726946998,
-          -29.550359723129443
+          -52.49996173939314,
+          -29.549759077512537
         ]
       },
       "properties": {
+        "id": "hls_point_daddf3160954",
         "severity": "critical",
-        "ndvi": -0.03357884698623586,
-        "description": "Área real - NDVI -0.034",
+        "ndvi": -0.025476166452509656,
+        "description": "Área real - NDVI -0.025",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 43.5
       }
     },
     {
@@ -46,19 +48,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.5561719767615,
-          -29.480082337490632
+          -52.55030262079546,
+          -29.500995363317095
         ]
       },
       "properties": {
+        "id": "hls_point_09ada23e45f4",
         "severity": "critical",
-        "ndvi": 0.13211394465929593,
-        "description": "Área real - NDVI 0.132",
+        "ndvi": 0.17889890393310814,
+        "description": "Área real - NDVI 0.179",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 16.6
       }
     },
     {
@@ -66,19 +69,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.48949242868469,
-          -29.553666811306343
+          -52.51723439798817,
+          -29.52465776904278
         ]
       },
       "properties": {
+        "id": "hls_point_3ed4f0b935bf",
         "severity": "critical",
-        "ndvi": -0.10297412783954578,
-        "description": "Área real - NDVI -0.103",
+        "ndvi": 0.06472039954389668,
+        "description": "Área real - NDVI 0.065",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 4.1
       }
     },
     {
@@ -86,19 +90,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.54468823704523,
-          -29.498082916784018
+          -52.75970225258455,
+          -29.38794567674393
         ]
       },
       "properties": {
+        "id": "hls_point_88433a889f46",
         "severity": "critical",
-        "ndvi": 0.05865502603569548,
-        "description": "Área real - NDVI 0.059",
+        "ndvi": 0.13977717646610008,
+        "description": "Área real - NDVI 0.140",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 4.7
       }
     },
     {
@@ -106,19 +111,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.48980199671583,
-          -29.553663339555705
+          -52.728258190346466,
+          -29.338006938175603
         ]
       },
       "properties": {
+        "id": "hls_point_ce5581b597ce",
         "severity": "critical",
-        "ndvi": -0.2649968995241153,
-        "description": "Área real - NDVI -0.265",
+        "ndvi": 0.13857229133748591,
+        "description": "Área real - NDVI 0.139",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 7.3
       }
     },
     {
@@ -126,19 +132,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.51753175297286,
-          -29.523842248343673
+          -52.75741347432693,
+          -29.380667057581363
         ]
       },
       "properties": {
+        "id": "hls_point_c6ed8fb397c0",
         "severity": "critical",
-        "ndvi": 0.07738420722379824,
-        "description": "Área real - NDVI 0.077",
+        "ndvi": -0.27550491737461025,
+        "description": "Área real - NDVI -0.276",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 6.2
       }
     },
     {
@@ -146,19 +153,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.506997146509626,
-          -29.54399457300861
+          -52.728271889628026,
+          -29.33881886335164
         ]
       },
       "properties": {
+        "id": "hls_point_86a162600ea7",
         "severity": "critical",
-        "ndvi": -0.2748160516914458,
-        "description": "Área real - NDVI -0.275",
+        "ndvi": 0.0842163669986581,
+        "description": "Área real - NDVI 0.084",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 3.2
       }
     },
     {
@@ -166,19 +174,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.55716108059038,
-          -29.4638282841957
+          -52.74955876249872,
+          -29.373190843121968
         ]
       },
       "properties": {
+        "id": "hls_point_f070c609e628",
         "severity": "critical",
-        "ndvi": 0.19041591022988572,
-        "description": "Área real - NDVI 0.190",
+        "ndvi": -0.04031461326577918,
+        "description": "Área real - NDVI -0.040",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 4.3
       }
     },
     {
@@ -186,19 +195,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.51829219654716,
-          -29.53330835767893
+          -52.71938720097405,
+          -29.30644940427268
         ]
       },
       "properties": {
+        "id": "hls_point_61957d150046",
         "severity": "critical",
-        "ndvi": 0.18682269354081543,
-        "description": "Área real - NDVI 0.187",
+        "ndvi": 0.1443256602736802,
+        "description": "Área real - NDVI 0.144",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 14.5
       }
     },
     {
@@ -206,19 +216,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.5189557029638,
-          -29.536278564329045
+          -52.760769191261716,
+          -29.39605247915133
         ]
       },
       "properties": {
+        "id": "hls_point_92a33c1c0956",
         "severity": "critical",
-        "ndvi": 0.1645164613584258,
-        "description": "Área real - NDVI 0.165",
+        "ndvi": -0.060268758315695684,
+        "description": "Área real - NDVI -0.060",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 8.1
       }
     },
     {
@@ -226,19 +237,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.514026783556204,
-          -29.51711449642232
+          -52.51621453054274,
+          -29.539287661658843
         ]
       },
       "properties": {
+        "id": "hls_point_b54182d0aaae",
         "severity": "critical",
-        "ndvi": 0.18552800152116145,
-        "description": "Área real - NDVI 0.186",
+        "ndvi": -0.1549779771813311,
+        "description": "Área real - NDVI -0.155",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 9.1
       }
     },
     {
@@ -246,19 +258,83 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.543850402382695,
-          -29.504048217326936
+          -52.5246942760752,
+          -29.52673806457188
         ]
       },
       "properties": {
+        "id": "hls_point_db162f425e29",
         "severity": "critical",
-        "ndvi": 0.1720639607748642,
+        "ndvi": 0.11096133669906308,
+        "description": "Área real - NDVI 0.111",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 7.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50334279836691,
+          -29.54809660536384
+        ]
+      },
+      "properties": {
+        "id": "hls_point_da635dd7a4d0",
+        "severity": "critical",
+        "ndvi": 0.12221603263697829,
+        "description": "Área real - NDVI 0.122",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 2.8
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.718987404007265,
+          -29.31944827281323
+        ]
+      },
+      "properties": {
+        "id": "hls_point_6588381e21ec",
+        "severity": "critical",
+        "ndvi": 0.15945985949630284,
+        "description": "Área real - NDVI 0.159",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 17.3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.48415442669231,
+          -29.442464033758704
+        ]
+      },
+      "properties": {
+        "id": "hls_point_26d41f67bcf4",
+        "severity": "critical",
+        "ndvi": 0.17166020811864105,
         "description": "Área real - NDVI 0.172",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 5.9
       }
     },
     {
@@ -266,19 +342,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.49141344761383,
-          -29.557976601273683
+          -52.740590266510914,
+          -29.336493124133018
         ]
       },
       "properties": {
+        "id": "hls_point_33b50f8fdc82",
         "severity": "critical",
-        "ndvi": 0.1906875532839566,
-        "description": "Área real - NDVI 0.191",
+        "ndvi": 0.1855662264440239,
+        "description": "Área real - NDVI 0.186",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 18.9
       }
     },
     {
@@ -286,19 +363,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.56594582216588,
-          -29.471846427058384
+          -52.54438706081731,
+          -29.498627830563052
         ]
       },
       "properties": {
+        "id": "hls_point_6c15ca713a95",
         "severity": "critical",
-        "ndvi": 0.19718352204859152,
-        "description": "Área real - NDVI 0.197",
+        "ndvi": 0.08511033015544846,
+        "description": "Área real - NDVI 0.085",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 19.8
       }
     },
     {
@@ -306,19 +384,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.51403081331701,
-          -29.517385159631417
+          -52.74131383169577,
+          -29.342709779522234
         ]
       },
       "properties": {
+        "id": "hls_point_02b879faf72d",
         "severity": "critical",
-        "ndvi": 0.17599947376654476,
-        "description": "Área real - NDVI 0.176",
+        "ndvi": 0.13533762153607384,
+        "description": "Área real - NDVI 0.135",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 16.2
       }
     },
     {
@@ -326,19 +405,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.52042226540959,
-          -29.530847629810804
+          -52.530671999555786,
+          -29.51259253887202
         ]
       },
       "properties": {
+        "id": "hls_point_6048f07b653e",
         "severity": "critical",
-        "ndvi": 0.07597743076960564,
+        "ndvi": 0.07552991326306317,
         "description": "Área real - NDVI 0.076",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 9.8
       }
     },
     {
@@ -346,30 +426,645 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -52.4873296196977,
-          -29.4481135849089
+          -52.53037070743984,
+          -29.513137424020943
         ]
       },
       "properties": {
+        "id": "hls_point_85db6573e9fc",
         "severity": "critical",
-        "ndvi": 0.19095828359153674,
-        "description": "Área real - NDVI 0.191",
+        "ndvi": 0.14259905989521246,
+        "description": "Área real - NDVI 0.143",
         "type": "critical_point",
         "level": "very_sparse",
         "color": "#DC143C",
         "label": "Vegetação muito rala / solo exposto",
-        "distance_to_river_m": 0
+        "distance_to_river_m": 6.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.56436603368132,
+          -29.469699350495006
+        ]
+      },
+      "properties": {
+        "id": "hls_point_85b6e51d9620",
+        "severity": "critical",
+        "ndvi": 0.004263045891603524,
+        "description": "Área real - NDVI 0.004",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 14.3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.559350923607376,
+          -29.465426890638874
+        ]
+      },
+      "properties": {
+        "id": "hls_point_00b3f89b2461",
+        "severity": "critical",
+        "ndvi": 0.17255500290445816,
+        "description": "Área real - NDVI 0.173",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 1.0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.74115680514591,
+          -29.351644915493925
+        ]
+      },
+      "properties": {
+        "id": "hls_point_dc6ce97fbe0e",
+        "severity": "critical",
+        "ndvi": 0.12833491983743955,
+        "description": "Área real - NDVI 0.128",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 2.6
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.742876502583385,
+          -29.361909021454714
+        ]
+      },
+      "properties": {
+        "id": "hls_point_eca4c36e5f51",
+        "severity": "critical",
+        "ndvi": 0.05221753037050926,
+        "description": "Área real - NDVI 0.052",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 17.7
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.74321311292115,
+          -29.363528814780683
+        ]
+      },
+      "properties": {
+        "id": "hls_point_1b4d368f30d9",
+        "severity": "critical",
+        "ndvi": -0.23424268752318828,
+        "description": "Área real - NDVI -0.234",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 11.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.72746245829413,
+          -29.327459898625516
+        ]
+      },
+      "properties": {
+        "id": "hls_point_b797d511d655",
+        "severity": "critical",
+        "ndvi": -0.16192498075826953,
+        "description": "Área real - NDVI -0.162",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 13.4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.56128316862005,
+          -29.49058002993493
+        ]
+      },
+      "properties": {
+        "id": "hls_point_f3518b85f155",
+        "severity": "critical",
+        "ndvi": 0.13947673443837727,
+        "description": "Área real - NDVI 0.139",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 12.8
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.72830842379563,
+          -29.340983996642606
+        ]
+      },
+      "properties": {
+        "id": "hls_point_c778daf28ba7",
+        "severity": "critical",
+        "ndvi": 0.08633445476676337,
+        "description": "Área real - NDVI 0.086",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 7.7
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.531315324195106,
+          -29.514209378860667
+        ]
+      },
+      "properties": {
+        "id": "hls_point_2b6d4cca5176",
+        "severity": "critical",
+        "ndvi": 0.19151413762691671,
+        "description": "Área real - NDVI 0.192",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 83.7
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50547353405745,
+          -29.54563609862268
+        ]
+      },
+      "properties": {
+        "id": "hls_point_6eda24703da3",
+        "severity": "critical",
+        "ndvi": -0.20367136759274493,
+        "description": "Área real - NDVI -0.204",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 16.7
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.53098143663568,
+          -29.51258897566087
+        ]
+      },
+      "properties": {
+        "id": "hls_point_2eae2dc64a0f",
+        "severity": "critical",
+        "ndvi": 0.11079129011313742,
+        "description": "Área real - NDVI 0.111",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 13.1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.71911470844718,
+          -29.30861853485234
+        ]
+      },
+      "properties": {
+        "id": "hls_point_18036cf87097",
+        "severity": "critical",
+        "ndvi": 0.12282603121944956,
+        "description": "Área real - NDVI 0.123",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 0.9
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.556648708437685,
+          -29.43026636784273
+        ]
+      },
+      "properties": {
+        "id": "hls_point_b665203660fc",
+        "severity": "critical",
+        "ndvi": 0.11995379524148415,
+        "description": "Área real - NDVI 0.120",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 23.8
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.724200980119505,
+          -29.317215410193818
+        ]
+      },
+      "properties": {
+        "id": "hls_point_9ad438b0f80a",
+        "severity": "critical",
+        "ndvi": -0.030891190545206438,
+        "description": "Área real - NDVI -0.031",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 0.1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.74315318001744,
+          -29.36001051253923
+        ]
+      },
+      "properties": {
+        "id": "hls_point_25e509203c70",
+        "severity": "critical",
+        "ndvi": 0.07279735824109214,
+        "description": "Área real - NDVI 0.073",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 6.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.71944165007827,
+          -29.309697134898336
+        ]
+      },
+      "properties": {
+        "id": "hls_point_9fca23ba9f62",
+        "severity": "critical",
+        "ndvi": 0.174420350924566,
+        "description": "Área real - NDVI 0.174",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 27.4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.52592001093219,
+          -29.52591187285991
+        ]
+      },
+      "properties": {
+        "id": "hls_point_82178cf3065f",
+        "severity": "critical",
+        "ndvi": 0.16436199951321673,
+        "description": "Área real - NDVI 0.164",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 2.6
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.52683218487697,
+          -29.524818564821718
+        ]
+      },
+      "properties": {
+        "id": "hls_point_b886c64ecfba",
+        "severity": "critical",
+        "ndvi": 0.00109134925813187,
+        "description": "Área real - NDVI 0.001",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 18.0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.490437024307546,
+          -29.5547390524463
+        ]
+      },
+      "properties": {
+        "id": "hls_point_d1f56ac0eb86",
+        "severity": "critical",
+        "ndvi": 0.060930740950750614,
+        "description": "Área real - NDVI 0.061",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 9.8
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.73431018413553,
+          -29.34875641591142
+        ]
+      },
+      "properties": {
+        "id": "hls_point_8eb75a735b19",
+        "severity": "critical",
+        "ndvi": 0.0666268806505607,
+        "description": "Área real - NDVI 0.067",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 3.3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.56437018937045,
+          -29.469970009219647
+        ]
+      },
+      "properties": {
+        "id": "hls_point_6f37ebbd1b27",
+        "severity": "critical",
+        "ndvi": 0.15516266220504407,
+        "description": "Área real - NDVI 0.155",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 2.5
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.75644462997268,
+          -29.378243552142038
+        ]
+      },
+      "properties": {
+        "id": "hls_point_e8d9d0d77010",
+        "severity": "critical",
+        "ndvi": 0.17320074408897235,
+        "description": "Área real - NDVI 0.173",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 17.7
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.53498369033132,
+          -29.51118928451172
+        ]
+      },
+      "properties": {
+        "id": "hls_point_2e2fd75f2ab1",
+        "severity": "critical",
+        "ndvi": 0.014264294644572148,
+        "description": "Área real - NDVI 0.014",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 5.1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50273170951996,
+          -29.54864493675594
+        ]
+      },
+      "properties": {
+        "id": "hls_point_81a720d69185",
+        "severity": "critical",
+        "ndvi": -0.020361112255394505,
+        "description": "Área real - NDVI -0.020",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 6.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.493437198556194,
+          -29.54820833439428
+        ]
+      },
+      "properties": {
+        "id": "hls_point_a1397a901825",
+        "severity": "critical",
+        "ndvi": 0.19909785066397206,
+        "description": "Área real - NDVI 0.199",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 3.7
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.47593433714935,
+          -29.408716035843053
+        ]
+      },
+      "properties": {
+        "id": "hls_point_c7c337057cb1",
+        "severity": "critical",
+        "ndvi": 0.1638770079339051,
+        "description": "Área real - NDVI 0.164",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 7.3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.50547754570594,
+          -29.54590676173886
+        ]
+      },
+      "properties": {
+        "id": "hls_point_fde8b26bc075",
+        "severity": "critical",
+        "ndvi": 0.14842526775424703,
+        "description": "Área real - NDVI 0.148",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 33.9
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.52009657893374,
+          -29.529768522775736
+        ]
+      },
+      "properties": {
+        "id": "hls_point_eac4dab5b037",
+        "severity": "critical",
+        "ndvi": 0.1801180226055431,
+        "description": "Área real - NDVI 0.180",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 8.7
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.51465078777305,
+          -29.538222664125847
+        ]
+      },
+      "properties": {
+        "id": "hls_point_3f65a330a231",
+        "severity": "critical",
+        "ndvi": 0.04732863072365751,
+        "description": "Área real - NDVI 0.047",
+        "type": "critical_point",
+        "level": "very_sparse",
+        "color": "#DC143C",
+        "label": "Vegetação muito rala / solo exposto",
+        "distance_to_river_m": 0.9
       }
     }
   ],
   "metadata": {
-    "analysis_date": "2025-10-04T20:28:28.095531",
+    "analysis_date": "2025-10-05T05:07:58.860506",
     "data_source": "HLS (Harmonized Landsat Sentinel)",
     "buffer_distance": "200 meters",
     "ndvi_processing": {
       "values_real": true,
       "geotiff_normalized": false,
       "points_generation_method": "real_ndvi_based",
+      "unique_ids_enabled": true,
+      "id_format": "hls_point_<hash>",
+      "id_description": "IDs únicos baseados APENAS nas coordenadas geográficas para referência temporal do mesmo local",
+      "id_based_on": "coordinates_only",
+      "coordinate_precision": "6_decimal_places_approx_0.1m",
       "thresholds_applied": {
         "critical": 0.2,
         "moderate": 0.5
@@ -389,7 +1084,7 @@
       "moderate_fraction": 0.1366954213669542,
       "overall_status": "healthy"
     },
-    "total_critical_points": 18,
+    "total_critical_points": 50,
     "total_moderate_points": 0,
     "total_fair_points": 0,
     "processing_params": {

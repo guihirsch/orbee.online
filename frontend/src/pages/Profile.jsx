@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { User, MapPin, Bell, Award, Settings, Mail, Phone } from "lucide-react";
-import { useAuth } from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 
 const Profile = () => {
    const { user } = useAuth();

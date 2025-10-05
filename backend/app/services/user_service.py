@@ -85,6 +85,7 @@ class UserService:
             id=user_in_db.id,
             email=user_in_db.email,
             full_name=user_in_db.full_name,
+            username=user_in_db.username,
             role=user_in_db.role,
             bio=user_in_db.bio,
             location=user_in_db.location,
@@ -92,10 +93,6 @@ class UserService:
             is_active=user_in_db.is_active,
             created_at=user_in_db.created_at,
             updated_at=user_in_db.updated_at,
-            observation_count=user_in_db.observation_count,
-            validation_count=user_in_db.validation_count,
-            points=user_in_db.points,
-            level=user_in_db.level,
             last_login=user_in_db.last_login
         )
         
@@ -126,6 +123,7 @@ class UserService:
             id=user.id,
             email=user.email,
             full_name=user.full_name,
+            username=user.username,
             role=user.role,
             bio=user.bio,
             location=user.location,
@@ -133,10 +131,6 @@ class UserService:
             is_active=user.is_active,
             created_at=user.created_at,
             updated_at=user.updated_at,
-            observation_count=user.observation_count,
-            validation_count=user.validation_count,
-            points=user.points,
-            level=user.level,
             last_login=user.last_login
         )
         
@@ -159,6 +153,7 @@ class UserService:
             id=user.id,
             email=user.email,
             full_name=user.full_name,
+            username=user.username,
             role=user.role,
             bio=user.bio,
             location=user.location,
@@ -166,10 +161,6 @@ class UserService:
             is_active=user.is_active,
             created_at=user.created_at,
             updated_at=user.updated_at,
-            observation_count=user.observation_count,
-            validation_count=user.validation_count,
-            points=user.points,
-            level=user.level,
             last_login=user.last_login
         )
     
@@ -185,48 +176,9 @@ class UserService:
         """Remove usuário (soft delete)"""
         return await self.user_repo.soft_delete(user_id)
     
-    async def add_points(self, user_id: str, points: int) -> Optional[User]:
-        """Adiciona pontos ao usuário"""
-        user = await self.get_user_by_id(user_id)
-        if user:
-            new_points = user.points + points
-            return await self.user_repo.update(user_id, {
-                "points": new_points,
-                "updated_at": datetime.utcnow()
-            })
-        return None
-    
-    async def increment_observations(self, user_id: str) -> Optional[User]:
-        """Incrementa contador de observações"""
-        user = await self.get_user_by_id(user_id)
-        if user:
-            new_count = user.observations_count + 1
-            # Adiciona pontos por observação
-            new_points = user.points + 10
-            return await self.user_repo.update(user_id, {
-                "observations_count": new_count,
-                "points": new_points,
-                "updated_at": datetime.utcnow()
-            })
-        return None
-    
-    async def increment_validations(self, user_id: str) -> Optional[User]:
-        """Incrementa contador de validações"""
-        user = await self.get_user_by_id(user_id)
-        if user:
-            new_count = user.validations_count + 1
-            # Adiciona pontos por validação
-            new_points = user.points + 5
-            return await self.user_repo.update(user_id, {
-                "validations_count": new_count,
-                "points": new_points,
-                "updated_at": datetime.utcnow()
-            })
-        return None
-    
-    async def get_leaderboard(self, limit: int = 10) -> List[User]:
-        """Retorna ranking de usuários por pontos"""
-        return await self.user_repo.get_top_users_by_points(limit)
+    async def get_recent_users(self, limit: int = 10) -> List[User]:
+        """Retorna usuários mais recentes"""
+        return await self.user_repo.get_recent_users(limit)
     
     async def search_users(self, query: str, limit: int = 20) -> List[User]:
         """Busca usuários por nome ou localização"""
@@ -244,6 +196,7 @@ class UserService:
                 id=user_in_db.id,
                 email=user_in_db.email,
                 full_name=user_in_db.full_name,
+                username=user_in_db.username,
                 role=user_in_db.role,
                 bio=user_in_db.bio,
                 location=user_in_db.location,
@@ -251,10 +204,6 @@ class UserService:
                 is_active=user_in_db.is_active,
                 created_at=user_in_db.created_at,
                 updated_at=user_in_db.updated_at,
-                observation_count=user_in_db.observation_count,
-                validation_count=user_in_db.validation_count,
-                points=user_in_db.points,
-                level=user_in_db.level,
                 last_login=user_in_db.last_login
             )
         except UserNotFoundError:
