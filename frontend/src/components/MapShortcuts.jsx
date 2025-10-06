@@ -183,7 +183,7 @@ export default function MapShortcuts({
   const handleFeedback = () => {
     const feedback = prompt("Leave your feedback about the map:");
     if (feedback) {
-      alert("Thank you for your feedback!");
+      alert("Thank you for your feedback");
     }
   };
 
