@@ -1,25 +1,25 @@
 """
-HLS Analysis Package - Análise de Mata Ciliar com Dados HLS
-Pacote para análise de degradação da mata ciliar usando dados HLS (Harmonized Landsat Sentinel)
+HLS Analysis Package - Riparian Forest Analysis with HLS Data
+Package for riparian forest degradation analysis using HLS (Harmonized Landsat Sentinel) data
 
-Módulos principais:
-- hls_analysis: Busca e carregamento de dados HLS
-- hls_ndvi_processing: Processamento de dados NDVI
-- hls_degradation_analysis: Análise de degradação da mata ciliar
-- hls_export: Exportação de resultados
-- hls_complete_analysis: Script principal integrado
+Main modules:
+- hls_analysis: HLS data search and loading
+- hls_ndvi_processing: NDVI data processing
+- hls_degradation_analysis: Riparian forest degradation analysis
+- hls_export: Results export
+- hls_complete_analysis: Main integrated script
 
-Dependências:
+Dependencies:
 - Microsoft Planetary Computer API
 - OpenStreetMap (via OSMnx)
-- Dados reais de satélites Landsat e Sentinel-2
+- Real Landsat and Sentinel-2 satellite data
 """
 
 __version__ = "1.0.0"
 __author__ = "Orbee Online Team"
-__description__ = "Análise de Mata Ciliar com Dados HLS"
+__description__ = "Riparian Forest Analysis with HLS Data"
 
-# Imports principais para facilitar o uso
+# Main imports for easy usage
 from .hls_analysis import (
     check_hls_coverage,
     load_aoi_data,
@@ -47,7 +47,7 @@ from .hls_export import (
     validate_ndvi_consistency
 )
 
-# Importar o script principal
+# Import main script
 from . import hls_complete_analysis
 
 __all__ = [

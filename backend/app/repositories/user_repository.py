@@ -9,7 +9,7 @@ from app.models.user import UserCreate, UserUpdate, UserInDB, User
 from app.core.exceptions import UserNotFoundError, UserAlreadyExistsError
 
 def get_pwd_context():
-    """Retorna o contexto de senha configurado"""
+    """Returns configured password context"""
     return CryptContext(schemes=["bcrypt"], deprecated="auto")
 logger = logging.getLogger(__name__)
 
@@ -19,53 +19,53 @@ class UserRepository:
         self.supabase = supabase
         self.table = "users"
         
-        # Se não há supabase, usar service role para contornar RLS
+        # If no supabase, use service role to bypass RLS
         if supabase is None:
             from app.core.database import get_supabase_service_client
             self.supabase = get_supabase_service_client()
     
     def _check_supabase(self):
-        """Verifica se Supabase está configurado"""
+        """Checks if Supabase is configured"""
         if self.supabase is None:
-            raise Exception("Supabase não configurado - modo desenvolvimento")
+            raise Exception("Supabase not configured - development mode")
     
     def _hash_password(self, password: str) -> str:
-        """Hash da senha usando bcrypt diretamente"""
+        """Hash password using bcrypt directly"""
         try:
-            print(f"DEBUG: _hash_password chamado com senha: {repr(password)}")
-            print(f"DEBUG: Tamanho em bytes: {len(password.encode('utf-8'))}")
+            print(f"DEBUG: _hash_password called with password: {repr(password)}")
+            print(f"DEBUG: Size in bytes: {len(password.encode('utf-8'))}")
             
-            # Truncar senha para máximo de 72 bytes (limitação do bcrypt)
+            # Truncate password to maximum 72 bytes (bcrypt limitation)
             password_bytes = password.encode('utf-8')
             if len(password_bytes) > 72:
-                print(f"DEBUG: Senha truncada de {len(password_bytes)} para 72 bytes")
+                print(f"DEBUG: Password truncated from {len(password_bytes)} to 72 bytes")
                 password_bytes = password_bytes[:72]
             
-            print(f"DEBUG: Senha final para hash: {password_bytes}")
+            print(f"DEBUG: Final password for hash: {password_bytes}")
             
-            # Usar bcrypt diretamente
+            # Use bcrypt directly
             salt = bcrypt.gensalt()
             result = bcrypt.hashpw(password_bytes, salt)
             
-            print(f"DEBUG: Hash gerado com sucesso: {result[:20]}...")
+            print(f"DEBUG: Hash generated successfully: {result[:20]}...")
             return result.decode('utf-8')
             
         except Exception as e:
-            print(f"DEBUG: Erro em _hash_password: {e}")
+            print(f"DEBUG: Error in _hash_password: {e}")
             raise e
     
     def verify_password(self, plain_password: str, hashed_password: str) -> bool:
-        """Verifica se a senha está correta usando bcrypt diretamente"""
+        """Verifies if password is correct using bcrypt directly"""
         try:
-            # Truncar senha para máximo de 72 bytes (limitação do bcrypt)
+            # Truncate password to maximum 72 bytes (bcrypt limitation)
             password_bytes = plain_password.encode('utf-8')
             if len(password_bytes) > 72:
                 password_bytes = password_bytes[:72]
             
-            # Usar bcrypt diretamente
+            # Use bcrypt directly
             return bcrypt.checkpw(password_bytes, hashed_password.encode('utf-8'))
         except Exception as e:
-            print(f"DEBUG: Erro em verify_password: {e}")
+            print(f"DEBUG: Error in verify_password: {e}")
             return False
     
     async def create_user(self, user_data: UserCreate) -> UserInDB:

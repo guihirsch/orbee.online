@@ -5,7 +5,7 @@ from enum import Enum
 
 
 class ObservationType(str, Enum):
-    """Tipos de observação"""
+    """Observation types"""
     VEGETATION_HEALTH = "vegetation_health"
     WATER_QUALITY = "water_quality"
     DEFORESTATION = "deforestation"
@@ -17,7 +17,7 @@ class ObservationType(str, Enum):
 
 
 class ObservationStatus(str, Enum):
-    """Status da observação"""
+    """Observation status"""
     PENDING = "pending"
     VALIDATED = "validated"
     REJECTED = "rejected"
@@ -25,14 +25,14 @@ class ObservationStatus(str, Enum):
 
 
 class ValidationStatus(str, Enum):
-    """Status da validação"""
+    """Validation status"""
     CONFIRMED = "confirmed"
     DISPUTED = "disputed"
     NEEDS_MORE_INFO = "needs_more_info"
 
 
 class ObservationBase(BaseModel):
-    """Modelo base para observações"""
+    """Base model for observations"""
     title: str = Field(..., min_length=5, max_length=200)
     description: str = Field(..., min_length=10, max_length=2000)
     observation_type: ObservationType
@@ -45,23 +45,23 @@ class ObservationBase(BaseModel):
     @validator('tags')
     def validate_tags(cls, v):
         if v and len(v) > 10:
-            raise ValueError('Máximo 10 tags permitidas')
+            raise ValueError('Maximum 10 tags allowed')
         return v
 
 
 class ObservationCreate(ObservationBase):
-    """Modelo para criação de observação"""
+    """Model for observation creation"""
     images: Optional[List[str]] = Field(default_factory=list, max_items=5)
     
     @validator('images')
     def validate_images(cls, v):
         if v and len(v) > 5:
-            raise ValueError('Máximo 5 imagens permitidas')
+            raise ValueError('Maximum 5 images allowed')
         return v
 
 
 class ObservationUpdate(BaseModel):
-    """Modelo para atualização de observação"""
+    """Model for observation update"""
     title: Optional[str] = Field(None, min_length=5, max_length=200)
     description: Optional[str] = Field(None, min_length=10, max_length=2000)
     observation_type: Optional[ObservationType] = None
@@ -72,7 +72,7 @@ class ObservationUpdate(BaseModel):
 
 
 class ObservationInDB(ObservationBase):
-    """Modelo de observação no banco de dados"""
+    """Observation model in database"""
     id: str
     user_id: str
     status: ObservationStatus = ObservationStatus.PENDING
@@ -87,17 +87,17 @@ class ObservationInDB(ObservationBase):
 
 
 class Observation(ObservationInDB):
-    """Modelo completo de observação"""
+    """Complete observation model"""
     user_name: Optional[str] = None
     user_avatar: Optional[str] = None
-    distance_km: Optional[float] = None  # Distância do usuário atual
-    user_can_validate: bool = False  # Se o usuário atual pode validar
-    confirmed_validations: int = 0  # Computado das validações
-    disputed_validations: int = 0  # Computado das validações
+    distance_km: Optional[float] = None  # Distance from current user
+    user_can_validate: bool = False  # If current user can validate
+    confirmed_validations: int = 0  # Computed from validations
+    disputed_validations: int = 0  # Computed from validations
 
 
 class ValidationBase(BaseModel):
-    """Modelo base para validação"""
+    """Base model for validation"""
     observation_id: str
     status: ValidationStatus
     comment: Optional[str] = Field(None, max_length=1000)
@@ -106,12 +106,12 @@ class ValidationBase(BaseModel):
 
 
 class ValidationCreate(ValidationBase):
-    """Modelo para criação de validação"""
+    """Model for validation creation"""
     pass
 
 
 class ValidationUpdate(BaseModel):
-    """Modelo para atualização de validação"""
+    """Model for validation update"""
     status: Optional[ValidationStatus] = None
     comment: Optional[str] = Field(None, max_length=1000)
     confidence_level: Optional[int] = Field(None, ge=1, le=5)
@@ -119,7 +119,7 @@ class ValidationUpdate(BaseModel):
 
 
 class ValidationInDB(ValidationBase):
-    """Modelo de validação no banco de dados"""
+    """Validation model in database"""
     id: str
     user_id: str
     created_at: datetime
@@ -127,24 +127,24 @@ class ValidationInDB(ValidationBase):
 
 
 class Validation(ValidationInDB):
-    """Modelo completo de validação"""
+    """Complete validation model"""
     user_name: Optional[str] = None
     user_avatar: Optional[str] = None
     user_level: Optional[int] = None
 
 
 class ObservationStats(BaseModel):
-    """Estatísticas de observações"""
+    """Observation statistics"""
     total_observations: int
     pending_observations: int
     validated_observations: int
     rejected_observations: int
     observations_by_type: Dict[str, int]
-    recent_observations: int  # Últimos 7 dias
+    recent_observations: int  # Last 7 days
 
 
 class ValidationStats(BaseModel):
-    """Estatísticas de validações"""
+    """Validation statistics"""
     total_validations: int
     confirmed_validations: int
     disputed_validations: int
@@ -153,7 +153,7 @@ class ValidationStats(BaseModel):
 
 
 class ObservationFilter(BaseModel):
-    """Filtros para busca de observações"""
+    """Filters for observation search"""
     observation_type: Optional[ObservationType] = None
     status: Optional[ObservationStatus] = None
     latitude: Optional[float] = None
@@ -168,7 +168,7 @@ class ObservationFilter(BaseModel):
 
 
 class ObservationResponse(BaseModel):
-    """Resposta com observações e metadados"""
+    """Response with observations and metadata"""
     observations: List[Observation]
     total: int
     page: int
@@ -178,7 +178,7 @@ class ObservationResponse(BaseModel):
 
 
 class NearbyObservation(BaseModel):
-    """Observação próxima com distância"""
+    """Nearby observation with distance"""
     id: str
     title: str
     observation_type: ObservationType

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 HLS Analysis Points Endpoints
-Endpoints para gerenciar pontos de análise HLS
+Endpoints for managing HLS analysis points
 """
 
 from typing import List, Optional
@@ -24,61 +24,61 @@ async def create_analysis_point(
     point_data: HLSAnalysisPointCreate,
     db: Session = Depends(get_db)
 ):
-    """Cria um novo ponto de análise HLS"""
+    """Creates a new HLS analysis point"""
     try:
         service = get_hls_analysis_points_service(db)
         return service.create_analysis_point(point_data)
     except Exception as e:
-        logger.error(f"Erro ao criar ponto de análise HLS: {e}")
-        raise HTTPException(status_code=500, detail="Erro interno do servidor")
+        logger.error(f"Error creating HLS analysis point: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.post("/bulk", response_model=dict)
 async def bulk_create_analysis_points(
     points_data: List[HLSAnalysisPointCreate],
     db: Session = Depends(get_db)
 ):
-    """Cria múltiplos pontos de análise HLS em lote"""
+    """Creates multiple HLS analysis points in batch"""
     try:
         service = get_hls_analysis_points_service(db)
         created_count = service.bulk_create_points(points_data)
         return {
-            "message": f"{created_count} pontos criados com sucesso",
+            "message": f"{created_count} points created successfully",
             "total_requested": len(points_data),
             "created_count": created_count,
             "skipped_count": len(points_data) - created_count
         }
     except Exception as e:
-        logger.error(f"Erro ao criar pontos de análise HLS em lote: {e}")
-        raise HTTPException(status_code=500, detail="Erro interno do servidor")
+        logger.error(f"Error creating HLS analysis points in batch: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/{point_id}", response_model=HLSAnalysisPoint)
 async def get_analysis_point(
     point_id: str,
     db: Session = Depends(get_db)
 ):
-    """Busca um ponto de análise HLS pelo ID único"""
+    """Gets an HLS analysis point by unique ID"""
     try:
         service = get_hls_analysis_points_service(db)
         point = service.get_point_by_id(point_id)
         if not point:
-            raise HTTPException(status_code=404, detail="Ponto não encontrado")
+            raise HTTPException(status_code=404, detail="Point not found")
         return point
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Erro ao buscar ponto de análise HLS {point_id}: {e}")
-        raise HTTPException(status_code=500, detail="Erro interno do servidor")
+        logger.error(f"Error getting HLS analysis point {point_id}: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/", response_model=List[HLSAnalysisPoint])
 async def get_analysis_points(
-    severity: Optional[str] = Query(None, description="Filtrar por severidade"),
-    min_lat: Optional[float] = Query(None, description="Latitude mínima"),
-    max_lat: Optional[float] = Query(None, description="Latitude máxima"),
-    min_lon: Optional[float] = Query(None, description="Longitude mínima"),
-    max_lon: Optional[float] = Query(None, description="Longitude máxima"),
+    severity: Optional[str] = Query(None, description="Filter by severity"),
+    min_lat: Optional[float] = Query(None, description="Minimum latitude"),
+    max_lat: Optional[float] = Query(None, description="Maximum latitude"),
+    min_lon: Optional[float] = Query(None, description="Minimum longitude"),
+    max_lon: Optional[float] = Query(None, description="Maximum longitude"),
     db: Session = Depends(get_db)
 ):
-    """Lista pontos de análise HLS com filtros opcionais"""
+    """Lists HLS analysis points with optional filters"""
     try:
         service = get_hls_analysis_points_service(db)
         
@@ -87,26 +87,26 @@ async def get_analysis_points(
         elif all(coord is not None for coord in [min_lat, max_lat, min_lon, max_lon]):
             points = service.get_points_in_area(min_lat, max_lat, min_lon, max_lon)
         else:
-            # Se nenhum filtro específico, retornar pontos críticos por padrão
+            # If no specific filter, return critical points by default
             points = service.get_points_by_severity("critical")
         
         return points
     except Exception as e:
-        logger.error(f"Erro ao listar pontos de análise HLS: {e}")
-        raise HTTPException(status_code=500, detail="Erro interno do servidor")
+        logger.error(f"Error listing HLS analysis points: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/trends/", response_model=List[HLSPointTrend])
 async def get_points_with_trends(
     db: Session = Depends(get_db)
 ):
-    """Lista pontos de análise HLS com informações de tendência"""
+    """Lists HLS analysis points with trend information"""
     try:
         service = get_hls_analysis_points_service(db)
         trends = service.get_points_with_trends()
         return trends
     except Exception as e:
-        logger.error(f"Erro ao buscar pontos com tendências: {e}")
-        raise HTTPException(status_code=500, detail="Erro interno do servidor")
+        logger.error(f"Error getting points with trends: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.put("/{point_id}", response_model=HLSAnalysisPoint)
 async def update_analysis_point(
@@ -114,14 +114,14 @@ async def update_analysis_point(
     update_data: HLSAnalysisPointUpdate,
     db: Session = Depends(get_db)
 ):
-    """Atualiza um ponto de análise HLS"""
+    """Updates an HLS analysis point"""
     try:
         service = get_hls_analysis_points_service(db)
         point = service.get_point_by_id(point_id)
         if not point:
-            raise HTTPException(status_code=404, detail="Ponto não encontrado")
+            raise HTTPException(status_code=404, detail="Point not found")
         
-        # Atualizar campos fornecidos
+        # Update provided fields
         if update_data.status is not None:
             point.status = update_data.status
         if update_data.is_validated is not None:
@@ -133,8 +133,8 @@ async def update_analysis_point(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Erro ao atualizar ponto de análise HLS {point_id}: {e}")
-        raise HTTPException(status_code=500, detail="Erro interno do servidor")
+        logger.error(f"Error updating HLS analysis point {point_id}: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.post("/{point_id}/history", response_model=HLSPointHistory)
 async def add_point_history(
@@ -142,29 +142,29 @@ async def add_point_history(
     history_data: HLSPointHistoryCreate,
     db: Session = Depends(get_db)
 ):
-    """Adiciona entrada ao histórico temporal de um ponto"""
+    """Adds entry to temporal history of a point"""
     try:
         service = get_hls_analysis_points_service(db)
         return service.add_point_history(point_id, history_data)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
-        logger.error(f"Erro ao adicionar histórico para ponto HLS {point_id}: {e}")
-        raise HTTPException(status_code=500, detail="Erro interno do servidor")
+        logger.error(f"Error adding history for HLS point {point_id}: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/{point_id}/history", response_model=List[HLSPointHistory])
 async def get_point_history(
     point_id: str,
     db: Session = Depends(get_db)
 ):
-    """Busca o histórico temporal de um ponto"""
+    """Gets temporal history of a point"""
     try:
         service = get_hls_analysis_points_service(db)
         history = service.get_point_history(point_id)
         return history
     except Exception as e:
-        logger.error(f"Erro ao buscar histórico do ponto HLS {point_id}: {e}")
-        raise HTTPException(status_code=500, detail="Erro interno do servidor")
+        logger.error(f"Error getting history for HLS point {point_id}: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.patch("/{point_id}/status")
 async def update_point_status(
@@ -172,36 +172,36 @@ async def update_point_status(
     status: str,
     db: Session = Depends(get_db)
 ):
-    """Atualiza o status de um ponto"""
+    """Updates status of a point"""
     try:
         service = get_hls_analysis_points_service(db)
         success = service.update_point_status(point_id, status)
         if not success:
-            raise HTTPException(status_code=404, detail="Ponto não encontrado")
+            raise HTTPException(status_code=404, detail="Point not found")
         
-        return {"message": f"Status do ponto {point_id} atualizado para {status}"}
+        return {"message": f"Point {point_id} status updated to {status}"}
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Erro ao atualizar status do ponto HLS {point_id}: {e}")
-        raise HTTPException(status_code=500, detail="Erro interno do servidor")
+        logger.error(f"Error updating status for HLS point {point_id}: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/summary/", response_model=HLSAnalysisSummary)
 async def get_analysis_summary(
     db: Session = Depends(get_db)
 ):
-    """Retorna resumo da análise HLS"""
+    """Returns HLS analysis summary"""
     try:
         service = get_hls_analysis_points_service(db)
         
-        # Buscar estatísticas básicas
+        # Get basic statistics
         critical_points = service.get_points_by_severity("critical")
         moderate_points = service.get_points_by_severity("moderate")
         healthy_points = service.get_points_by_severity("healthy")
         
         total_points = len(critical_points) + len(moderate_points) + len(healthy_points)
         
-        # Usar dados do primeiro ponto para metadados (assumindo que todos têm os mesmos parâmetros)
+        # Use data from first point for metadata (assuming all have same parameters)
         if critical_points:
             first_point = critical_points[0]
             return HLSAnalysisSummary(
@@ -218,7 +218,7 @@ async def get_analysis_summary(
                 cloud_coverage_max=first_point.cloud_coverage_max
             )
         else:
-            # Retornar valores padrão se não houver pontos
+            # Return default values if no points
             return HLSAnalysisSummary(
                 total_points=0,
                 critical_points=0,
@@ -233,5 +233,5 @@ async def get_analysis_summary(
                 cloud_coverage_max=50
             )
     except Exception as e:
-        logger.error(f"Erro ao gerar resumo da análise HLS: {e}")
-        raise HTTPException(status_code=500, detail="Erro interno do servidor")
+        logger.error(f"Error generating HLS analysis summary: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")

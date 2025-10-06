@@ -16,7 +16,7 @@ from app.api.v1.endpoints import (
 
 api_router = APIRouter()
 
-# Incluir todas as rotas
+# Include all routes
 api_router.include_router(
     auth.router, 
     prefix="/auth", 

@@ -8,7 +8,7 @@ import AOIViewer from "./pages/AOIViewer";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 function App() {
-   // Aplicar tema orbee globalmente
+   // Apply orbee theme globally
    useEffect(() => {
       const savedTheme = localStorage.getItem("theme") || "orbee";
       document.documentElement.setAttribute("data-theme", savedTheme);
@@ -22,7 +22,7 @@ function App() {
                <Route path="/" element={<Home />} />
 
                <Route
-                  path="/perfil"
+                  path="/profile"
                   element={
                      <ProtectedRoute>
                         <Profile />

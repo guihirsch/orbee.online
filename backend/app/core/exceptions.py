@@ -1,75 +1,75 @@
 from fastapi import HTTPException, status
 
 class OrBeeException(Exception):
-    """Exceção base para o OrBee.Online"""
+    """Base exception for OrBee.Online"""
     def __init__(self, message: str, status_code: int = 500):
         self.message = message
         self.status_code = status_code
         super().__init__(self.message)
 
 class UserNotFoundError(OrBeeException):
-    """Usuário não encontrado"""
-    def __init__(self, message: str = "Usuário não encontrado"):
+    """User not found"""
+    def __init__(self, message: str = "User not found"):
         super().__init__(message, status.HTTP_404_NOT_FOUND)
 
 class UserAlreadyExistsError(OrBeeException):
-    """Usuário já existe"""
-    def __init__(self, message: str = "Usuário já existe"):
+    """User already exists"""
+    def __init__(self, message: str = "User already exists"):
         super().__init__(message, status.HTTP_409_CONFLICT)
 
 class InvalidCredentialsError(OrBeeException):
-    """Credenciais inválidas"""
-    def __init__(self, message: str = "Email ou senha incorretos"):
+    """Invalid credentials"""
+    def __init__(self, message: str = "Incorrect email or password"):
         super().__init__(message, status.HTTP_401_UNAUTHORIZED)
 
 class TokenExpiredError(OrBeeException):
-    """Token expirado"""
-    def __init__(self, message: str = "Token expirado"):
+    """Token expired"""
+    def __init__(self, message: str = "Token expired"):
         super().__init__(message, status.HTTP_401_UNAUTHORIZED)
 
 class InvalidTokenError(OrBeeException):
-    """Token inválido"""
-    def __init__(self, message: str = "Token inválido"):
+    """Invalid token"""
+    def __init__(self, message: str = "Invalid token"):
         super().__init__(message, status.HTTP_401_UNAUTHORIZED)
 
 class InsufficientPermissionsError(OrBeeException):
-    """Permissões insuficientes"""
-    def __init__(self, message: str = "Permissões insuficientes"):
+    """Insufficient permissions"""
+    def __init__(self, message: str = "Insufficient permissions"):
         super().__init__(message, status.HTTP_403_FORBIDDEN)
 
 class ValidationError(OrBeeException):
-    """Erro de validação de dados"""
-    def __init__(self, message: str = "Dados inválidos"):
+    """Data validation error"""
+    def __init__(self, message: str = "Invalid data"):
         super().__init__(message, status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 class ObservationNotFoundError(OrBeeException):
-    """Observação não encontrada"""
-    def __init__(self, message: str = "Observação não encontrada"):
+    """Observation not found"""
+    def __init__(self, message: str = "Observation not found"):
         super().__init__(message, status.HTTP_404_NOT_FOUND)
 
 class ValidationNotFoundError(OrBeeException):
-    """Validação não encontrada"""
-    def __init__(self, message: str = "Validação não encontrada"):
+    """Validation not found"""
+    def __init__(self, message: str = "Validation not found"):
         super().__init__(message, status.HTTP_404_NOT_FOUND)
 
 class NDVIServiceError(OrBeeException):
-    """Erro no serviço NDVI"""
-    def __init__(self, message: str = "Erro ao obter dados NDVI"):
+    """NDVI service error"""
+    def __init__(self, message: str = "Error getting NDVI data"):
         super().__init__(message, status.HTTP_503_SERVICE_UNAVAILABLE)
 
 class FileUploadError(OrBeeException):
-    """Erro no upload de arquivo"""
-    def __init__(self, message: str = "Erro no upload do arquivo"):
+    """File upload error"""
+    def __init__(self, message: str = "File upload error"):
         super().__init__(message, status.HTTP_400_BAD_REQUEST)
 
 class DatabaseError(OrBeeException):
-    """Erro de banco de dados"""
-    def __init__(self, message: str = "Erro interno do servidor"):
+    """Database error"""
+    def __init__(self, message: str = "Internal server error"):
         super().__init__(message, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# Função para converter exceções personalizadas em HTTPException
+# Function to convert custom exceptions to HTTPException
 def to_http_exception(exc: OrBeeException) -> HTTPException:
-    """Converte exceção personalizada em HTTPException do FastAPI"""
+    """Converts custom exception to FastAPI HTTPException"""
     return HTTPException(
         status_code=exc.status_code,
         detail=exc.message

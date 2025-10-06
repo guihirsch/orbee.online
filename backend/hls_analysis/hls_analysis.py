@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-HLS Analysis - Análise de Mata Ciliar com Dados HLS (Harmonized Landsat Sentinel)
-Este script processa dados HLS da NASA para análise de mata ciliar:
-- Busca automática de dados HLS via STAC API
-- Processamento NDVI com máscaras de qualidade
-- Detecção de pontos críticos de degradação
-- Exportação de resultados para integração web
+HLS Analysis - Riparian Forest Analysis with HLS Data (Harmonized Landsat Sentinel)
+This script processes NASA HLS data for riparian forest analysis:
+- Automatic HLS data search via STAC API
+- NDVI processing with quality masks
+- Critical degradation points detection
+- Results export for web integration
 """
 
 import os
@@ -15,16 +15,16 @@ import warnings
 from datetime import datetime, timedelta
 from pathlib import Path
 
-# Configurações de warnings
+# Warning configurations
 warnings.filterwarnings('ignore')
 
-# Importar configurações centralizadas
+# Import centralized configurations
 try:
     from .config_hls import get_config
 except ImportError:
     from config_hls import get_config
 
-# Importações principais
+# Main imports
 import pystac_client
 import planetary_computer as pc
 import rasterio
@@ -42,10 +42,10 @@ import stackstac
 import xarray as xr
 from pyproj import Transformer
 
-# Carregar configurações centralizadas
+# Load centralized configurations
 config = get_config()
 
-# Configurações globais (usando configurações centralizadas)
+# Global configurations (using centralized configurations)
 AOI_FILE = "export.geojson"
 BUFFER_DISTANCE = config['degradation']['buffer_distance']
 CRS_WGS84 = "EPSG:4326"
@@ -60,64 +60,64 @@ MAX_POINTS_PER_SEVERITY = config['points']['max_per_severity']
 BUFFER_DISTANCE_RIVER = config['degradation']['buffer_distance_river']
 SAMPLING_STEP = config['points']['sampling_step']
 
-# Nomes das coleções HLS
+# HLS collection names
 HLS_COLLECTIONS = [
     "hls2-l30",  # HLS Landsat 30m v2.0
     "hls2-s30"   # HLS Sentinel-2 30m v2.0
 ]
 
 def check_hls_coverage(bounds):
-    """Verifica se a região tem cobertura HLS teórica"""
+    """Checks if the region has theoretical HLS coverage"""
     minx, miny, maxx, maxy = bounds
 
-    print("🌍 Verificando cobertura HLS para a região...")
+    print("🌍 Checking HLS coverage for the region...")
 
-    # Verificar se está dentro dos limites globais razoáveis
+    # Check if within reasonable global limits
     if miny < -60 or maxy > 80:
-        print("⚠️ Região pode ter cobertura limitada (latitudes extremas)")
+        print("⚠️ Region may have limited coverage (extreme latitudes)")
         return False
 
-    # Verificar se a região não é muito pequena
+    # Check if region is not too small
     area_deg = (maxx - minx) * (maxy - miny)
-    if area_deg < 0.001:  # Muito pequena
-        print("⚠️ Região muito pequena - expandindo ligeiramente...")
+    if area_deg < 0.001:  # Too small
+        print("⚠️ Region too small - expanding slightly...")
         return False
 
-    # Verificar se não é muito grande
-    if area_deg > 10:  # Muito grande
-        print("⚠️ Região muito grande - pode ser necessário dividir")
+    # Check if not too large
+    if area_deg > 10:  # Too large
+        print("⚠️ Region too large - may need to be divided")
         return False
 
-    print("✅ Região dentro dos parâmetros esperados para HLS")
+    print("✅ Region within expected parameters for HLS")
     return True
 
 def load_aoi_data(region_name=None):
     """
-    Carrega dados da AOI APENAS de fontes reais.
-    Se region_name for fornecido, busca rios da região com filtro preciso.
-    Se não conseguir carregar dados reais, gera erro.
+    Loads AOI data ONLY from real sources.
+    If region_name is provided, searches for rivers in the region with precise filtering.
+    If unable to load real data, raises error.
     
     Args:
-        region_name: Nome da região para buscar rios (ex: "Sinimbu, Rio Grande do Sul, Brasil")
+        region_name: Region name to search for rivers (e.g., "Sinimbu, Rio Grande do Sul, Brasil")
     
     Returns:
-        tuple: (GeoDataFrame da AOI, caminho da fonte)
+        tuple: (AOI GeoDataFrame, source path)
         
     Raises:
-        ValueError: Se não conseguir carregar dados reais da AOI
+        ValueError: If unable to load real AOI data
     """
     
-    # Se uma região foi especificada, buscar rios da região
+    # If a region was specified, search for rivers in the region
     if region_name:
-        print(f"🌍 Buscando AOI para região: {region_name}")
+        print(f"🌍 Searching AOI for region: {region_name}")
         try:
             aoi_gdf = find_rivers_in_region_with_filter(region_name)
             return aoi_gdf, f"rios_region_{region_name.replace(',', '_').replace(' ', '_')}"
         except Exception as e:
-            print(f"⚠️ Erro ao buscar rios da região: {e}")
-            print("🔄 Tentando carregar arquivo local...")
+            print(f"⚠️ Error searching for rivers in region: {e}")
+            print("🔄 Trying to load local file...")
     
-    # Opção 1: Tentar carregar arquivo local do projeto
+    # Option 1: Try to load local project file
     local_paths = [
         "../../public/aoi.geojson",
         "../../export.geojson",
@@ -128,32 +128,32 @@ def load_aoi_data(region_name=None):
 
     for path in local_paths:
         if os.path.exists(path):
-            print(f"📂 Carregando AOI local: {path}")
+            print(f"📂 Loading local AOI: {path}")
             with open(path) as f:
                 data = json.load(f)
             gdf = gpd.GeoDataFrame.from_features(data["features"], crs=CRS_WGS84)
             return gdf, path
 
-    # Se chegou até aqui, não foi possível carregar dados reais
-    print("❌ ERRO: Não foi possível carregar dados reais da AOI")
-    print("   Verifique se:")
-    print("   1. A região especificada é válida")
-    print("   2. Há conexão com a internet (para OpenStreetMap)")
-    print("   3. Existem arquivos GeoJSON locais na pasta do projeto")
-    print("   4. A região possui rios mapeados no OpenStreetMap")
-    raise ValueError("Não foi possível carregar dados reais da AOI. Verifique a região e conexão.")
+    # If we got here, it was not possible to load real data
+    print("❌ ERROR: Unable to load real AOI data")
+    print("   Check if:")
+    print("   1. The specified region is valid")
+    print("   2. There is internet connection (for OpenStreetMap)")
+    print("   3. Local GeoJSON files exist in the project folder")
+    print("   4. The region has rivers mapped in OpenStreetMap")
+    raise ValueError("Unable to load real AOI data. Check region and connection.")
 
 def find_rivers_in_region_with_filter(regiao: str, buffer_distance: float = 200) -> gpd.GeoDataFrame:
     """
-    Busca todos os rios na região especificada com filtro preciso por limites administrativos.
-    Cria uma AOI unificada com buffer para análise de mata ciliar.
+    Searches for all rivers in the specified region with precise filtering by administrative boundaries.
+    Creates a unified AOI with buffer for riparian forest analysis.
     
     Args:
-        regiao: Nome da região para buscar rios
-        buffer_distance: Distância do buffer em metros
+        regiao: Region name to search for rivers
+        buffer_distance: Buffer distance in meters
     
     Returns:
-        GeoDataFrame: AOI unificada dos rios da região
+        GeoDataFrame: Unified AOI of rivers in the region
     """
     import osmnx as ox
     

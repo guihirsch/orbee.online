@@ -27,11 +27,11 @@ router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login")
 
-# get_current_user importado de app.api.deps
+# get_current_user imported from app.api.deps
 
 @router.post("/register", response_model=Token)
 async def register(user_data: RegisterRequest):
-    """Registra novo usuário"""
+    """Registers new user"""
     try:
         user_service = UserService()
         return await user_service.register_user(user_data)
@@ -40,13 +40,13 @@ async def register(user_data: RegisterRequest):
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Erro interno do servidor"
+            detail="Internal server error"
         )
 
 
 @router.post("/login", response_model=Token)
 async def login(login_data: LoginRequest):
-    """Faz login do usuário"""
+    """User login"""
     try:
         user_service = UserService()
         return await user_service.login_user(login_data.email, login_data.password)
@@ -55,12 +55,12 @@ async def login(login_data: LoginRequest):
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Erro interno do servidor"
+            detail="Internal server error"
         )
 
 @router.post("/login/form", response_model=Token)
 async def login_form(form_data: OAuth2PasswordRequestForm = Depends()):
-    """Login usando formulário OAuth2 (compatibilidade)"""
+    """Login using OAuth2 form (compatibility)"""
     try:
         user_service = UserService()
         return await user_service.login_user(form_data.username, form_data.password)
@@ -69,22 +69,22 @@ async def login_form(form_data: OAuth2PasswordRequestForm = Depends()):
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Erro interno do servidor"
+            detail="Internal server error"
         )
 
 @router.get("/me", response_model=User)
 async def get_current_user_info(current_user: User = Depends(get_current_user)):
-    """Obtém informações do usuário atual"""
+    """Gets current user information"""
     return current_user
 
 @router.post("/logout")
 async def logout():
-    """Logout do usuário (invalidação do token no frontend)"""
-    return {"message": "Logout realizado com sucesso"}
+    """User logout (token invalidation on frontend)"""
+    return {"message": "Logout successful"}
 
 @router.post("/refresh", response_model=Token)
 async def refresh_token(current_user: User = Depends(get_current_user)):
-    """Renova token de acesso"""
+    """Renews access token"""
     try:
         user_service = UserService()
         access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -101,6 +101,6 @@ async def refresh_token(current_user: User = Depends(get_current_user)):
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Erro ao renovar token"
+            detail="Error renewing token"
         )
 

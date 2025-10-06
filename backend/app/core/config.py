@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=True,
-        extra="ignore",  # Ignora variáveis extras (ex.: VITE_*)
+        extra="ignore",  # Ignores extra variables (ex.: VITE_*)
     )
     # API Settings
     API_V1_STR: str = "/api/v1"
@@ -52,7 +52,7 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
     DEBUG: bool = ENVIRONMENT == "development"
     
-    # Removido Config (Pydantic v2 não permite usar junto de model_config)
+    # Removed Config (Pydantic v2 doesn't allow using together with model_config)
 
 
 settings = Settings()

@@ -1,161 +1,161 @@
-# HLS Analysis - Análise de Mata Ciliar
+# HLS Analysis - Riparian Forest Analysis
 
-Pacote Python para análise de degradação da mata ciliar usando dados HLS (Harmonized Landsat Sentinel).
+Python package for riparian forest degradation analysis using HLS (Harmonized Landsat Sentinel) data.
 
-## 📁 Estrutura do Pacote
+## 📁 Package Structure
 
 ```
 hls_analysis/
-├── __init__.py                    # Pacote Python
-├── hls_analysis.py               # Busca e carregamento de dados HLS
-├── hls_ndvi_processing.py        # Processamento de dados NDVI
-├── hls_degradation_analysis.py   # Análise de degradação da mata ciliar
-├── hls_export.py                 # Exportação de resultados
-├── hls_complete_analysis.py      # Script principal integrado
-├── run_analysis.py               # Script de execução principal
-├── config_hls.py                 # Configurações do sistema
-├── requirements_hls.txt          # Dependências Python
-└── README.md                     # Este arquivo
+├── __init__.py                    # Python package
+├── hls_analysis.py               # HLS data search and loading
+├── hls_ndvi_processing.py        # NDVI data processing
+├── hls_degradation_analysis.py   # Riparian forest degradation analysis
+├── hls_export.py                 # Results export
+├── hls_complete_analysis.py      # Main integrated script
+├── run_analysis.py               # Main execution script
+├── config_hls.py                 # System configurations
+├── requirements_hls.txt          # Python dependencies
+└── README.md                     # This file
 ```
 
-## 🚀 Como Usar
+## 🚀 How to Use
 
-### Execução Rápida
+### Quick Execution
 
 ```bash
 cd scripts/hls_analysis
 python run_analysis.py
 ```
 
-### Execução do Script Principal
+### Main Script Execution
 
 ```bash
 cd scripts/hls_analysis
 python hls_complete_analysis.py
 ```
 
-### Uso como Módulo
+### Usage as Module
 
 ```python
 from scripts.hls_analysis import hls_complete_analysis
 
-# Executar análise
+# Execute analysis
 hls_complete_analysis.main()
 ```
 
-## 📊 Dados Utilizados
+## 📊 Data Sources
 
-### Fontes de Dados Reais
+### Real Data Sources
 
-- **Microsoft Planetary Computer**: Dados HLS (Landsat + Sentinel-2)
-- **OpenStreetMap**: Geometrias de rios e limites administrativos
-- **Dados de Satélite**: Bandas espectrais reais para cálculo NDVI
+-  **Microsoft Planetary Computer**: HLS data (Landsat + Sentinel-2)
+-  **OpenStreetMap**: River geometries and administrative boundaries
+-  **Satellite Data**: Real spectral bands for NDVI calculation
 
-### Processamento
+### Processing
 
-- **NDVI Real**: Calculado a partir de bandas espectrais reais
-- **Análise de Degradação**: Baseada em pixels reais de satélite
-- **Pontos Críticos**: Gerados a partir de dados NDVI reais
+-  **Real NDVI**: Calculated from real spectral bands
+-  **Degradation Analysis**: Based on real satellite pixels
+-  **Critical Points**: Generated from real NDVI data
 
-## ⚙️ Configurações
+## ⚙️ Configuration
 
-### Região Padrão
+### Default Region
 
-- **Região**: Sinimbu, Rio Grande do Sul, Brasil
-- **Período**: 2025-06-01 a 2025-09-30
-- **Buffer**: 200m de mata ciliar
-- **Thresholds**: Crítico < 0.2, Moderado < 0.5
+-  **Region**: Sinimbu, Rio Grande do Sul, Brasil
+-  **Period**: 2025-06-01 to 2025-09-30
+-  **Buffer**: 200m riparian forest
+-  **Thresholds**: Critical < 0.2, Moderate < 0.5
 
-### Personalização
+### Customization
 
-Edite as variáveis no início de `hls_complete_analysis.py`:
+Edit the variables at the beginning of `hls_complete_analysis.py`:
 
 ```python
-REGION_NAME = "Sua Região, Estado, Brasil"
+REGION_NAME = "Your Region, State, Country"
 START_DATE = "2025-06-01"
 END_DATE = "2025-09-30"
 BUFFER_DISTANCE = 200
 ```
 
-## 📋 Dependências
+## 📋 Dependencies
 
-Instale as dependências:
+Install the dependencies:
 
 ```bash
 pip install -r requirements_hls.txt
 ```
 
-### Principais Bibliotecas
+### Main Libraries
 
-- `pystac-client`: Acesso ao Microsoft Planetary Computer
-- `osmnx`: Dados geográficos do OpenStreetMap
-- `rioxarray`: Processamento de dados raster
-- `geopandas`: Manipulação de dados geoespaciais
-- `rasterio`: Leitura/escrita de arquivos raster
+-  `pystac-client`: Microsoft Planetary Computer access
+-  `osmnx`: OpenStreetMap geographic data
+-  `rioxarray`: Raster data processing
+-  `geopandas`: Geospatial data manipulation
+-  `rasterio`: Raster file reading/writing
 
-## 📤 Resultados
+## 📤 Results
 
-### Arquivos Gerados
+### Generated Files
 
-- `critical_points_mata_ciliar.geojson`: Pontos críticos de degradação
-- `ndvi_mata_ciliar_wgs84_normalized.geotiff`: Mapa NDVI processado
-- `processamento_notebook.log`: Log detalhado do processamento
+-  `critical_points_mata_ciliar.geojson`: Critical degradation points
+-  `ndvi_mata_ciliar_wgs84_normalized.geotiff`: Processed NDVI map
+-  `processamento_notebook.log`: Detailed processing log
 
-### Metadados
+### Metadata
 
-Todos os arquivos incluem metadados completos sobre:
+All files include complete metadata about:
 
-- Fonte dos dados (HLS real)
-- Parâmetros de processamento
-- Estatísticas de degradação
-- Validação de consistência
+-  Data source (real HLS)
+-  Processing parameters
+-  Degradation statistics
+-  Consistency validation
 
-## 🔍 Validação de Dados
+## 🔍 Data Validation
 
-### Garantias de Integridade
+### Integrity Guarantees
 
-- ✅ **Apenas dados reais**: Sem dados inventados ou simulados
-- ✅ **Validação de cobertura**: Verifica disponibilidade HLS
-- ✅ **Máscaras de qualidade**: Filtra pixels válidos
-- ✅ **Conversão de coordenadas**: UTM ↔ WGS84 precisa
-- ✅ **Consistência NDVI**: Valida pontos vs análise
+-  ✅ **Real data only**: No invented or simulated data
+-  ✅ **Coverage validation**: Verifies HLS availability
+-  ✅ **Quality masks**: Filters valid pixels
+-  ✅ **Coordinate conversion**: Precise UTM ↔ WGS84
+-  ✅ **NDVI consistency**: Validates points vs analysis
 
-### Fallbacks Removidos
+### Removed Fallbacks
 
-- ❌ **Sem dados de exemplo**: Falha se não conseguir dados reais
-- ❌ **Sem simulações**: Apenas dados de satélite reais
-- ❌ **Sem valores inventados**: NDVI calculado de bandas reais
+-  ❌ **No sample data**: Fails if real data unavailable
+-  ❌ **No simulations**: Only real satellite data
+-  ❌ **No invented values**: NDVI calculated from real bands
 
-## 🛠️ Desenvolvimento
+## 🛠️ Development
 
-### Estrutura Modular
+### Modular Structure
 
-- **hls_analysis**: Busca e carregamento
-- **hls_ndvi_processing**: Processamento NDVI
-- **hls_degradation_analysis**: Análise de degradação
-- **hls_export**: Exportação de resultados
+-  **hls_analysis**: Search and loading
+-  **hls_ndvi_processing**: NDVI processing
+-  **hls_degradation_analysis**: Degradation analysis
+-  **hls_export**: Results export
 
-### Testes
+### Testing
 
 ```bash
-# Testar importação
+# Test import
 python -c "from hls_analysis import hls_complete_analysis; print('✅ OK')"
 
-# Testar execução
+# Test execution
 python run_analysis.py
 ```
 
-## 📞 Suporte
+## 📞 Support
 
-Para dúvidas ou problemas:
+For questions or issues:
 
-1. Verifique os logs de processamento
-2. Confirme a conectividade com Microsoft Planetary Computer
-3. Valide a região especificada no OpenStreetMap
-4. Verifique as dependências instaladas
+1. Check processing logs
+2. Confirm connectivity with Microsoft Planetary Computer
+3. Validate the specified region in OpenStreetMap
+4. Verify installed dependencies
 
 ---
 
-**Desenvolvido por**: Orbee Online Team  
-**Versão**: 1.0.0  
-**Licença**: MIT
+**Developed by**: Orbee Online Team  
+**Version**: 1.0.0  
+**License**: MIT

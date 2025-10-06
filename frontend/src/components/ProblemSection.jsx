@@ -30,12 +30,13 @@ const ProblemSection = () => {
                      <AlertTriangle className="w-6 h-6 text-red-600" />
                   </div>
                   <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                     O Problema Atual
+                     The Current Problem
                   </h2>
                </div>
                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                  A devastação das matas ciliares no Brasil acontece de forma
-                  silenciosa, sem dados precisos e sem acompanhamento adequado.
+                  The devastation of riparian forests in Brazil happens
+                  silently, without precise data and without adequate
+                  monitoring.
                </p>
             </motion.div>
 
@@ -56,12 +57,12 @@ const ProblemSection = () => {
                         75%
                      </div>
                      <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                        Mata Ciliar Devastada
+                        Devastated Riparian Forest
                      </h3>
                      <p className="text-gray-600">
-                        das matas ciliares brasileiras já foram devastadas,
-                        comprometendo a qualidade da água e a biodiversidade
-                        local.
+                        of Brazilian riparian forests have already been
+                        devastated, compromising water quality and local
+                        biodiversity.
                      </p>
                   </div>
                </motion.div>
@@ -82,11 +83,11 @@ const ProblemSection = () => {
                         11 mil km²
                      </div>
                      <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                        Perda Anual
+                        Annual Loss
                      </h3>
                      <p className="text-gray-600">
-                        de vegetação ciliar são perdidos anualmente no Brasil,
-                        uma área equivalente ao estado do Catar.
+                        of riparian vegetation are lost annually in Brazil, an
+                        area equivalent to the state of Qatar.
                      </p>
                   </div>
                </motion.div>
@@ -107,11 +108,11 @@ const ProblemSection = () => {
                         R$ 2,8 bi
                      </div>
                      <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                        Recursos Perdidos
+                        Lost Resources
                      </h3>
                      <p className="text-gray-600">
-                        são desperdiçados anualmente em recursos que poderiam
-                        ser direcionados para preservação e recuperação.
+                        are wasted annually on resources that could be directed
+                        to preservation and recovery.
                      </p>
                   </div>
                </motion.div>
@@ -130,12 +131,12 @@ const ProblemSection = () => {
                      <AlertTriangle className="w-8 h-8 text-red-600" />
                   </div>
                   <h3 className="text-3xl font-bold mb-4 text-gray-900">
-                     11 mil km² perdidos por ano
+                     11 thousand km² lost per year
                   </h3>
                   <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                     Sem dados precisos, sem acompanhamento, sem ação
-                     coordenada. A devastação continua invisível até que seja
-                     tarde demais.
+                     Without precise data, without monitoring, without
+                     coordinated action. The devastation continues invisible
+                     until it's too late.
                   </p>
                </div>
             </motion.div>

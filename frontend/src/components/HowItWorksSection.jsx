@@ -21,10 +21,10 @@ const HowItWorksSection = () => {
                className="text-center mb-16"
             >
                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                  Como Funciona
+                  How It Works
                </h2>
                <p className="text-xl text-gray-600">
-                  Processo simples em 4 passos
+                  Simple process in 4 steps
                </p>
             </motion.div>
 
@@ -46,10 +46,10 @@ const HowItWorksSection = () => {
                      <div className="relative z-10">
                         <MapPin className="w-8 h-8 text-emerald-600 mx-auto mb-3" />
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                           Identificamos a Área
+                           We Identify the Area
                         </h3>
                         <p className="text-gray-600 text-sm">
-                           Satélite + comunidade local detectam degradação
+                           Satellite + local community detect degradation
                         </p>
                      </div>
                   </div>
@@ -70,10 +70,10 @@ const HowItWorksSection = () => {
                      <div className="relative z-10">
                         <Calculator className="w-8 h-8 text-blue-600 mx-auto mb-3" />
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                           Geramos o Plano
+                           We Generate the Plan
                         </h3>
                         <p className="text-gray-600 text-sm">
-                           Quantas mudas, custo total e cronograma
+                           How many seedlings, total cost and schedule
                         </p>
                      </div>
                   </div>
@@ -96,10 +96,10 @@ const HowItWorksSection = () => {
                      <div className="relative z-10">
                         <Heart className="w-8 h-8 text-purple-600 mx-auto mb-3" />
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                           Você Escolhe Apoiar
+                           You Choose to Support
                         </h3>
                         <p className="text-gray-600 text-sm">
-                           Assinatura Pix ou doação única
+                           Pix subscription or one-time donation
                         </p>
                      </div>
                   </div>
@@ -122,10 +122,10 @@ const HowItWorksSection = () => {
                      <div className="relative z-10">
                         <BarChart3 className="w-8 h-8 text-green-600 mx-auto mb-3" />
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                           Acompanha em Tempo Real
+                           Monitor in Real Time
                         </h3>
                         <p className="text-gray-600 text-sm">
-                           NDVI, fotos de campo e conquistas no dashboard
+                           NDVI, field photos and achievements on dashboard
                         </p>
                      </div>
                   </div>

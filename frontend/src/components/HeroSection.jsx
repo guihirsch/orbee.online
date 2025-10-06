@@ -20,9 +20,9 @@ const HeroSection = () => {
          {/* Hero Content */}
          <div className="container mx-auto px-6 py-2 relative z-10">
             <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
-               {/* Seção Esquerda - Interface */}
+               {/* Left Section - Interface */}
                <div className="space-y-8">
-                  {/* Headline Principal */}
+                  {/* Main Headline */}
                   <div className="space-y-4">
                      <h1
                         className="font-medium text-[#2f4538] leading-tight text-4xl lg:text-5xl"
@@ -30,16 +30,17 @@ const HeroSection = () => {
                            fontFamily: '"Fraunces", serif',
                         }}
                      >
-                        Plano de Recuperação
+                        Real-Time Environmental
                         <br />
-                        Ambiental em Tempo Real
+                        Recovery Plan
                      </h1>
                      <p className="text-lg text-gray-600 max-w-xl">
-                        Busque a sua região e veja a saúde da mata ciliar
+                        Search your region and see the health of riparian
+                        forests
                      </p>
                   </div>
 
-                  {/* Input de Busca */}
+                  {/* Search Input */}
                   <div className="flex gap-3">
                      <input
                         type="text"
@@ -53,20 +54,20 @@ const HeroSection = () => {
                         onClick={handleSearch}
                         className="px-6 py-3 bg-[#2f4538]  text-white rounded-lg hover:bg-[#2f4538]/80 transition-colors"
                      >
-                        Buscar
+                        Search
                      </button>
                   </div>
                </div>
 
-               {/* Seção Direita - Zonas */}
+               {/* Right Section - Zones */}
                <div className="space-y-4">
-                  {/* Título da Seção */}
+                  {/* Section Title */}
                   <div className="flex items-center justify-between">
                      <a
                         href="#"
                         className="text-blue-600 hover:text-blue-700 flex items-center gap-2"
                      >
-                        Ver demais zonas
+                        View other zones
                         <svg
                            className="w-4 h-4"
                            fill="none"
@@ -83,20 +84,20 @@ const HeroSection = () => {
                      </a>
                   </div>
 
-                  {/* Cards das Zonas */}
+                  {/* Zone Cards */}
                   <div className="space-y-3">
-                     {/* Card 1 - Zona Crítica A */}
+                     {/* Card 1 - Critical Zone A */}
                      <div className="group relative overflow-hidden rounded-xl border border-red-400/20 hover:border-red-400/40 bg-white/90 backdrop-blur-sm p-4 shadow-xl hover:shadow-red-500/25 transition-all duration-300 ease-in-out cursor-pointer hover:-translate-y-1">
                         <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
                         <div className="relative z-10">
                            <div className="flex items-center gap-2 mb-2">
                               <h3 className="text-lg font-semibold text-gray-900">
-                                 Zona Crítica A
+                                 Critical Zone A
                               </h3>
                               <div className="w-2 h-2 bg-red-500 rounded-full"></div>
                            </div>
                            <p className="text-sm text-gray-600 mb-3">
-                              Margem norte do Rio Pardinho
+                              North bank of Pardinho River
                            </p>
                            <div className="flex gap-6 text-sm">
                               <div>
@@ -104,7 +105,7 @@ const HeroSection = () => {
                                     2.1 ha
                                  </span>
                                  <span className="text-gray-500 ml-1">
-                                    Área
+                                    Area
                                  </span>
                               </div>
                               <div>
@@ -117,28 +118,28 @@ const HeroSection = () => {
                               </div>
                               <div>
                                  <span className="text-red-600 font-medium">
-                                    Severa
+                                    Severe
                                  </span>
                                  <span className="text-gray-500 ml-1">
-                                    Degradação
+                                    Degradation
                                  </span>
                               </div>
                            </div>
                         </div>
                      </div>
 
-                     {/* Card 2 - Zona Crítica B */}
+                     {/* Card 2 - Critical Zone B */}
                      <div className="group relative overflow-hidden rounded-xl border border-orange-400/20 hover:border-orange-400/40 bg-white/90 backdrop-blur-sm p-4 shadow-xl hover:shadow-orange-500/25 transition-all duration-300 ease-in-out cursor-pointer hover:-translate-y-1">
                         <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
                         <div className="relative z-10">
                            <div className="flex items-center gap-2 mb-2">
                               <h3 className="text-lg font-semibold text-gray-900">
-                                 Zona Crítica B
+                                 Critical Zone B
                               </h3>
                               <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
                            </div>
                            <p className="text-sm text-gray-600 mb-3">
-                              Confluência Rio Pardinho - Arroio Lajeado
+                              Pardinho River - Lajeado Stream confluence
                            </p>
                            <div className="flex gap-6 text-sm">
                               <div>
@@ -146,7 +147,7 @@ const HeroSection = () => {
                                     1.8 ha
                                  </span>
                                  <span className="text-gray-500 ml-1">
-                                    Área
+                                    Area
                                  </span>
                               </div>
                               <div>
@@ -159,28 +160,28 @@ const HeroSection = () => {
                               </div>
                               <div>
                                  <span className="text-orange-600 font-medium">
-                                    Severa
+                                    Severe
                                  </span>
                                  <span className="text-gray-500 ml-1">
-                                    Degradação
+                                    Degradation
                                  </span>
                               </div>
                            </div>
                         </div>
                      </div>
 
-                     {/* Card 3 - Zona Atenção C */}
+                     {/* Card 3 - Attention Zone C */}
                      <div className="group relative overflow-hidden rounded-xl border border-yellow-400/20 hover:border-yellow-400/40 bg-white/90 backdrop-blur-sm p-4 shadow-xl hover:shadow-yellow-500/25 transition-all duration-300 ease-in-out cursor-pointer hover:-translate-y-1">
                         <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
                         <div className="relative z-10">
                            <div className="flex items-center gap-2 mb-2">
                               <h3 className="text-lg font-semibold text-gray-900">
-                                 Zona Atenção C
+                                 Attention Zone C
                               </h3>
                               <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                            </div>
                            <p className="text-sm text-gray-600 mb-3">
-                              Margem sul do Rio Pardinho - Setor urbano
+                              South bank of Pardinho River - Urban sector
                            </p>
                            <div className="flex gap-6 text-sm">
                               <div>
@@ -188,7 +189,7 @@ const HeroSection = () => {
                                     3.2 ha
                                  </span>
                                  <span className="text-gray-500 ml-1">
-                                    Área
+                                    Area
                                  </span>
                               </div>
                               <div>
@@ -201,10 +202,10 @@ const HeroSection = () => {
                               </div>
                               <div>
                                  <span className="text-yellow-600 font-medium">
-                                    Moderada
+                                    Moderate
                                  </span>
                                  <span className="text-gray-500 ml-1">
-                                    Degradação
+                                    Degradation
                                  </span>
                               </div>
                            </div>

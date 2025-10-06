@@ -35,7 +35,7 @@ class UserUpdate(BaseModel):
 
 class UserInDB(UserBase):
     id: str
-    password_hash: str  # Mudado de hashed_password para password_hash
+    password_hash: str  # Changed from hashed_password to password_hash
     created_at: datetime
     updated_at: datetime
     last_login: Optional[datetime] = None

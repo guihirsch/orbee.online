@@ -14,7 +14,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 
 def get_ndvi_service():
-    """Dependency para obter o serviço NDVI"""
+    """Dependency to get NDVI service"""
     return NDVIService()
 
 
@@ -24,14 +24,14 @@ async def get_ndvi_data(
     current_user: User = Depends(get_current_user),
     ndvi_service: NDVIService = Depends(get_ndvi_service)
 ):
-    """Obtém dados NDVI para uma localização e período específicos"""
+    """Gets NDVI data for a specific location and period"""
     try:
         ndvi_data = await ndvi_service.get_ndvi_data(request)
         return ndvi_data
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erro ao obter dados NDVI: {str(e)}"
+            detail=f"Error getting NDVI data: {str(e)}"
         )
 
 @router.post("/aoi")
@@ -40,8 +40,8 @@ async def get_ndvi_by_aoi(
     current_user: User = Depends(get_current_user),
     ndvi_service: NDVIService = Depends(get_ndvi_service)
 ):
-    """Obtém NDVI por município (código IBGE) ou geometria AOI (GeoJSON).
-    Body exemplo:
+    """Gets NDVI by municipality (IBGE code) or AOI geometry (GeoJSON).
+    Body example:
     {
       "municipality_code": "4320676",
       "geometry": { ...GeoJSON... },
@@ -57,7 +57,7 @@ async def get_ndvi_by_aoi(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erro ao obter NDVI por AOI: {str(e)}"
+            detail=f"Error getting NDVI by AOI: {str(e)}"
         )
 
 
@@ -65,12 +65,12 @@ async def get_ndvi_by_aoi(
 async def get_ndvi_data_by_coordinates(
     latitude: float = Query(..., ge=-90, le=90, description="Latitude"),
     longitude: float = Query(..., ge=-180, le=180, description="Longitude"),
-    start_date: Optional[date] = Query(None, description="Data inicial (YYYY-MM-DD)"),
-    end_date: Optional[date] = Query(None, description="Data final (YYYY-MM-DD)"),
+    start_date: Optional[date] = Query(None, description="Start date (YYYY-MM-DD)"),
+    end_date: Optional[date] = Query(None, description="End date (YYYY-MM-DD)"),
     current_user: User = Depends(get_current_user),
     ndvi_service: NDVIService = Depends(get_ndvi_service)
 ):
-    """Obtém dados NDVI usando parâmetros de query"""
+    """Gets NDVI data using query parameters"""
     request = NDVIRequest(
         latitude=latitude,
         longitude=longitude,
@@ -84,7 +84,7 @@ async def get_ndvi_data_by_coordinates(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erro ao obter dados NDVI: {str(e)}"
+            detail=f"Error getting NDVI data: {str(e)}"
         )
 
 
@@ -95,7 +95,7 @@ async def get_ndvi_alerts(
     current_user: User = Depends(get_current_user),
     ndvi_service: NDVIService = Depends(get_ndvi_service)
 ):
-    """Obtém alertas NDVI para uma localização"""
+    """Gets NDVI alerts for a location"""
     try:
         alerts = await ndvi_service.get_ndvi_alerts(latitude, longitude)
         return {
@@ -107,7 +107,7 @@ async def get_ndvi_alerts(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erro ao obter alertas NDVI: {str(e)}"
+            detail=f"Error getting NDVI alerts: {str(e)}"
         )
 
 
@@ -118,7 +118,7 @@ async def get_current_ndvi(
     current_user: User = Depends(get_current_user),
     ndvi_service: NDVIService = Depends(get_ndvi_service)
 ):
-    """Obtém apenas o valor NDVI atual para uma localização"""
+    """Gets only the current NDVI value for a location"""
     request = NDVIRequest(
         latitude=latitude,
         longitude=longitude,
@@ -138,7 +138,7 @@ async def get_current_ndvi(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erro ao obter NDVI atual: {str(e)}"
+            detail=f"Error getting current NDVI: {str(e)}"
         )
 
 
@@ -146,11 +146,11 @@ async def get_current_ndvi(
 async def get_ndvi_timeseries(
     latitude: float = Query(..., ge=-90, le=90, description="Latitude"),
     longitude: float = Query(..., ge=-180, le=180, description="Longitude"),
-    days: int = Query(90, ge=7, le=365, description="Número de dias para buscar"),
+    days: int = Query(90, ge=7, le=365, description="Number of days to search"),
     current_user: User = Depends(get_current_user),
     ndvi_service: NDVIService = Depends(get_ndvi_service)
 ):
-    """Obtém série temporal NDVI para uma localização"""
+    """Gets NDVI time series for a location"""
     end_date = datetime.now().date()
     start_date = date.fromordinal(end_date.toordinal() - days)
     
@@ -178,7 +178,7 @@ async def get_ndvi_timeseries(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erro ao obter série temporal NDVI: {str(e)}"
+            detail=f"Error getting NDVI time series: {str(e)}"
         )
 
 
@@ -189,7 +189,7 @@ async def get_vegetation_health(
     current_user: User = Depends(get_current_user),
     ndvi_service: NDVIService = Depends(get_ndvi_service)
 ):
-    """Obtém análise de saúde da vegetação para uma localização"""
+    """Gets vegetation health analysis for a location"""
     request = NDVIRequest(
         latitude=latitude,
         longitude=longitude
@@ -199,7 +199,7 @@ async def get_vegetation_health(
         ndvi_data = await ndvi_service.get_ndvi_data(request)
         alerts = await ndvi_service.get_ndvi_alerts(latitude, longitude)
         
-        # Análise de saúde baseada no NDVI
+        # Health analysis based on NDVI
         health_analysis = {
             "overall_status": ndvi_data.vegetation_status,
             "current_ndvi": ndvi_data.current_ndvi,
@@ -210,28 +210,28 @@ async def get_vegetation_health(
             "alerts": alerts
         }
         
-        # Gera recomendações baseadas no status
+        # Generate recommendations based on status
         if ndvi_data.vegetation_status == "critical":
             health_analysis["recommendations"].extend([
-                "Intervenção urgente necessária",
-                "Verificar causas de degradação",
-                "Considerar replantio ou restauração"
+                "Urgent intervention required",
+                "Check degradation causes",
+                "Consider replanting or restoration"
             ])
         elif ndvi_data.vegetation_status == "poor":
             health_analysis["recommendations"].extend([
-                "Monitoramento intensivo recomendado",
-                "Investigar possíveis estressores",
-                "Implementar medidas de conservação"
+                "Intensive monitoring recommended",
+                "Investigate possible stressors",
+                "Implement conservation measures"
             ])
         elif ndvi_data.vegetation_status == "moderate":
             health_analysis["recommendations"].extend([
-                "Manter monitoramento regular",
-                "Considerar práticas de manejo sustentável"
+                "Maintain regular monitoring",
+                "Consider sustainable management practices"
             ])
         else:
             health_analysis["recommendations"].extend([
-                "Vegetação em bom estado",
-                "Continuar práticas atuais de conservação"
+                "Vegetation in good condition",
+                "Continue current conservation practices"
             ])
         
         return health_analysis
@@ -239,18 +239,18 @@ async def get_vegetation_health(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erro ao analisar saúde da vegetação: {str(e)}"
+            detail=f"Error analyzing vegetation health: {str(e)}"
         )
 
 
 @router.get("/history/{municipality_code}")
 async def get_ndvi_history(
     municipality_code: str,
-    days: int = Query(90, ge=7, le=365, description="Número de dias para buscar"),
-    limit: int = Query(100, ge=1, le=500, description="Limite de registros"),
+    days: int = Query(90, ge=7, le=365, description="Number of days to search"),
+    limit: int = Query(100, ge=1, le=500, description="Record limit"),
     current_user: User = Depends(get_current_user)
 ):
-    """Obtém histórico NDVI de um município"""
+    """Gets NDVI history for a municipality"""
     try:
         history_service = NDVIHistoryService()
         history = await history_service.get_ndvi_history(
@@ -270,17 +270,17 @@ async def get_ndvi_history(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erro ao obter histórico NDVI: {str(e)}"
+            detail=f"Error getting NDVI history: {str(e)}"
         )
 
 
 @router.get("/trend/{municipality_code}")
 async def get_ndvi_trend(
     municipality_code: str,
-    days: int = Query(30, ge=7, le=90, description="Período para análise de tendência"),
+    days: int = Query(30, ge=7, le=90, description="Period for trend analysis"),
     current_user: User = Depends(get_current_user)
 ):
-    """Obtém análise de tendência NDVI de um município"""
+    """Gets NDVI trend analysis for a municipality"""
     try:
         history_service = NDVIHistoryService()
         trend_analysis = await history_service.get_ndvi_trend_analysis(
@@ -297,5 +297,5 @@ async def get_ndvi_trend(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erro ao analisar tendência NDVI: {str(e)}"
+            detail=f"Error analyzing NDVI trend: {str(e)}"
         )

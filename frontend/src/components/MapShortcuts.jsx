@@ -127,7 +127,7 @@ export default function MapShortcuts({
                });
             },
             (error) => {
-               console.warn("Geolocalização não disponível:", error);
+               console.warn("Geolocation not available:", error);
                // Fallback: centralizar na área padrão
                mapRef.current.flyTo({
                   center: [-52.4264, -29.475],
@@ -173,13 +173,13 @@ export default function MapShortcuts({
 
          if (navigator.share) {
             navigator.share({
-               title: "Localização no mapa - Orbee",
-               text: "Veja esta localização no mapa da Orbee",
+               title: "Location on map - Orbee",
+               text: "See this location on the Orbee map",
                url: url,
             });
          } else {
             navigator.clipboard.writeText(url).then(() => {
-               alert("Link copiado para a área de transferência!");
+               alert("Link copied to clipboard!");
             });
          }
       }
@@ -310,7 +310,7 @@ export default function MapShortcuts({
                   title={
                      selectedRegion
                         ? `Região selecionada: ${selectedRegion.municipality}`
-                        : "Buscar município"
+                        : "Search municipality"
                   }
                >
                   <Search className="h-4 w-4" />
@@ -323,7 +323,7 @@ export default function MapShortcuts({
                            clearSelectedRegion();
                         }}
                         className="absolute -top-1 -right-1 w-4 h-4 bg-[#2f4538] text-white rounded-full flex items-center justify-center hover:bg-[#2f4538]/80 transition-colors duration-200 z-10"
-                        title="Limpar seleção"
+                        title="Clear selection"
                      >
                         <X className="h-2.5 w-2.5" />
                      </button>
@@ -358,7 +358,7 @@ export default function MapShortcuts({
                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 z-10" />
                            <input
                               type="text"
-                              placeholder="Digite o nome do município..."
+                              placeholder="Type municipality name..."
                               value={searchQuery}
                               onChange={(e) => setSearchQuery(e.target.value)}
                               className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500/20 focus:border-blue-400/40 transition-all duration-200"
@@ -459,7 +459,7 @@ export default function MapShortcuts({
                <button
                   onClick={handleLocate}
                   className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-100 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-200"
-                  title="Minha localização"
+                  title="My location"
                >
                   <Navigation className="h-4 w-4" />
                </button>
@@ -509,7 +509,7 @@ export default function MapShortcuts({
                <button
                   onClick={handleShare}
                   className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-100 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-200"
-                  title="Compartilhar localização"
+                  title="Share location"
                >
                   <Share2 className="h-4 w-4" />
                </button>
@@ -529,7 +529,7 @@ export default function MapShortcuts({
                   <button
                      onClick={() => setShowUserMenu((v) => !v)}
                      className="w-10 h-10 bg-white/95 backdrop-blur-sm border border-gray-100 hover:bg-white text-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:border-gray-200"
-                     title="Perfil do usuário"
+                     title="User profile"
                   >
                      <User className="h-4 w-4" />
                   </button>
@@ -614,7 +614,7 @@ export default function MapShortcuts({
 
                      {/* Card de Pontos Críticos */}
                      {createStatCard(
-                        "Críticos",
+                        "Critical",
                         criticalPoints
                            .filter((p) => p.properties.severity === "critical")
                            .length.toString(),
@@ -636,7 +636,7 @@ export default function MapShortcuts({
 
                      {/* Card de Pontos Saudáveis */}
                      {createStatCard(
-                        "Saudáveis",
+                        "Healthy",
                         criticalPoints
                            .filter((p) => p.properties.severity === "healthy")
                            .length.toString(),
@@ -647,7 +647,7 @@ export default function MapShortcuts({
 
                      {/* Card de NDVI Médio */}
                      {createStatCard(
-                        "NDVI Médio",
+                        "Average NDVI",
                         criticalPoints.length > 0
                            ? (
                                 criticalPoints.reduce(
@@ -663,7 +663,7 @@ export default function MapShortcuts({
 
                      {/* Card de Última Atualização */}
                      {createStatCard(
-                        "Última Análise",
+                        "Last Analysis",
                         new Date().toLocaleDateString(),
                         <Satellite className="h-4 w-4 text-indigo-600" />,
                         "border-indigo-200 bg-indigo-50/50",

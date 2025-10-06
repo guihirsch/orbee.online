@@ -55,7 +55,7 @@ export default function AOIViewer() {
    // Funções para integração com backend
    const saveObservation = async (observationData) => {
       if (!isAuthenticated) {
-         alert("Você precisa estar logado para salvar observações");
+         alert("You need to be logged in to save observations");
          return;
       }
 
@@ -67,10 +67,10 @@ export default function AOIViewer() {
          });
 
          setSavedObservations((prev) => [...prev, response]);
-         alert("Observação salva com sucesso!");
+         alert("Observation saved successfully!");
       } catch (error) {
-         console.error("Erro ao salvar observação:", error);
-         alert("Erro ao salvar observação");
+         console.error("Error saving observation:", error);
+         alert("Error saving observation");
       } finally {
          setLoading(false);
       }
@@ -84,7 +84,7 @@ export default function AOIViewer() {
          const response = await apiRequest("/observations/");
          setSavedObservations(response);
       } catch (error) {
-         console.error("Erro ao carregar observações:", error);
+         console.error("Error loading observations:", error);
       } finally {
          setLoading(false);
       }
@@ -102,10 +102,10 @@ export default function AOIViewer() {
          setSavedObservations((prev) =>
             prev.filter((obs) => obs.id !== observationId)
          );
-         alert("Observação removida com sucesso!");
+         alert("Observation removed successfully!");
       } catch (error) {
-         console.error("Erro ao remover observação:", error);
-         alert("Erro ao remover observação");
+         console.error("Error removing observation:", error);
+         alert("Error removing observation");
       } finally {
          setLoading(false);
       }
@@ -241,9 +241,7 @@ export default function AOIViewer() {
                            level: mappedLevel,
                            color: props.color,
                            label:
-                              props.label ||
-                              props.severity ||
-                              "Não classificado",
+                              props.label || props.severity || "Unclassified",
                            ndvi: props.ndvi,
                         };
                      }
@@ -261,7 +259,7 @@ export default function AOIViewer() {
                         return {
                            level: "critical",
                            color: "#DC143C",
-                           label: "Crítico",
+                           label: "Critical",
                            ndvi: ndvi,
                         };
                      if (ndvi < 0.4)
@@ -281,7 +279,7 @@ export default function AOIViewer() {
                      return {
                         level: "excellent",
                         color: "#228B22",
-                        label: "Saudável",
+                        label: "Healthy",
                         ndvi: ndvi,
                      };
                   };
@@ -685,22 +683,22 @@ export default function AOIViewer() {
                   // Função para descrição da vegetação
                   const getVegetationDescription = (level) => {
                      const descriptions = {
-                        water: "Área de água ou solo exposto",
-                        critical: "Vegetação severamente degradada ou ausente",
+                        water: "Water area or exposed soil",
+                        critical: "Severely degraded or absent vegetation",
                         severe:
-                           "Vegetação muito danificada, necessita intervenção urgente",
-                        moderate: "Vegetação parcialmente degradada",
-                        light: "Vegetação com sinais leves de estresse",
-                        fair: "Vegetação em condição regular",
-                        good: "Vegetação saudável e bem desenvolvida",
-                        excellent: "Vegetação exuberante e muito densa",
-                        // Níveis específicos do GeoJSON
-                        very_sparse: "Vegetação muito rala ou solo exposto",
-                        sparse: "Vegetação esparsa em regeneração",
-                        dense: "Vegetação densa e bem desenvolvida",
-                        very_dense: "Vegetação muito densa e exuberante",
+                           "Very damaged vegetation, needs urgent intervention",
+                        moderate: "Partially degraded vegetation",
+                        light: "Vegetation with mild stress signs",
+                        fair: "Vegetation in regular condition",
+                        good: "Healthy and well-developed vegetation",
+                        excellent: "Lush and very dense vegetation",
+                        // Specific GeoJSON levels
+                        very_sparse: "Very sparse vegetation or exposed soil",
+                        sparse: "Sparse vegetation in regeneration",
+                        dense: "Dense and well-developed vegetation",
+                        very_dense: "Very dense and lush vegetation",
                      };
-                     return descriptions[level] || "Estado não classificado";
+                     return descriptions[level] || "Unclassified state";
                   };
 
                   // Pontos estáticos - não mudam com zoom

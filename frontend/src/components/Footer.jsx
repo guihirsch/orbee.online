@@ -7,11 +7,11 @@ const Footer = () => {
    const currentYear = new Date().getFullYear();
 
    const navigationLinks = [
-      { name: "Início", href: "#hero" },
-      { name: "Problema", href: "#problem" },
-      { name: "Solução", href: "#solution" },
-      { name: "Como funciona", href: "#how-it-works" },
-      { name: "Futuro", href: "#future" },
+      { name: "Home", href: "#hero" },
+      { name: "Problem", href: "#problem" },
+      { name: "Solution", href: "#solution" },
+      { name: "How it works", href: "#how-it-works" },
+      { name: "Future", href: "#future" },
    ];
 
    const handleScroll = (e, href) => {
@@ -72,13 +72,13 @@ const Footer = () => {
                      </span>
                   </div>
                   <p className="text-gray-600 max-w-xl leading-relaxed">
-                     O Sistema Operacional da Recuperação Ambiental.
+                     The Operating System for Environmental Recovery.
                   </p>
                </div>
 
                <div>
                   <h3 className="text-base font-semibold mb-4 text-[#2f4538]">
-                     Navegação
+                     Navigation
                   </h3>
                   <ul className="space-y-2">
                      {navigationLinks.map((link, index) => (
@@ -108,10 +108,10 @@ const Footer = () => {
             <div className="border-t border-gray-200 pt-6">
                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                   <p className="text-gray-500 text-sm">
-                     © {currentYear} orbee. Todos os direitos reservados.
+                     © {currentYear} orbee. All rights reserved.
                   </p>
                   <div className="text-sm text-gray-500">
-                     Feito com ❤️ no Brasil
+                     Made with ❤️ in Brazil
                   </div>
                </div>
             </div>

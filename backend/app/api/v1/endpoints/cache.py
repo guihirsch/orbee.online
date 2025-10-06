@@ -1,6 +1,6 @@
 """
-Endpoints para cache de dados municipais
-Fornece dados pré-processados para resposta rápida
+Municipal data cache endpoints
+Provides pre-processed data for fast response
 """
 
 from fastapi import APIRouter, HTTPException, Query, Depends
@@ -26,7 +26,7 @@ async def get_cached_municipality_data(
     db: Session = Depends(get_db)
 ) -> Dict[str, Any]:
     """
-    Retorna dados municipais do cache (resposta rápida)
+    Returns municipal data from cache (fast response)
     """
     try:
         result = {
@@ -35,7 +35,7 @@ async def get_cached_municipality_data(
             "timestamp": datetime.now().isoformat()
         }
         
-        # Busca geometria se solicitada
+        # Search geometry if requested
         if include_geometry:
             geometry_result = db.execute("""
                 SELECT municipality_name, state, geometry_data, bbox, source, updated_at
@@ -55,7 +55,7 @@ async def get_cached_municipality_data(
             else:
                 result["geometry"] = None
         
-        # Busca plano se solicitado
+        # Search plan if requested
         if include_plan:
             plan_result = db.execute("""
                 SELECT municipality_name, state, plan_data, ndvi_data, zones_data, summary_data, updated_at
@@ -76,7 +76,7 @@ async def get_cached_municipality_data(
             else:
                 result["plan"] = None
         
-        # Busca NDVI se solicitado
+        # Search NDVI if requested
         if include_ndvi:
             ndvi_results = db.execute("""
                 SELECT date_observed, ndvi_value, cloud_coverage, statistics
@@ -103,7 +103,7 @@ async def get_cached_municipality_data(
             else:
                 result["ndvi"] = None
         
-        # Verifica se todos os dados estão disponíveis
+        # Check if all data is available
         missing_data = []
         if include_geometry and not result.get("geometry"):
             missing_data.append("geometry")
@@ -121,8 +121,8 @@ async def get_cached_municipality_data(
         return result
         
     except Exception as e:
-        logger.error(f"Erro ao buscar dados em cache para município {code}: {e}")
-        raise HTTPException(status_code=500, detail="Erro interno do servidor")
+        logger.error(f"Error fetching cached data for municipality {code}: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/municipality/{code}/status")
 async def get_municipality_cache_status(
@@ -130,17 +130,17 @@ async def get_municipality_cache_status(
     db: Session = Depends(get_db)
 ) -> Dict[str, Any]:
     """
-    Retorna status do cache para um município
+    Returns cache status for a municipality
     """
     try:
-        # Verifica status de cada tipo de cache
+        # Check status of each cache type
         status = {
             "municipality_code": code,
             "timestamp": datetime.now().isoformat(),
             "cache_status": {}
         }
         
-        # Status da geometria
+        # Geometry status
         geometry_status = db.execute("""
             SELECT COUNT(*) as count, MAX(updated_at) as last_update, MIN(expires_at) as expires_at
             FROM municipality_geometry_cache 
@@ -154,7 +154,7 @@ async def get_municipality_cache_status(
             "expires_at": geometry_status[2].isoformat() if geometry_status[2] else None
         }
         
-        # Status do plano
+        # Plan status
         plan_status = db.execute("""
             SELECT COUNT(*) as count, MAX(updated_at) as last_update, MIN(expires_at) as expires_at
             FROM municipality_plan_cache 
@@ -168,7 +168,7 @@ async def get_municipality_cache_status(
             "expires_at": plan_status[2].isoformat() if plan_status[2] else None
         }
         
-        # Status do NDVI
+        # NDVI status
         ndvi_status = db.execute("""
             SELECT COUNT(*) as count, MAX(date_observed) as last_date, MIN(expires_at) as expires_at
             FROM municipality_ndvi_cache 
@@ -182,7 +182,7 @@ async def get_municipality_cache_status(
             "expires_at": ndvi_status[2].isoformat() if ndvi_status[2] else None
         }
         
-        # Status geral
+        # Overall status
         all_available = all([
             status["cache_status"]["geometry"]["available"],
             status["cache_status"]["plan"]["available"],
@@ -198,15 +198,15 @@ async def get_municipality_cache_status(
         return status
         
     except Exception as e:
-        logger.error(f"Erro ao verificar status do cache para município {code}: {e}")
-        raise HTTPException(status_code=500, detail="Erro interno do servidor")
+        logger.error(f"Error checking cache status for municipality {code}: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/municipalities/stats")
 async def get_cache_statistics(
     db: Session = Depends(get_db)
 ) -> Dict[str, Any]:
     """
-    Retorna estatísticas gerais do cache
+    Returns general cache statistics
     """
     try:
         stats = {
@@ -214,7 +214,7 @@ async def get_cache_statistics(
             "cache_statistics": {}
         }
         
-        # Estatísticas da geometria
+        # Geometry statistics
         geometry_stats = db.execute("""
             SELECT 
                 COUNT(*) as total,
@@ -229,7 +229,7 @@ async def get_cache_statistics(
             "expired": geometry_stats[2]
         }
         
-        # Estatísticas do plano
+        # Plan statistics
         plan_stats = db.execute("""
             SELECT 
                 COUNT(*) as total,
@@ -244,7 +244,7 @@ async def get_cache_statistics(
             "expired": plan_stats[2]
         }
         
-        # Estatísticas do NDVI
+        # NDVI statistics
         ndvi_stats = db.execute("""
             SELECT 
                 COUNT(*) as total,
@@ -259,20 +259,20 @@ async def get_cache_statistics(
             "expired": ndvi_stats[2]
         }
         
-        # Estatísticas gerais
+        # General statistics
         stats["cache_statistics"]["overall"] = {
             "total_municipalities": len(set([
                 row[0] for row in db.execute("SELECT DISTINCT municipality_code FROM municipality_geometry_cache").fetchall()
             ])),
-            "cache_hit_rate": "N/A",  # Seria calculado com métricas de uso
+            "cache_hit_rate": "N/A",  # Would be calculated with usage metrics
             "last_update": datetime.now().isoformat()
         }
         
         return stats
         
     except Exception as e:
-        logger.error(f"Erro ao buscar estatísticas do cache: {e}")
-        raise HTTPException(status_code=500, detail="Erro interno do servidor")
+        logger.error(f"Error fetching cache statistics: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.delete("/municipality/{code}/cache")
 async def clear_municipality_cache(
@@ -282,11 +282,11 @@ async def clear_municipality_cache(
     current_user: User = Depends(get_current_user)
 ) -> Dict[str, Any]:
     """
-    Limpa cache de um município específico (requer autenticação)
+    Clears cache for a specific municipality (requires authentication)
     """
     try:
         if current_user.role not in ["admin", "moderator"]:
-            raise HTTPException(status_code=403, detail="Permissão negada")
+            raise HTTPException(status_code=403, detail="Permission denied")
         
         deleted_count = 0
         
@@ -321,5 +321,5 @@ async def clear_municipality_cache(
         }
         
     except Exception as e:
-        logger.error(f"Erro ao limpar cache para município {code}: {e}")
-        raise HTTPException(status_code=500, detail="Erro interno do servidor")
+        logger.error(f"Error clearing cache for municipality {code}: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")

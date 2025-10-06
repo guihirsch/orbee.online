@@ -38,14 +38,14 @@ export const AuthProvider = ({ children }) => {
             if (response.status === 401) {
                // Token expirado ou inválido
                logout();
-               throw new Error("Sessão expirada");
+               throw new Error("Session expired");
             }
-            throw new Error(`Erro ${response.status}: ${response.statusText}`);
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
          }
 
          return await response.json();
       } catch (error) {
-         console.error("Erro na requisição:", error);
+         console.error("Request error:", error);
          throw error;
       }
    };
@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }) => {
          const data = await apiRequest("/auth/me");
          setUser(data);
       } catch (error) {
-         console.error("Erro ao obter usuário atual:", error);
+         console.error("Error getting current user:", error);
          logout();
       } finally {
          setLoading(false);

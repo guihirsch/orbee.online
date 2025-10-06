@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 
 class ObservationService:
-    """Serviço para lógica de negócio das observações"""
+    """Service for observation business logic"""
     
     def __init__(
         self, 
@@ -43,20 +43,20 @@ class ObservationService:
         user_id: str,
         user_token: str = None
     ) -> Observation:
-        """Cria nova observação"""
+        """Creates new observation"""
         try:
-            # Validar dados específicos
+            # Validate specific data
             await self._validate_observation_data(observation_data)
             
-            # Verificar se há observações muito próximas (evitar spam)
+            # Check for very nearby observations (prevent spam)
             nearby_obs = await self.get_nearby_observations(
                 lat=observation_data.latitude,
                 lon=observation_data.longitude,
-                radius_km=0.1,  # 100 metros
+                radius_km=0.1,  # 100 meters
                 user_id=user_id
             )
             
-            # Permitir apenas uma observação por usuário em raio de 100m nas últimas 24h
+            # Allow only one observation per user within 100m radius in the last 24h
             recent_nearby = [
                 obs for obs in nearby_obs 
                 if obs.user_id == user_id and 
@@ -65,39 +65,39 @@ class ObservationService:
             
             if recent_nearby:
                 raise ValidationError(
-                    "Você já criou uma observação próxima nas últimas 24 horas"
+                    "You already created a nearby observation in the last 24 hours"
                 )
             
             observation = await self.observation_repo.create_observation(
                 observation_data, user_id, user_token
             )
             
-            logger.info(f"Observação criada: {observation.id} por usuário {user_id}")
+            logger.info(f"Observation created: {observation.id} by user {user_id}")
             return observation
             
         except ValidationError:
             raise
         except Exception as e:
-            logger.error(f"Erro ao criar observação: {e}")
-            raise DatabaseError(f"Erro ao criar observação: {str(e)}")
+            logger.error(f"Error creating observation: {e}")
+            raise DatabaseError(f"Error creating observation: {str(e)}")
     
     async def get_observation_by_id(
         self, 
         observation_id: str, 
         user_id: Optional[str] = None
     ) -> Observation:
-        """Busca observação por ID"""
+        """Gets observation by ID"""
         try:
             observation = await self.observation_repo.get_observation_by_id(
                 observation_id, user_id
             )
             
-            # Buscar validações da observação
+            # Get observation validations
             validations = await self.validation_repo.get_validations_by_observation(
                 observation_id
             )
             
-            # Adicionar validações ao objeto observação
+            # Add validations to observation object
             observation.validations = validations
             
             return observation
@@ -105,8 +105,8 @@ class ObservationService:
         except ObservationNotFoundError:
             raise
         except Exception as e:
-            logger.error(f"Erro ao buscar observação {observation_id}: {e}")
-            raise DatabaseError(f"Erro ao buscar observação: {str(e)}")
+            logger.error(f"Error getting observation {observation_id}: {e}")
+            raise DatabaseError(f"Error getting observation: {str(e)}")
     
     async def get_observations(
         self,

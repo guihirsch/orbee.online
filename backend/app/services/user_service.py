@@ -27,13 +27,13 @@ from app.repositories.user_repository import UserRepository
 class UserService:
     def __init__(self, supabase: Client = None):
         if supabase is None:
-            # Usar service role para contornar RLS
+            # Use service role to bypass RLS
             from app.core.database import get_supabase_service_client
             supabase = get_supabase_service_client()
         self.user_repo = UserRepository(supabase)
     
     def create_access_token(self, data: dict, expires_delta: Optional[timedelta] = None) -> str:
-        """Cria token JWT de acesso"""
+        """Creates JWT access token"""
         to_encode = data.copy()
         if expires_delta:
             expire = datetime.utcnow() + expires_delta
@@ -45,18 +45,18 @@ class UserService:
         return encoded_jwt
     
     def verify_token(self, token: str) -> TokenData:
-        """Verifica e decodifica token JWT"""
+        """Verifies and decodes JWT token"""
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
             email: str = payload.get("sub")
             if email is None:
-                raise InvalidTokenError("Token inválido")
+                raise InvalidTokenError("Invalid token")
             return TokenData(email=email)
         except JWTError:
-            raise InvalidTokenError("Token inválido")
+            raise InvalidTokenError("Invalid token")
     
     async def authenticate_user(self, email: str, password: str) -> Optional[UserInDB]:
-        """Autentica usuário com email e senha"""
+        """Authenticates user with email and password"""
         user = await self.user_repo.get_user_by_email(email)
         if not user:
             return None
@@ -65,16 +65,16 @@ class UserService:
         return user
     
     async def register_user(self, user_data: UserCreate) -> Token:
-        """Registra novo usuário"""
-        # Verificar se usuário já existe
+        """Registers new user"""
+        # Check if user already exists
         existing_user = await self.user_repo.get_user_by_email(user_data.email)
         if existing_user:
-            raise UserAlreadyExistsError("Email já está em uso")
+            raise UserAlreadyExistsError("Email is already in use")
         
-        # Criar usuário
+        # Create user
         user_in_db = await self.user_repo.create_user(user_data)
         
-        # Criar token de acesso
+        # Create access token
         access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = self.create_access_token(
             data={"sub": user_in_db.email}, expires_delta=access_token_expires
@@ -104,15 +104,15 @@ class UserService:
         )
     
     async def login_user(self, email: str, password: str) -> Token:
-        """Faz login do usuário"""
+        """Logs in user"""
         user = await self.authenticate_user(email, password)
         if not user:
-            raise InvalidCredentialsError("Email ou senha incorretos")
+            raise InvalidCredentialsError("Incorrect email or password")
         
-        # Atualizar último login
+        # Update last login
         await self.user_repo.update_last_login(user.id)
         
-        # Criar token de acesso
+        # Create access token
         access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = self.create_access_token(
             data={"sub": user.email}, expires_delta=access_token_expires

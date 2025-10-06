@@ -1,79 +1,79 @@
 #!/usr/bin/env python3
 """
-Configurações para HLS Analysis
-Arquivo centralizado de configurações para personalizar a análise
+Configuration for HLS Analysis
+Centralized configuration file for customizing the analysis
 """
 
 # =============================================================================
-# CONFIGURAÇÕES DE BUSCA DE DADOS HLS
+# HLS DATA SEARCH CONFIGURATIONS
 # =============================================================================
 
-# Período de análise
+# Analysis period
 START_DATE = "2025-06-01"
 END_DATE = "2025-09-30"
 
-# Cobertura máxima de nuvens (0-100%)
+# Maximum cloud coverage (0-100%)
 CLOUD_COVERAGE_MAX = 50
 
-# Coleções HLS a serem utilizadas
+# HLS collections to be used
 HLS_COLLECTIONS = [
     "hls2-l30",  # HLS Landsat 30m v2.0
     "hls2-s30"   # HLS Sentinel-2 30m v2.0
 ]
 
 # =============================================================================
-# CONFIGURAÇÕES DE PROCESSAMENTO NDVI
+# NDVI PROCESSING CONFIGURATIONS
 # =============================================================================
 
-# Thresholds de classificação de vegetação
-NDVI_CRITICAL_THRESHOLD = 0.2   # Limite para áreas sem vegetação ou muito ralas
-NDVI_MODERATE_THRESHOLD = 0.5   # Limite para separar vegetação esparsa de densa
+# Vegetation classification thresholds
+NDVI_CRITICAL_THRESHOLD = 0.2   # Threshold for areas without vegetation or very sparse
+NDVI_MODERATE_THRESHOLD = 0.5   # Threshold to separate sparse from dense vegetation
 
-# Mínimo de pixels válidos para análise (fração 0-1)
+# Minimum valid pixels for analysis (fraction 0-1)
 MIN_VALID_PIXELS = 0.05
 
 # =============================================================================
-# CONFIGURAÇÕES DE ANÁLISE DE DEGRADAÇÃO
+# DEGRADATION ANALYSIS CONFIGURATIONS
 # =============================================================================
 
-# Buffer de mata ciliar em metros
+# Riparian forest buffer in meters
 BUFFER_DISTANCE = 200
 
-# Buffer específico do rio em metros
+# Specific river buffer in meters
 BUFFER_DISTANCE_RIVER = 200
 
 # =============================================================================
-# CONFIGURAÇÕES DE GERAÇÃO DE PONTOS CRÍTICOS
+# CRITICAL POINTS GENERATION CONFIGURATIONS
 # =============================================================================
 
-# Distância mínima entre pontos críticos (metros)
+# Minimum distance between critical points (meters)
 MIN_DISTANCE_POINTS = 100
 
-# Máximo de pontos por categoria de severidade
+# Maximum points per severity category
 MAX_POINTS_PER_SEVERITY = 50
 
-# Configurações de amostragem
+# Sampling configurations
 SAMPLING_STEP = 3
 
 # =============================================================================
-# CONFIGURAÇÕES DE EXPORTAÇÃO
+# EXPORT CONFIGURATIONS
 # =============================================================================
 
-# Diretório de saída
+# Output directory
 OUTPUT_DIR = "."
 
-# Nomes dos arquivos de saída
+# Output file names
 GEOJSON_FILENAME = "critical_points_mata_ciliar.geojson"
 GEOTIFF_FILENAME = "ndvi_mata_ciliar_wgs84_normalized.geotiff"
 LOG_FILENAME = "processamento_notebook.log"
 
 
 # =============================================================================
-# FUNÇÕES DE CONFIGURAÇÃO
+# CONFIGURATION FUNCTIONS
 # =============================================================================
 
 def get_config():
-    """Retorna todas as configurações como um dicionário"""
+    """Returns all configurations as a dictionary"""
     return {
         'search': {
             'start_date': START_DATE,
@@ -104,14 +104,14 @@ def get_config():
     }
 
 def update_config(**kwargs):
-    """Atualiza configurações específicas"""
+    """Updates specific configurations"""
     global START_DATE, END_DATE, CLOUD_COVERAGE_MAX
     global NDVI_CRITICAL_THRESHOLD, NDVI_MODERATE_THRESHOLD
     global BUFFER_DISTANCE, BUFFER_DISTANCE_RIVER
     global MIN_DISTANCE_POINTS, MAX_POINTS_PER_SEVERITY
     global OUTPUT_DIR, GEOJSON_FILENAME, GEOTIFF_FILENAME, LOG_FILENAME
     
-    # Atualizar configurações de busca
+    # Update search configurations
     if 'start_date' in kwargs:
         START_DATE = kwargs['start_date']
     if 'end_date' in kwargs:
@@ -119,25 +119,25 @@ def update_config(**kwargs):
     if 'cloud_coverage_max' in kwargs:
         CLOUD_COVERAGE_MAX = kwargs['cloud_coverage_max']
     
-    # Atualizar configurações de NDVI
+    # Update NDVI configurations
     if 'critical_threshold' in kwargs:
         NDVI_CRITICAL_THRESHOLD = kwargs['critical_threshold']
     if 'moderate_threshold' in kwargs:
         NDVI_MODERATE_THRESHOLD = kwargs['moderate_threshold']
     
-    # Atualizar configurações de buffer
+    # Update buffer configurations
     if 'buffer_distance' in kwargs:
         BUFFER_DISTANCE = kwargs['buffer_distance']
     if 'buffer_distance_river' in kwargs:
         BUFFER_DISTANCE_RIVER = kwargs['buffer_distance_river']
     
-    # Atualizar configurações de pontos
+    # Update points configurations
     if 'min_distance' in kwargs:
         MIN_DISTANCE_POINTS = kwargs['min_distance']
     if 'max_per_severity' in kwargs:
         MAX_POINTS_PER_SEVERITY = kwargs['max_per_severity']
     
-    # Atualizar configurações de exportação
+    # Update export configurations
     if 'output_dir' in kwargs:
         OUTPUT_DIR = kwargs['output_dir']
     if 'geojson_filename' in kwargs:
@@ -148,10 +148,10 @@ def update_config(**kwargs):
         LOG_FILENAME = kwargs['log_filename']
 
 def print_config():
-    """Imprime as configurações atuais"""
+    """Prints current configurations"""
     config = get_config()
     
-    print("🔧 CONFIGURAÇÕES ATUAIS - HLS ANALYSIS")
+    print("🔧 CURRENT CONFIGURATIONS - HLS ANALYSIS")
     print("=" * 50)
     
     for section, settings in config.items():

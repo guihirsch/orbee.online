@@ -6,13 +6,13 @@ const Profile = () => {
    const { user } = useAuth();
    const [activeTab, setActiveTab] = useState("profile");
    const [profile, setProfile] = useState({
-      name: user?.full_name || "Usuário",
+      name: user?.full_name || "User",
       email: user?.email || "",
       phone: user?.phone || "",
       location: user?.location || "",
       bio: user?.bio || "",
       joinDate: user?.created_at
-         ? new Date(user.created_at).toLocaleDateString("pt-BR")
+         ? new Date(user.created_at).toLocaleDateString("en-US")
          : "2024-01-01",
    });
 
@@ -24,41 +24,41 @@ const Profile = () => {
    });
 
    const tabs = [
-      { id: "profile", label: "Perfil", icon: User },
-      { id: "achievements", label: "Conquistas", icon: Award },
-      { id: "notifications", label: "Notificações", icon: Bell },
-      { id: "settings", label: "Configurações", icon: Settings },
+      { id: "profile", label: "Profile", icon: User },
+      { id: "achievements", label: "Achievements", icon: Award },
+      { id: "notifications", label: "Notifications", icon: Bell },
+      { id: "settings", label: "Settings", icon: Settings },
    ];
 
    const achievements = [
       {
          id: 1,
-         title: "Primeiro Observador",
-         description: "Fez sua primeira observação comunitária",
+         title: "First Observer",
+         description: "Made your first community observation",
          icon: Leaf,
          earned: true,
          date: "2024-01-05",
       },
       {
          id: 2,
-         title: "Guardião Ambiental",
-         description: "Contribuiu com 10 observações verificadas",
+         title: "Environmental Guardian",
+         description: "Contributed with 10 verified observations",
          icon: "🛡️",
          earned: false,
          progress: 3,
       },
       {
          id: 3,
-         title: "Explorador de Dados",
-         description: "Visualizou dados NDVI por 30 dias consecutivos",
+         title: "Data Explorer",
+         description: "Viewed NDVI data for 30 consecutive days",
          icon: BarChart3,
          earned: false,
          progress: 15,
       },
       {
          id: 4,
-         title: "Colaborador Ativo",
-         description: "Validou 50 observações de outros usuários",
+         title: "Active Collaborator",
+         description: "Validated 50 observations from other users",
          icon: "🤝",
          earned: false,
          progress: 0,
@@ -104,25 +104,25 @@ const Profile = () => {
                <p className="text-2xl font-bold text-primary-600">
                   {stats.observations}
                </p>
-               <p className="text-sm text-gray-600">Observações</p>
+               <p className="text-sm text-gray-600">Observations</p>
             </div>
             <div className="card text-center">
                <p className="text-2xl font-bold text-blue-600">
                   {stats.validations}
                </p>
-               <p className="text-sm text-gray-600">Validações</p>
+               <p className="text-sm text-gray-600">Validations</p>
             </div>
             <div className="card text-center">
                <p className="text-2xl font-bold text-green-600">
                   {stats.points}
                </p>
-               <p className="text-sm text-gray-600">Pontos</p>
+               <p className="text-sm text-gray-600">Points</p>
             </div>
             <div className="card text-center">
                <p className="text-2xl font-bold text-purple-600">
                   {stats.areasMonitored}
                </p>
-               <p className="text-sm text-gray-600">Áreas Monitoradas</p>
+               <p className="text-sm text-gray-600">Monitored Areas</p>
             </div>
          </div>
 
@@ -154,14 +154,14 @@ const Profile = () => {
             <div className="max-w-2xl mx-auto">
                <div className="card">
                   <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                     Informações do Perfil
+                     Profile Information
                   </h2>
 
                   <form onSubmit={handleProfileUpdate} className="space-y-6">
                      <div className="grid md:grid-cols-2 gap-6">
                         <div>
                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Nome Completo
+                              Full Name
                            </label>
                            <input
                               type="text"
@@ -178,7 +178,7 @@ const Profile = () => {
 
                         <div>
                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Localização
+                              Location
                            </label>
                            <div className="relative">
                               <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -220,7 +220,7 @@ const Profile = () => {
 
                         <div>
                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Telefone
+                              Phone
                            </label>
                            <div className="relative">
                               <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -241,7 +241,7 @@ const Profile = () => {
 
                      <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                           Biografia
+                           Biography
                         </label>
                         <textarea
                            value={profile.bio}
@@ -254,7 +254,7 @@ const Profile = () => {
                      </div>
 
                      <button type="submit" className="btn-primary px-6 py-2">
-                        Salvar Alterações
+                        Save Changes
                      </button>
                   </form>
                </div>
@@ -264,7 +264,7 @@ const Profile = () => {
          {activeTab === "achievements" && (
             <div className="space-y-6">
                <h2 className="text-xl font-semibold text-gray-900">
-                  Conquistas
+                  Achievements
                </h2>
 
                <div className="grid md:grid-cols-2 gap-6">
@@ -289,12 +289,12 @@ const Profile = () => {
 
                               {achievement.earned ? (
                                  <p className="text-xs text-green-500 mt-2">
-                                    Conquistado em {achievement.date}
+                                    Earned on {achievement.date}
                                  </p>
                               ) : (
                                  <div className="mt-2">
                                     <div className="flex justify-between text-xs text-gray-500 mb-1">
-                                       <span>Progresso</span>
+                                       <span>Progress</span>
                                        <span>
                                           {achievement.progress || 0}/
                                           {achievement.id === 2
@@ -326,15 +326,15 @@ const Profile = () => {
             <div className="max-w-2xl mx-auto">
                <div className="card">
                   <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                     Preferências de Notificação
+                     Notification Preferences
                   </h2>
 
                   <div className="space-y-6">
                      {Object.entries({
-                        emailAlerts: "Alertas por Email",
-                        whatsappAlerts: "Alertas por WhatsApp",
-                        weeklyReports: "Relatórios Semanais",
-                        communityUpdates: "Atualizações da Comunidade",
+                        emailAlerts: "Email Alerts",
+                        whatsappAlerts: "WhatsApp Alerts",
+                        weeklyReports: "Weekly Reports",
+                        communityUpdates: "Community Updates",
                      }).map(([key, label]) => (
                         <div
                            key={key}
@@ -346,13 +346,13 @@ const Profile = () => {
                               </p>
                               <p className="text-sm text-gray-500">
                                  {key === "emailAlerts" &&
-                                    "Receba alertas importantes por email"}
+                                    "Receive important alerts by email"}
                                  {key === "whatsappAlerts" &&
-                                    "Receba notificações via WhatsApp"}
+                                    "Receive notifications via WhatsApp"}
                                  {key === "weeklyReports" &&
-                                    "Relatório semanal com resumo das atividades"}
+                                    "Weekly report with activity summary"}
                                  {key === "communityUpdates" &&
-                                    "Novidades e atualizações da comunidade"}
+                                    "News and community updates"}
                               </p>
                            </div>
                            <button
@@ -382,11 +382,9 @@ const Profile = () => {
             <div className="text-center py-12">
                <Settings className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Configurações Avançadas
+                  Advanced Settings
                </h3>
-               <p className="text-gray-500">
-                  Funcionalidade em desenvolvimento
-               </p>
+               <p className="text-gray-500">Feature under development</p>
             </div>
          )}
       </div>

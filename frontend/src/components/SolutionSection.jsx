@@ -25,7 +25,7 @@ const SolutionSection = () => {
                      <Leaf className="w-6 h-6 text-emerald-600" />
                   </div>
                   <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                     A Solução Orbee
+                     The Orbee Solution
                   </h2>
                </div>
             </motion.div>
@@ -44,11 +44,11 @@ const SolutionSection = () => {
                         <MapPin className="w-12 h-12" />
                      </div>
                      <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                        Identificação Precisa
+                        Precise Identification
                      </h3>
                      <p className="text-gray-600">
-                        Usa NDVI e dados geoespaciais para identificar áreas
-                        degradadas com precisão científica
+                        Uses NDVI and geospatial data to identify degraded areas
+                        with scientific precision
                      </p>
                   </div>
                </motion.div>
@@ -66,11 +66,11 @@ const SolutionSection = () => {
                         <Calculator className="w-12 h-12" />
                      </div>
                      <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                        Planos em Tempo Real
+                        Real-Time Plans
                      </h3>
                      <p className="text-gray-600">
-                        Calcula planos de recuperação ambiental
-                        instantaneamente, incluindo custos detalhados
+                        Calculates environmental recovery plans instantly,
+                        including detailed costs
                      </p>
                   </div>
                </motion.div>
@@ -88,11 +88,11 @@ const SolutionSection = () => {
                         <Heart className="w-12 h-12" />
                      </div>
                      <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                        Financiamento Coletivo
+                        Crowdfunding
                      </h3>
                      <p className="text-gray-600">
-                        Permite crowdfunding com acompanhamento direto no mapa
-                        em tempo real
+                        Enables crowdfunding with direct monitoring on the map
+                        in real time
                      </p>
                   </div>
                </motion.div>
@@ -108,9 +108,9 @@ const SolutionSection = () => {
                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
                <div className="relative z-10">
                   <p className="text-2xl text-gray-900 leading-relaxed">
-                     "Com a Orbee, você vê o impacto da sua contribuição,
+                     "With Orbee, you see the impact of your contribution,
                      <span className="text-emerald-600 font-bold">
-                        árvore por árvore, hectare por hectare.
+                        tree by tree, hectare by hectare.
                      </span>
                      "
                   </p>

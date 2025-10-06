@@ -9,7 +9,7 @@ import FutureSection from "../components/FutureSection";
 import SectionDivider from "../components/ui/SectionDivider";
 
 const Home = () => {
-   // useEffect para detectar cliques em links de navegação
+   // useEffect to detect clicks on navigation links
    useEffect(() => {
       const handleHashChange = () => {
          const hash = window.location.hash;
@@ -18,10 +18,10 @@ const Home = () => {
          }
       };
 
-      // Verificar hash inicial
+      // Check initial hash
       handleHashChange();
 
-      // Escutar mudanças no hash
+      // Listen for hash changes
       window.addEventListener("hashchange", handleHashChange);
 
       return () => {
@@ -31,7 +31,7 @@ const Home = () => {
 
    return (
       <div className="relative min-h-screen overflow-x-hidden">
-         {/* Header Fixo */}
+         {/* Fixed Header */}
          <div className="fixed top-0 left-0 right-0 z-50">
             <Header />
          </div>

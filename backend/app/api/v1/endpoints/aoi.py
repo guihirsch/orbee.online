@@ -8,10 +8,10 @@ router = APIRouter()
 @router.get("/sinimbu/riparian")
 async def get_sinimbu_riparian_aoi():
     """
-    AOI placeholder das matas ciliares do município de Sinimbu/RS.
-    Nota: Substituir por geração dinâmica (IBGE + OSM + buffer) em etapa futura.
+    AOI placeholder for riparian forests in Sinimbu/RS municipality.
+    Note: Replace with dynamic generation (IBGE + OSM + buffer) in future stage.
     """
-    # GeoJSON simplificado (polígono aproximado) — substituir por dados reais
+    # Simplified GeoJSON (approximate polygon) — replace with real data
     feature_collection = {
         "type": "FeatureCollection",
         "name": "sinimbu_riparian_placeholder",
@@ -20,7 +20,7 @@ async def get_sinimbu_riparian_aoi():
             {
                 "type": "Feature",
                 "properties": {
-                    "name": "Faixa ripária aproximada",
+                    "name": "Approximate riparian strip",
                     "source": "placeholder",
                     "generated_at": datetime.utcnow().isoformat() + "Z",
                 },

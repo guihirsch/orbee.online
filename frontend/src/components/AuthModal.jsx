@@ -48,7 +48,7 @@ const AuthModal = ({
             setError(result.error);
          }
       } catch (err) {
-         setError("Erro inesperado. Tente novamente.");
+         setError("Unexpected error. Please try again.");
       } finally {
          setLoading(false);
       }
@@ -73,7 +73,7 @@ const AuthModal = ({
                      <User className="w-4 h-4 text-white" />
                   </div>
                   <h2 className="text-xl font-semibold text-gray-900">
-                     {mode === "login" ? "Entrar" : "Criar Conta"}
+                     {mode === "login" ? "Login" : "Create Account"}
                   </h2>
                </div>
                <button
@@ -111,10 +111,10 @@ const AuthModal = ({
                   </div>
                </div>
 
-               {/* Senha */}
+               {/* Password */}
                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                     Senha
+                     Password
                   </label>
                   <div className="relative">
                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -141,11 +141,11 @@ const AuthModal = ({
                   </div>
                </div>
 
-               {/* Nome completo - sempre visível para registro */}
+               {/* Full name - always visible for registration */}
                {mode === "register" && (
                   <div>
                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Nome Completo
+                        Full Name
                      </label>
                      <div className="relative">
                         <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -156,26 +156,26 @@ const AuthModal = ({
                            onChange={handleChange}
                            required
                            className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2f4538] focus:border-transparent"
-                           placeholder="Seu nome completo"
+                           placeholder="Your full name"
                         />
                      </div>
                   </div>
                )}
 
-               {/* Botão de submit */}
+               {/* Submit button */}
                <button
                   type="submit"
                   disabled={loading}
                   className="w-full bg-[#2f4538] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#1f2e1f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                >
                   {loading
-                     ? "Carregando..."
+                     ? "Loading..."
                      : mode === "login"
-                       ? "Entrar"
-                       : "Criar Conta"}
+                       ? "Login"
+                       : "Create Account"}
                </button>
 
-               {/* Toggle entre login e registro */}
+               {/* Toggle between login and registration */}
                <div className="text-center">
                   <button
                      type="button"
@@ -185,8 +185,8 @@ const AuthModal = ({
                      className="text-sm text-[#2f4538] hover:underline"
                   >
                      {mode === "login"
-                        ? "Não tem conta? Criar conta"
-                        : "Já tem conta? Fazer login"}
+                        ? "Don't have an account? Create account"
+                        : "Already have an account? Login"}
                   </button>
                </div>
             </form>

@@ -8,14 +8,14 @@ from app.models.user import User
 from app.services.user_service import UserService
 from app.core.exceptions import InvalidTokenError, UserNotFoundError, to_http_exception
 
-# Esquema de autenticação Bearer
+# Bearer authentication scheme
 oauth2_scheme = HTTPBearer()
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
-    """Obtém usuário atual baseado no token JWT"""
+    """Gets current user based on JWT token"""
     try:
-        # UserService já usa service role por padrão
+        # UserService already uses service role by default
         user_service = UserService()
         return await user_service.get_current_user(token.credentials)
     except (InvalidTokenError, UserNotFoundError) as e:
@@ -23,18 +23,18 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
     except Exception:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token inválido",
+            detail="Invalid token",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
 
 async def get_current_user_optional(token: Optional[str] = Depends(HTTPBearer(auto_error=False))) -> Optional[User]:
-    """Obtém usuário atual baseado no token JWT (opcional)"""
+    """Gets current user based on JWT token (optional)"""
     if not token:
         return None
     
     try:
-        # UserService já usa service role por padrão
+        # UserService already uses service role by default
         user_service = UserService()
         return await user_service.get_current_user(token.credentials)
     except (InvalidTokenError, UserNotFoundError):
@@ -44,5 +44,5 @@ async def get_current_user_optional(token: Optional[str] = Depends(HTTPBearer(au
 
 
 def get_db() -> Client:
-    """Dependency para obter cliente do banco"""
+    """Dependency to get database client"""
     return get_supabase_client()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 HLS Analysis Points Service
-Serviço para gerenciar pontos de análise HLS com IDs únicos
+Service for managing HLS analysis points with unique IDs
 """
 
 from typing import List, Optional, Dict, Any
@@ -16,21 +16,21 @@ from app.models.schemas import HLSAnalysisPoint, HLSPointHistory, HLSAnalysisPoi
 logger = logging.getLogger(__name__)
 
 class HLSAnalysisPointsService:
-    """Serviço para gerenciar pontos de análise HLS"""
+    """Service for managing HLS analysis points"""
     
     def __init__(self, db: Session):
         self.db = db
     
     def create_analysis_point(self, point_data: HLSAnalysisPointCreate) -> HLSAnalysisPoint:
-        """Cria um novo ponto de análise HLS"""
+        """Creates a new HLS analysis point"""
         try:
-            # Verificar se o ponto já existe
+            # Check if point already exists
             existing_point = self.get_point_by_id(point_data.point_id)
             if existing_point:
-                logger.warning(f"Ponto HLS {point_data.point_id} já existe")
+                logger.warning(f"HLS point {point_data.point_id} already exists")
                 return existing_point
             
-            # Criar novo ponto
+            # Create new point
             db_point = HLSAnalysisPoint(
                 point_id=point_data.point_id,
                 latitude=point_data.latitude,
@@ -53,27 +53,27 @@ class HLSAnalysisPointsService:
             self.db.commit()
             self.db.refresh(db_point)
             
-            logger.info(f"Ponto HLS {point_data.point_id} criado com sucesso")
+            logger.info(f"HLS point {point_data.point_id} created successfully")
             return db_point
             
         except Exception as e:
-            logger.error(f"Erro ao criar ponto HLS {point_data.point_id}: {e}")
+            logger.error(f"Error creating HLS point {point_data.point_id}: {e}")
             self.db.rollback()
             raise
     
     def get_point_by_id(self, point_id: str) -> Optional[HLSAnalysisPoint]:
-        """Busca um ponto pelo ID único"""
+        """Gets a point by unique ID"""
         try:
             return self.db.query(HLSAnalysisPoint).filter(
                 HLSAnalysisPoint.point_id == point_id,
                 HLSAnalysisPoint.deleted_at.is_(None)
             ).first()
         except Exception as e:
-            logger.error(f"Erro ao buscar ponto HLS {point_id}: {e}")
+            logger.error(f"Error getting HLS point {point_id}: {e}")
             return None
     
     def get_points_by_severity(self, severity: str) -> List[HLSAnalysisPoint]:
-        """Busca pontos por severidade"""
+        """Gets points by severity"""
         try:
             return self.db.query(HLSAnalysisPoint).filter(
                 HLSAnalysisPoint.severity == severity,

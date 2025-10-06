@@ -25,11 +25,11 @@ const FutureSection = () => {
                      <Rocket className="w-6 h-6 text-cyan-600" />
                   </div>
                   <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                     O Que Vem Pela Frente
+                     What's Coming Next
                   </h2>
                </div>
                <p className="text-xl text-gray-600">
-                  Próximos marcos da nossa jornada
+                  Next milestones in our journey
                </p>
             </motion.div>
 
@@ -46,16 +46,16 @@ const FutureSection = () => {
                      <div className="flex items-center mb-4">
                         <Globe className="w-8 h-8 text-cyan-600 mr-3" />
                         <h3 className="text-xl font-semibold text-gray-900">
-                           Expansão Nacional
+                           National Expansion
                         </h3>
                      </div>
                      <p className="text-gray-600 mb-4">
-                        Cobertura completa do território brasileiro até dezembro
-                        de 2024
+                        Complete coverage of Brazilian territory by December
+                        2024
                      </p>
                      <div className="bg-cyan-500/20 rounded-lg p-3">
                         <p className="text-cyan-600 font-medium text-sm">
-                           Meta: 100 municípios monitorados
+                           Goal: 100 monitored municipalities
                         </p>
                      </div>
                   </div>
@@ -77,11 +77,11 @@ const FutureSection = () => {
                         </h3>
                      </div>
                      <p className="text-gray-600 mb-4">
-                        Aplicativo nativo para validação em campo e gamificação
+                        Native app for field validation and gamification
                      </p>
                      <div className="bg-purple-500/20 rounded-lg p-3">
                         <p className="text-purple-600 font-medium text-sm">
-                           Lançamento: Q1 2025
+                           Launch: Q1 2025
                         </p>
                      </div>
                   </div>
@@ -100,18 +100,18 @@ const FutureSection = () => {
                   <div className="flex items-center mb-4">
                      <Zap className="w-8 h-8 text-green-600 mr-3" />
                      <h3 className="text-2xl font-semibold text-gray-900">
-                        IA Preditiva
+                        Predictive AI
                      </h3>
                   </div>
                   <p className="text-gray-600 text-lg mb-4">
-                     Algoritmos que preveem degradação antes que ela aconteça,
-                     permitindo ação preventiva em tempo real
+                     Algorithms that predict degradation before it happens,
+                     enabling preventive action in real time
                   </p>
                   <div className="grid md:grid-cols-3 gap-4">
                      <div className="bg-green-500/20 rounded-lg p-3 text-center">
                         <p className="text-green-600 font-bold text-lg">95%</p>
                         <p className="text-gray-600 text-sm">
-                           Precisão na previsão
+                           Prediction accuracy
                         </p>
                      </div>
                      <div className="bg-green-500/20 rounded-lg p-3 text-center">
@@ -119,14 +119,12 @@ const FutureSection = () => {
                            30 dias
                         </p>
                         <p className="text-gray-600 text-sm">
-                           Antecedência do alerta
+                           Alert advance notice
                         </p>
                      </div>
                      <div className="bg-green-500/20 rounded-lg p-3 text-center">
                         <p className="text-green-600 font-bold text-lg">60%</p>
-                        <p className="text-gray-600 text-sm">
-                           Redução de custos
-                        </p>
+                        <p className="text-gray-600 text-sm">Cost reduction</p>
                      </div>
                   </div>
                </div>
@@ -143,20 +141,21 @@ const FutureSection = () => {
                <div className="relative z-10">
                   <Rocket className="w-16 h-16 text-orange-600 mx-auto mb-4" />
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                     Visão 2030
+                     Vision 2030
                   </h3>
                   <p className="text-xl text-gray-600 leading-relaxed">
-                     Ser a{" "}
+                     To be the{" "}
                      <span className="text-orange-600 font-bold">
-                        maior plataforma
+                        largest platform
                      </span>{" "}
-                     de restauração ambiental colaborativa da América Latina,
+                     for collaborative environmental restoration in Latin
+                     America,
                      <br />
-                     conectando{" "}
+                     connecting{" "}
                      <span className="text-orange-600 font-bold">
-                        1 milhão de guardiões
+                        1 million guardians
                      </span>
-                     em defesa dos nossos biomas.
+                     in defense of our biomes.
                   </p>
                </div>
             </motion.div>

@@ -35,11 +35,11 @@ const Header = () => {
    };
 
    const navItems = [
-      { name: "Início", href: "#hero" },
-      { name: "Problema", href: "#problem" },
-      { name: "Solução", href: "#solution" },
-      { name: "Como funciona", href: "#how-it-works" },
-      { name: "Futuro", href: "#future" },
+      { name: "Home", href: "#hero" },
+      { name: "Problem", href: "#problem" },
+      { name: "Solution", href: "#solution" },
+      { name: "How it works", href: "#how-it-works" },
+      { name: "Future", href: "#future" },
    ];
 
    const handleScroll = (e, href) => {
@@ -139,7 +139,7 @@ const Header = () => {
                      onClick={handlePlataformaClick}
                      className="hidden rounded-full bg-[#2f4538] px-6 py-2 font-medium text-white shadow-sm transition-colors hover:bg-[#2f4538]/80 md:block"
                   >
-                     Plataforma
+                     Platform
                   </Link>
 
                   {/* Auth Section */}
@@ -156,7 +156,7 @@ const Header = () => {
                            className="flex items-center gap-1 text-sm text-gray-600 hover:text-[#2f4538] transition-colors"
                         >
                            <LogOut className="w-4 h-4" />
-                           <span className="hidden sm:inline">Sair</span>
+                           <span className="hidden sm:inline">Logout</span>
                         </button>
                      </div>
                   ) : (
@@ -165,7 +165,7 @@ const Header = () => {
                            onClick={() => handleAuthClick("login")}
                            className="text-gray-700 hover:text-[#2f4538] transition-colors"
                         >
-                           Entrar
+                           Login
                         </button>
                      </div>
                   )}
@@ -217,7 +217,7 @@ const Header = () => {
                      onClick={handlePlataformaClick}
                      className="mt-4 rounded-full bg-[#2f4538] px-6 py-2 text-center font-medium text-white shadow-sm transition-colors hover:bg-[#2f4538]/80"
                   >
-                     Plataforma
+                     Platform
                   </Link>
 
                   {!isAuthenticated && (
@@ -229,7 +229,7 @@ const Header = () => {
                            }}
                            className="block w-full text-left text-gray-700 hover:text-[#2f4538] transition-colors"
                         >
-                           Entrar
+                           Login
                         </button>
                         <button
                            onClick={() => {
@@ -238,7 +238,7 @@ const Header = () => {
                            }}
                            className="block w-full text-left bg-[#2f4538] text-white px-4 py-2 rounded-lg hover:bg-[#1f2e1f] transition-colors"
                         >
-                           Criar Conta
+                           Create Account
                         </button>
                      </div>
                   )}
