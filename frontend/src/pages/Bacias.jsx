@@ -5,7 +5,6 @@ import AuthModal from "../components/AuthModal";
 import useAuth from "../hooks/useAuth";
 import {
    BAND_COLORS,
-   BAND_ORDER,
    getMethods,
    getReach,
    getReaches,
@@ -13,11 +12,18 @@ import {
    listBasins,
 } from "../lib/apiV2";
 
-/* Portal comunitário de bacias — leitura PÚBLICA (sem login).
- * Login só é pedido ao "adotar um trecho" (salva observation).
+const SEGMENTOS = [
+   { value: "", label: "Todas" },
+   { value: "Média", label: "Média+" },
+   { value: "Alta", label: "Alta+" },
+   { value: "Urgente", label: "Urgente" },
+];
+
+/* Portal comunitário de bacias — revisão R4 (identidade orbee).
+ * Leitura PÚBLICA (sem login); login só ao "adotar um trecho".
  */
 export default function Bacias() {
-   const { user, isAuthenticated, apiRequest } = useAuth();
+   const { isAuthenticated, apiRequest } = useAuth();
    const [basins, setBasins] = useState([]);
    const [basin, setBasin] = useState("pardo");
    const [version, setVersion] = useState("");
@@ -29,6 +35,7 @@ export default function Bacias() {
    const [srOn, setSrOn] = useState(false);
    const [srOpacity, setSrOpacity] = useState(0.85);
    const [srTiles, setSrTiles] = useState(null);
+   const [baseLayer, setBaseLayer] = useState("sat");
    const [methods, setMethods] = useState(null);
    const [showMethods, setShowMethods] = useState(false);
    const [error, setError] = useState("");
@@ -62,7 +69,7 @@ export default function Bacias() {
       setSelectedId(null);
       setDetail(null);
       setSrTiles(null);
-      getReaches({ basin, version: version || undefined, band: bandFilter || undefined })
+      getReaches({ basin, version: version || undefined, band: undefined, min_priority: bandFilter || undefined })
          .then((fc) => {
             setReaches(fc);
             setError("");
@@ -95,11 +102,10 @@ export default function Bacias() {
          const p = feature.properties || {};
          const [lon, lat] = (() => {
             try {
-               const cs = feature.geometry.coordinates;
                const flat = [];
                const walk = (c) =>
                   typeof c[0] === "number" ? flat.push(c) : c.forEach(walk);
-               walk(cs);
+               walk(feature.geometry.coordinates);
                const n = flat.length || 1;
                return [
                   flat.reduce((a, c) => a + c[0], 0) / n,
@@ -109,17 +115,16 @@ export default function Bacias() {
                return [null, null];
             }
          })();
-         const body = {
-            location: `Trecho ${p.id} — bacia ${basin} (prioridade ${p.band}, score ${p.score})`,
-            description: `Quero adotar o trecho ${p.id} (rio ${p.river}, banda ${p.band}, score ${p.score}). Técnica sugerida e metodologia em /bacias.`,
-            observation_type: "vegetation",
-            latitude: lat,
-            longitude: lon,
-         };
          try {
             await apiRequest("/observations/", {
                method: "POST",
-               body: JSON.stringify(body),
+               body: JSON.stringify({
+                  location: `Trecho ${p.id} — bacia ${basin} (prioridade ${p.band}, score ${p.score})`,
+                  description: `Quero adotar o trecho ${p.id} (rio ${p.river}, banda ${p.band}, score ${p.score}). Técnica sugerida e metodologia em /bacias.`,
+                  observation_type: "vegetation",
+                  latitude: lat,
+                  longitude: lon,
+               }),
             });
             setNotice("Trecho adotado! Sua intenção foi registrada como observação.");
          } catch (e) {
@@ -162,167 +167,184 @@ export default function Bacias() {
    }, [methods, basin, version]);
 
    return (
-      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-6">
-         <div>
-            <h1 className="text-3xl font-medium text-[#2f4538]">
-               Bacias — qualidade da mata ciliar
-            </h1>
-            <p className="mt-1 text-sm text-gray-600">
-               Trechos priorizados para restauração, com metodologia aberta.
-               Recursos são finitos — cada real rende mais onde a prioridade é maior.
-            </p>
-         </div>
-
-         {error && (
-            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
-               {error}
+      <div className="bg-gradient-to-b from-white via-[#f4f7f2] to-white">
+         <div className="mx-auto flex max-w-7xl flex-col gap-5 px-6 py-10">
+            {/* Cabeçalho editorial */}
+            <div className="max-w-3xl">
+               <span className="inline-block rounded-full bg-[#2f4538]/10 px-4 py-1 text-xs font-medium uppercase tracking-widest text-[#2f4538]">
+                  Portal comunitário · Bacia do Pardo
+               </span>
+               <h1
+                  className="mt-3 text-4xl leading-tight text-[#2f4538] lg:text-5xl"
+                  style={{ fontFamily: '"Fraunces", serif' }}
+               >
+                  Onde cada real de restauração rende mais
+               </h1>
+               <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-gray-600">
+                  Trechos de mata ciliar diagnosticados por satélite e ordenados
+                  por prioridade, com metodologia aberta. Recursos são finitos —
+                  o mapa mostra onde agir primeiro.
+               </p>
             </div>
-         )}
-         {notice && (
-            <div className="rounded-lg bg-green-50 p-3 text-sm text-green-800">
-               {notice}
-            </div>
-         )}
 
-         <div className="flex flex-wrap items-center gap-3 text-sm">
-            <label className="flex items-center gap-2">
-               Bacia
-               <select
-                  value={basin}
-                  onChange={(e) => setBasin(e.target.value)}
-                  className="rounded-lg border px-2 py-1"
-               >
-                  {basins.map((b) => (
-                     <option key={b.basin} value={b.basin}>
-                        {b.basin}
-                     </option>
-                  ))}
-               </select>
-            </label>
-            <label className="flex items-center gap-2">
-               Versão
-               <select
-                  value={version}
-                  onChange={(e) => setVersion(e.target.value)}
-                  className="rounded-lg border px-2 py-1"
-               >
-                  {versions.map((v) => (
-                     <option key={v} value={v}>
-                        {v}
-                     </option>
-                  ))}
-               </select>
-            </label>
-            <label className="flex items-center gap-2">
-               Prioridade
-               <select
-                  value={bandFilter}
-                  onChange={(e) => setBandFilter(e.target.value)}
-                  className="rounded-lg border px-2 py-1"
-               >
-                  <option value="">Todas</option>
-                  {BAND_ORDER.slice().reverse().map((b) => (
-                     <option key={b} value={b}>
-                        {b} ou maior
-                     </option>
-                  ))}
-               </select>
-            </label>
-            <label className="flex items-center gap-2" title={srTiles ? "" : "Sem SR para este trecho"}>
-               <input
-                  type="checkbox"
-                  checked={srOn}
-                  disabled={!srTiles}
-                  onChange={(e) => setSrOn(e.target.checked)}
-               />
-               SR 2,5 m
-            </label>
-            {srOn && srTiles && (
-               <label className="flex items-center gap-2">
-                  Opacidade
-                  <input
-                     type="range"
-                     min="0"
-                     max="1"
-                     step="0.05"
-                     value={srOpacity}
-                     onChange={(e) => setSrOpacity(Number(e.target.value))}
-                  />
-               </label>
+            {error && (
+               <div className="rounded-xl bg-red-50 p-3 text-sm text-red-700">
+                  {error}
+               </div>
             )}
-            <button onClick={openMethods} className="text-[#2f4538] underline">
-               Metodologia
-            </button>
-            <div className="ml-auto flex items-center gap-2">
-               {BAND_ORDER.map((b) => (
-                  <span key={b} className="flex items-center gap-1 text-xs text-gray-600">
-                     <span
-                        className="inline-block h-3 w-3 rounded-full"
-                        style={{ backgroundColor: BAND_COLORS[b] }}
-                     />
-                     {b}
-                  </span>
-               ))}
-            </div>
-         </div>
+            {notice && (
+               <div className="rounded-xl bg-green-50 p-3 text-sm text-green-800">
+                  {notice}
+               </div>
+            )}
 
-         <div className="flex min-h-[540px] flex-col gap-4 lg:flex-row">
-            <div className="min-h-[420px] flex-1 overflow-hidden rounded-xl border">
-               {loading && !reaches ? (
-                  <div className="p-6 text-sm text-gray-500">Carregando trechos…</div>
-               ) : (
-                  <BasinMap
-                     reaches={reaches}
-                     selectedId={selectedId}
-                     onSelect={selectReach}
-                     srTiles={srTiles}
-                     srVisible={srOn}
-                     srOpacity={srOpacity}
-                  />
-               )}
-            </div>
-            <div className="w-full overflow-hidden rounded-xl border lg:w-[380px]">
-               <ReachPanel detail={detail} onAdopt={adopt} onDownload={downloadReach} />
-            </div>
-         </div>
-
-         {showMethods && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-               <div className="max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-6">
-                  <h2 className="text-xl font-medium text-[#2f4538]">Metodologia</h2>
-                  <pre className="mt-3 whitespace-pre-wrap text-sm text-gray-700">
-                     {methods ? methods.text : "Carregando…"}
-                  </pre>
-                  {methods && (
-                     <p className="mt-2 text-xs text-gray-500">
-                        Versão {methods.methods_version} · pesos:{" "}
-                        {Object.entries(methods.weights || {})
-                           .map(([k, v]) => `${k} ${Math.round(v * 100)}%`)
-                           .join(" · ")}
-                     </p>
-                  )}
-                  <button
-                     onClick={() => setShowMethods(false)}
-                     className="mt-4 rounded-full bg-[#2f4538] px-6 py-2 text-sm text-white"
+            {/* Barra de controles */}
+            <div className="flex flex-wrap items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-3 py-2 shadow-sm backdrop-blur">
+               <label className="flex items-center gap-2 text-sm text-gray-600">
+                  Bacia
+                  <select
+                     id="bacia-select"
+                     name="bacia"
+                     value={basin}
+                     onChange={(e) => setBasin(e.target.value)}
+                     className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-800 focus:border-[#2f4538] focus:outline-none"
                   >
-                     Fechar
-                  </button>
+                     {basins.map((b) => (
+                        <option key={b.basin} value={b.basin}>
+                           {b.basin}
+                        </option>
+                     ))}
+                  </select>
+               </label>
+               <label className="flex items-center gap-2 text-sm text-gray-600">
+                  Versão
+                  <select
+                     id="versao-select"
+                     name="versao"
+                     value={version}
+                     onChange={(e) => setVersion(e.target.value)}
+                     className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-800 focus:border-[#2f4538] focus:outline-none"
+                  >
+                     {versions.map((v) => (
+                        <option key={v} value={v}>
+                           {v}
+                        </option>
+                     ))}
+                  </select>
+               </label>
+               <div
+                  className="flex items-center gap-1 rounded-full bg-gray-100 p-1"
+                  role="group"
+                  aria-label="Filtro de prioridade"
+               >
+                  {SEGMENTOS.map((s) => (
+                     <button
+                        key={s.label}
+                        onClick={() => setBandFilter(s.value)}
+                        aria-pressed={bandFilter === s.value}
+                        className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
+                           bandFilter === s.value
+                              ? "bg-[#2f4538] text-white shadow"
+                              : "text-gray-600 hover:text-[#2f4538]"
+                        }`}
+                     >
+                        {s.label}
+                     </button>
+                  ))}
+               </div>
+               <button
+                  onClick={openMethods}
+                  className="ml-auto rounded-full border border-[#2f4538]/30 px-4 py-1.5 text-xs font-medium text-[#2f4538] transition-colors hover:bg-[#2f4538]/10"
+               >
+                  Metodologia aberta
+               </button>
+            </div>
+
+            {/* Mapa + painel */}
+            <div className="flex min-h-[68vh] flex-col gap-4 lg:flex-row">
+               <div className="relative min-h-[52vh] flex-1 overflow-hidden rounded-3xl shadow-xl ring-1 ring-black/10">
+                  {loading && !reaches ? (
+                     <div className="flex h-full items-center justify-center bg-[#1a241d] p-6 text-sm text-white/70">
+                        Carregando trechos…
+                     </div>
+                  ) : (
+                     <BasinMap
+                        reaches={reaches}
+                        selectedId={selectedId}
+                        onSelect={selectReach}
+                        srTiles={srTiles}
+                        srVisible={srOn}
+                        srOpacity={srOpacity}
+                        onSrToggle={setSrOn}
+                        onSrOpacity={setSrOpacity}
+                        baseLayer={baseLayer}
+                        onBaseLayer={setBaseLayer}
+                     />
+                  )}
+                  {/* Legenda flutuante */}
+                  <div className="absolute bottom-3 right-3 z-10 flex items-center gap-3 rounded-full bg-black/55 px-4 py-2 shadow-lg backdrop-blur-md">
+                     {["Urgente", "Alta", "Média", "Baixa"].map((b) => (
+                        <span key={b} className="flex items-center gap-1.5 text-[11px] font-medium text-white">
+                           <span
+                              className="inline-block h-2.5 w-2.5 rounded-full"
+                              style={{
+                                 backgroundColor: BAND_COLORS[b],
+                                 boxShadow: `0 0 8px ${BAND_COLORS[b]}`,
+                              }}
+                           />
+                           {b}
+                        </span>
+                     ))}
+                  </div>
+               </div>
+               <div className="w-full overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-xl lg:w-[390px]">
+                  <ReachPanel detail={detail} onAdopt={adopt} onDownload={downloadReach} />
                </div>
             </div>
-         )}
 
-         <AuthModal
-            isOpen={showAuth}
-            onClose={() => setShowAuth(false)}
-            initialMode="login"
-            onSuccessRedirect={() => {
-               setShowAuth(false);
-               if (pendingAdopt.current) {
-                  doAdopt(pendingAdopt.current);
-                  pendingAdopt.current = null;
-               }
-            }}
-         />
+            {showMethods && (
+               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+                  <div className="max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white p-8 shadow-2xl">
+                     <h2
+                        className="text-2xl text-[#2f4538]"
+                        style={{ fontFamily: '"Fraunces", serif' }}
+                     >
+                        Metodologia aberta
+                     </h2>
+                     <pre className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-gray-700">
+                        {methods ? methods.text : "Carregando…"}
+                     </pre>
+                     {methods && (
+                        <p className="mt-2 text-xs text-gray-500">
+                           Versão {methods.methods_version} · pesos:{" "}
+                           {Object.entries(methods.weights || {})
+                              .map(([k, v]) => `${k} ${Math.round(v * 100)}%`)
+                              .join(" · ")}
+                        </p>
+                     )}
+                     <button
+                        onClick={() => setShowMethods(false)}
+                        className="mt-5 rounded-full bg-[#2f4538] px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-[#2f4538]/80"
+                     >
+                        Fechar
+                     </button>
+                  </div>
+               </div>
+            )}
+
+            <AuthModal
+               isOpen={showAuth}
+               onClose={() => setShowAuth(false)}
+               initialMode="login"
+               onSuccessRedirect={() => {
+                  setShowAuth(false);
+                  if (pendingAdopt.current) {
+                     doAdopt(pendingAdopt.current);
+                     pendingAdopt.current = null;
+                  }
+               }}
+            />
+         </div>
       </div>
    );
 }

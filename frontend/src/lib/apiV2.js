@@ -49,11 +49,13 @@ export const getReach = (id, params) =>
 export const getTilejson = (params) => get("/tilejson", params);
 export const getSrSummary = (params) => get("/sr-summary", params);
 
+/* Paleta das bandas otimizada para legibilidade sobre satélite
+ * (identidade orbee; revisão R2). */
 export const BAND_COLORS = {
-   Urgente: "#DC143C",
-   Alta: "#F59E0B",
-   Média: "#84CC16",
-   Baixa: "#2f4538",
+   Urgente: "#FF4D5E",
+   Alta: "#FFB020",
+   Média: "#A3D614",
+   Baixa: "#7FB069",
 };
 
 export const BAND_ORDER = ["Baixa", "Média", "Alta", "Urgente"];
