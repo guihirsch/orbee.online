@@ -5,6 +5,7 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import AOIViewer from "./pages/AOIViewer";
+import Bacias from "./pages/Bacias";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 function App() {
@@ -29,7 +30,8 @@ function App() {
                      </ProtectedRoute>
                   }
                />
-               <Route path="/aoi-viewer" element={<AOIViewer />} />
+                <Route path="/aoi-viewer" element={<AOIViewer />} />
+                <Route path="/bacias" element={<Bacias />} />
             </Routes>
          </Layout>
       </AuthProvider>
