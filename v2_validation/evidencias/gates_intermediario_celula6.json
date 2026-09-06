@@ -1,0 +1,30 @@
+{
+  "G0": {
+    "status": "SKIPPED",
+    "pearson": null
+  },
+  "G2": {
+    "status": "SKIPPED",
+    "vies_solo": null
+  },
+  "G4": {
+    "status": "SKIPPED",
+    "nota": "sem GPU ou pacote ausente"
+  },
+  "G1": {
+    "status": "SKIPPED",
+    "nota": "aguarda NDVI_SR da C\u00e9lula 4"
+  },
+  "G3": {
+    "status": "SKIPPED",
+    "nota": "aguarda NDVI_SR da C\u00e9lula 4"
+  },
+  "G5": {
+    "status": "PASS",
+    "delta_ndvi": 0.0139
+  },
+  "G6": {
+    "status": "SKIPPED",
+    "nota": "implementar sanity check do Soturno"
+  }
+}

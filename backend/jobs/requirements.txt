@@ -16,3 +16,10 @@ shapely>=2.0.0
 pyproj>=3.4.0
 numpy>=1.24.0
 scikit-image>=0.19.0  # block_reduce e utilidades (Fase 0)
+mercantile>=1.2.0     # tiles XYZ (build_sr)
+matplotlib>=3.6.0     # paleta YlGn dos tiles (build_sr)
+Pillow>=10.0.0        # escrita dos PNGs (build_sr)
+pyproj>=3.4.0
+
+# Extras de SR (modelos; CPU basta p/ SEN2SRLite):
+# pip install torch sen2sr mlstac cubo

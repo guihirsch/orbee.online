@@ -102,18 +102,27 @@ def search_scenes(
     return [pc.sign(i).to_dict() for i in items]
 
 
-def composite_ndvi(
+@dataclass
+class RgbnComposite:
+    """Medianas por banda + SCL + máscara (base p/ SR e NDVI)."""
+
+    bands: Dict[str, Any]  # B02/B03/B04/B08(/SCL) como DataArrays
+    scl: Any
+    valid: Any
+    epsg: int
+    n_scenes: int
+
+
+def composite_rgbn(
     bbox: Bbox,
     start: str,
     end: str,
     cloud_max: int = 20,
     top_n: int = 3,
-    ndvi_critical: float = 0.2,
-    ndvi_moderate: float = 0.5,
     catalog_url: Optional[str] = None,
     collection: str = "sentinel-2-l2a",
-) -> CompositeResult:
-    """Composite mediano + NDVI-10m + stats (port da Célula 3 do notebook)."""
+) -> RgbnComposite:
+    """Composite mediano com todas as bandas (S2_BANDS). Núcleo compartilhado."""
     _require_deps()
     import stackstac
 
@@ -134,12 +143,32 @@ def composite_ndvi(
 
     scl = med.sel(band="SCL")
     valid = scl.isin(SCL_VALID_DEFAULT)
-    red = med.sel(band="B04").where(valid) / SCALE_FACTOR
-    nir = med.sel(band="B08").where(valid) / SCALE_FACTOR
+    bands = {b: med.sel(band=b) for b in S2_BANDS if b != "SCL"}
+    return RgbnComposite(bands=bands, scl=scl, valid=valid,
+                         epsg=epsg, n_scenes=len(signed))
+
+
+def composite_ndvi(
+    bbox: Bbox,
+    start: str,
+    end: str,
+    cloud_max: int = 20,
+    top_n: int = 3,
+    ndvi_critical: float = 0.2,
+    ndvi_moderate: float = 0.5,
+    catalog_url: Optional[str] = None,
+    collection: str = "sentinel-2-l2a",
+) -> CompositeResult:
+    """Composite mediano + NDVI-10m + stats (port da Célula 3 do notebook)."""
+    comp = composite_rgbn(bbox, start, end, cloud_max, top_n,
+                          catalog_url, collection)
+    valid = comp.valid
+    red = comp.bands["B04"].where(valid) / SCALE_FACTOR
+    nir = comp.bands["B08"].where(valid) / SCALE_FACTOR
     ndvi = ((nir - red) / (nir + red)).where((nir + red) != 0)
 
     stats = {
-        "n_cenas": len(signed),
+        "n_cenas": comp.n_scenes,
         "frac_validos": float(valid.mean()),
         "ndvi_min": float(ndvi.min()),
         "ndvi_max": float(ndvi.max()),
@@ -149,7 +178,8 @@ def composite_ndvi(
             ((ndvi >= ndvi_critical) & (ndvi < ndvi_moderate)).mean()
         ),
     }
-    return CompositeResult(ndvi=ndvi, stats=stats, epsg=epsg, n_scenes=len(signed))
+    return CompositeResult(ndvi=ndvi, stats=stats, epsg=comp.epsg,
+                           n_scenes=comp.n_scenes)
 
 
 async def composite_ndvi_async(*args: Any, **kwargs: Any) -> CompositeResult:
