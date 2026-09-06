@@ -1,0 +1,18 @@
+# Deps EXCLUSIVAS do job offline (build_basin.py). NÃO instalar na imagem web.
+# A API v2 serve artefatos estáticos e não importa estes pacotes em runtime
+# (s2_service/reaches_service usam imports lazy).
+#
+# Uso: pip install -r backend/jobs/requirements.txt  (venv dedicada ou CI)
+
+pystac-client>=0.7.0
+planetary-computer>=1.0.0
+stackstac>=0.4.0
+rioxarray>=0.15.0
+xarray>=2023.1.0
+dask>=2023.1.0
+geopandas>=0.13.0
+osmnx>=1.3.0
+shapely>=2.0.0
+pyproj>=3.4.0
+numpy>=1.24.0
+scikit-image>=0.19.0  # block_reduce e utilidades (Fase 0)

@@ -14,6 +14,7 @@ if str(CURRENT_DIR) not in sys.path:
 
 from app.core.config import settings
 from app.api.v1.api import api_router
+from app.api.v2.api import router as api_router_v2
 from app.core.database import init_db
 
 
@@ -45,6 +46,9 @@ app.add_middleware(
 
 # Rotas da API
 app.include_router(api_router, prefix=settings.API_V1_STR)
+
+# API v2 — portal comunitário (leitura pública; v1 intocada)
+app.include_router(api_router_v2, prefix="/api/v2")
 
 
 @app.get("/")

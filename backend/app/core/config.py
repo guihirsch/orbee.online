@@ -40,7 +40,14 @@ class Settings(BaseSettings):
     SENTINEL_HUB_CLIENT_SECRET: str = os.getenv("SENTINEL_HUB_CLIENT_SECRET", "")
     SENTINEL_HUB_INSTANCE_ID: str = os.getenv("SENTINEL_HUB_INSTANCE_ID", "")
     # NDVI Provider and AI options
-    NDVI_PROVIDER: str = os.getenv("NDVI_PROVIDER", "sentinel_hub")  # options: sentinel_hub | earth_engine | sentinel_hub_mock
+    # v2: "planetary_computer" (STAC gratuito, sem credencial) é o caminho real,
+    # validado na Fase 0 (v2_validation/). "sentinel_hub" mantido por compatibilidade.
+    NDVI_PROVIDER: str = os.getenv("NDVI_PROVIDER", "planetary_computer")  # options: planetary_computer | sentinel_hub | earth_engine | sentinel_hub_mock
+    # Planetary Computer (Microsoft) — sem credencial
+    PC_STAC_URL: str = os.getenv("PC_STAC_URL", "https://planetarycomputer.microsoft.com/api/stac/v1")
+    PC_COLLECTION_S2L2A: str = os.getenv("PC_COLLECTION_S2L2A", "sentinel-2-l2a")
+    # Diretório de artefatos pré-computados por bacia (jobs/build_basin.py)
+    JOBS_DATA_DIR: str = os.getenv("JOBS_DATA_DIR", "data/basins")
     ENABLE_SUPER_RESOLUTION: bool = os.getenv("ENABLE_SUPER_RESOLUTION", "false").lower() == "true"
     SUPER_RES_MODEL: str = os.getenv("SUPER_RES_MODEL", "bicubic")  # options: bicubic | dr-3.0 | esrgan
     
