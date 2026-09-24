@@ -259,6 +259,24 @@ def main(argv=None) -> int:
     else:
         check("WARN", "sem sr_summary (versão sem SR)", checks, "V4")
 
+    # ---- V7: crosscheck inter-sensores (S2 × CBERS-4A) ----
+    cc = vdir / "crosscheck.json"
+    if cc.is_file():
+        doc = json.loads(cc.read_text())
+        for r in doc.get("reaches", []):
+            st = r.get("status", "FAIL")
+            check(st, f"{r.get('id')}: S2×CBERS Δmean={r.get('delta_ndvi_mean')} "
+                  f"Δcrit={r.get('delta_frac_critico')} "
+                  f"(cenas: {len(r.get('scene_ids', []))})", checks, "V7")
+        rho = doc.get("rank_corr_spearman")
+        if rho is not None and rho < 0.5:
+            check("WARN", f"ordenação S2×CBERS inconclusiva (Spearman {rho}, n=6; "
+                  "viés absoluto DN-vs-SR domina; campo decide)", checks, "V7")
+        else:
+            check("PASS", f"ordenação S2×CBERS preservada (Spearman {rho})", checks, "V7")
+    else:
+        check("WARN", "sem crosscheck.json (Fase A não rodada p/ esta versão)", checks, "V7")
+
     # ---- V5: terreno conhecido ----
     rivers = {f["properties"].get("river") for f in feats}
     if rivers == {"rio_taquari"}:
@@ -299,7 +317,7 @@ def main(argv=None) -> int:
     report = {
         "basin": args.basin, "version": args.version,
         "validated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
-        "gates": ["V1", "V2", "V3", "V4", "V5", "V6"],
+        "gates": ["V1", "V2", "V3", "V4", "V5", "V6", "V7"],
         "n_checks": len(checks), "n_fail": fails, "n_warn": warns,
         "verdict": "FAIL" if fails else ("PASS_WITH_WARNS" if warns else "PASS"),
         "checks": checks,

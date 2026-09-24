@@ -1,19 +1,20 @@
 {
   "basin": "taquari",
   "version": "v1",
-  "validated_at": "2026-09-24T17:24:59.989989+00:00",
+  "validated_at": "2026-09-24T19:39:38.345243+00:00",
   "gates": [
     "V1",
     "V2",
     "V3",
     "V4",
     "V5",
-    "V6"
+    "V6",
+    "V7"
   ],
-  "n_checks": 31,
-  "n_fail": 0,
-  "n_warn": 14,
-  "verdict": "PASS_WITH_WARNS",
+  "n_checks": 38,
+  "n_fail": 3,
+  "n_warn": 18,
+  "verdict": "FAIL",
   "checks": [
     {
       "gate": "V1",
@@ -149,6 +150,41 @@
       "gate": "V4",
       "status": "PASS",
       "detail": "figura 10m×SR em /tmp/taquari_sr_25m.png"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_ccabf1fe88: S2×CBERS Δmean=-0.1103 Δcrit=0.2328 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_baeab33dbb: S2×CBERS Δmean=-0.1094 Δcrit=0.2233 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_7b419318a2: S2×CBERS Δmean=-0.0914 Δcrit=0.195 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_3a4dd0a219: S2×CBERS Δmean=-0.08 Δcrit=0.1865 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_1b14902269: S2×CBERS Δmean=-0.124 Δcrit=0.1741 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_1b60e6f8bf: S2×CBERS Δmean=-0.1228 Δcrit=0.2435 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "ordenação S2×CBERS inconclusiva (Spearman 0.429, n=6; viés absoluto DN-vs-SR domina; campo decide)"
     },
     {
       "gate": "V5",

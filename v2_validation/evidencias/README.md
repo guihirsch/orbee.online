@@ -24,6 +24,21 @@ Pendente (não resgatado): nada — resgate completo em 2026-09-06.
 - `taquari_sr_25m.png` — NDVI 10 m (coarsened) vs SR 2,5 m nos 3 trechos PASS
   (G1/G2): corredor do rio nítido, sem artefato de retalho.
 
+## Fase A — crosscheck S2 × CBERS-4A (2026-09-24, segunda opinião)
+
+- `taquari_crosscheck.json` — NDVI WPM-8 m (INPE STAC, janela regen,
+  `backend/jobs/build_crosscheck.py`) vs S2 publicado, por trecho, com os IDs
+  das cenas WPM usadas. Viés sistemático S2−CBERS ≈ −0,11 (DN sem correção
+  atmosférica; causa conhecida e documentada), Spearman da ordenação 0,429
+  (n=6, inconclusivo).
+- `taquari_cbers_x_s2.png` — barras S2×CBERS por trecho + dispersão (y=x):
+  offset sistemático visível, mesma direção nos 6 trechos.
+- `taquari_v1_validacao.json` (atualizado) — bateria V1–**V7**: o V7 registra
+  3 FAIL + 3 WARN no acordo absoluto inter-sensores; V1–V6 seguem íntegros.
+  Veredito global honesto: **FAIL localizado no V7** — os valores absolutos
+  entre sensores divergem por calibração; a ordenação é inconclusiva com n=6.
+  Decisão: campo, não mais pixel.
+
 ## Sessão completa do Colab (canônica)
 
 - `fase0_sessao_colab.ipynb` — notebook executado, 28 células (14 de código,
