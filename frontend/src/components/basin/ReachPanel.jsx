@@ -189,7 +189,27 @@ export default function ReachPanel({ detail, onAdopt, onDownload }) {
             </section>
          )}
 
-         <blockquote className="border-l-4 pl-4 text-[15px] italic leading-relaxed text-gray-700" style={{ borderColor: color }}>
+          {detail.crosscheck && (
+            <section className="rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm leading-relaxed text-gray-700">
+               <strong style={{ fontFamily: '"Fraunces", serif' }}>
+                  Segunda opinião (CBERS-4A).
+               </strong>{" "}
+               Status {detail.crosscheck.status}
+               {typeof detail.crosscheck.delta_ndvi_mean === "number" && (
+                  <>
+                     {" "}· Δ NDVI {detail.crosscheck.delta_ndvi_mean >= 0 ? "+" : ""}
+                     {detail.crosscheck.delta_ndvi_mean.toFixed(3)}
+                  </>
+               )}
+               {Array.isArray(detail.crosscheck.scene_ids) && (
+                  <> · {detail.crosscheck.scene_ids.length} cenas</>
+               )}
+               . Divergência absoluta entre sensores é esperada (DN vs
+               reflectância); ver V7 na Metodologia.
+            </section>
+          )}
+
+          <blockquote className="border-l-4 pl-4 text-[15px] italic leading-relaxed text-gray-700" style={{ borderColor: color }}>
             {TECNICA_POR_BANDA[p.band] || "—"}
          </blockquote>
 

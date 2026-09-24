@@ -391,6 +391,18 @@ export default function Bacias() {
                            não diagnóstico (sem verdade de campo).
                         </li>
                      </ul>
+                     <p className="mt-4 text-sm leading-relaxed text-gray-700">
+                        Evidências, código e dados brutos:{" "}
+                        <a
+                           className="font-medium text-[#2f4538] underline"
+                           href="https://github.com/guihirsch/orbee.online/tree/main/v2_validation/evidencias"
+                           target="_blank"
+                           rel="noreferrer"
+                        >
+                           v2_validation/evidencias no GitHub
+                        </a>{" "}
+                        (notebook Fase 0, relatórios V1–V7, figuras, jobs de build).
+                     </p>
                      <button
                         onClick={() => setShowMethods(false)}
                         className="mt-5 rounded-full bg-[#2f4538] px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-[#2f4538]/80"

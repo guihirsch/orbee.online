@@ -126,14 +126,22 @@ async function staticReach(id, params = {}) {
    const fc = await sget(`/${encodeURIComponent(basin)}/${encodeURIComponent(version)}/reaches.geojson`);
    const f = (fc.features || []).find((x) => x.properties?.id === id);
    if (!f) throw new Error(`API v2: Trecho inexistente: ${id}`);
+   const out = { ...f };
    try {
       const doc = await sget(`/${encodeURIComponent(basin)}/${encodeURIComponent(version)}/sr_summary.json`);
       const r = (doc.reaches || []).find((x) => x.id === id);
-      if (r) return { ...f, sr: r };
+      if (r) out.sr = r;
    } catch {
       /* sem SR nesta versão */
    }
-   return f;
+   try {
+      const cc = await sget(`/${encodeURIComponent(basin)}/${encodeURIComponent(version)}/crosscheck.json`);
+      const c = (cc.reaches || []).find((x) => x.id === id);
+      if (c) out.crosscheck = c;
+   } catch {
+      /* sem crosscheck nesta versão */
+   }
+   return out;
 }
 
 async function staticTilejson(params = {}) {
