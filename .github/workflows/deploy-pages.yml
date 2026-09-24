@@ -34,7 +34,7 @@ jobs:
         run: npm ci --no-audit --no-fund
         working-directory: frontend
       - name: Build (estático, dados Taquari embutidos)
-        run: VITE_V2_STATIC=1 npm run build
+        run: VITE_V2_STATIC=1 npm run build -- --base=/orbee.online/
         working-directory: frontend
       - name: Fallback SPA (/bacias)
         run: cp dist/index.html dist/404.html

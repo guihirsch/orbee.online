@@ -11,7 +11,10 @@
 const V1_FALLBACK = "http://localhost:8000/api/v1";
 
 export const V2_STATIC = (import.meta.env.VITE_V2_STATIC ?? "") === "1";
-export const V2_DATA_BASE = (import.meta.env.VITE_V2_DATA ?? "/data/basins").replace(/\/$/, "");
+// Mesma origem: respeita o base do Vite ("/" em dev, "/orbee.online/" no Pages).
+export const V2_DATA_BASE = (
+   import.meta.env.VITE_V2_DATA ?? `${import.meta.env.BASE_URL}data/basins`
+).replace(/\/$/, "");
 
 function resolveBase() {
    const explicit = import.meta.env.VITE_API_V2_URL;
