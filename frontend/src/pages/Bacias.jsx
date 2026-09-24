@@ -6,10 +6,13 @@ import useAuth from "../hooks/useAuth";
 import {
    BAND_COLORS,
    V2_STATIC,
+   getManifest,
    getMethods,
    getReach,
    getReaches,
+   getSrSummary,
    getTilejson,
+   getValidation,
    listBasins,
 } from "../lib/apiV2";
 
@@ -38,6 +41,9 @@ export default function Bacias() {
    const [srTiles, setSrTiles] = useState(null);
    const [baseLayer, setBaseLayer] = useState("sat");
    const [methods, setMethods] = useState(null);
+   const [manifest, setManifest] = useState(null);
+   const [srInfo, setSrInfo] = useState(null);
+   const [validation, setValidation] = useState(null);
    const [showMethods, setShowMethods] = useState(false);
    const [error, setError] = useState("");
    const [loading, setLoading] = useState(true);
@@ -165,13 +171,27 @@ export default function Bacias() {
    }, []);
 
    const openMethods = useCallback(() => {
+      const pv = { basin, version: version || undefined };
       if (!methods) {
-         getMethods({ basin, version: version || undefined })
+         getMethods(pv)
             .then(setMethods)
             .catch((e) => setError(e.message));
       }
+      if (!manifest) {
+         getManifest(pv)
+            .then(setManifest)
+            .catch(() => setManifest(null));
+      }
+      if (!srInfo) {
+         getSrSummary(pv)
+            .then(setSrInfo)
+            .catch(() => setSrInfo(null));
+      }
+      if (!validation) {
+         getValidation(pv).then(setValidation);
+      }
       setShowMethods(true);
-   }, [methods, basin, version]);
+   }, [methods, manifest, srInfo, validation, basin, version]);
 
    return (
       <div className="bg-gradient-to-b from-white via-[#f4f7f2] to-white">
@@ -330,6 +350,47 @@ export default function Bacias() {
                               .join(" · ")}
                         </p>
                      )}
+                     <h3
+                        className="mt-6 text-lg text-[#2f4538]"
+                        style={{ fontFamily: '"Fraunces", serif' }}
+                     >
+                        Dados e proveniência
+                     </h3>
+                     <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed text-gray-700">
+                        <li>
+                           Vegetação: NDVI de Sentinel-2 L2A (10 m, bandas
+                           B04/B08, máscara SCL) via Planetary Computer, janelas
+                           pré 01–03/24 · pós 06–08/24 · regen 06–08/25
+                           (mediana top-3, nuvens &lt; 20%).
+                        </li>
+                        <li>
+                           Rios do OpenStreetMap, trechos de ~500 m
+                           {manifest?.buffer_m != null &&
+                              ` (faixa ${manifest.buffer_m} m)`}
+                           {manifest?.region != null && ` · ${manifest.region}`}
+                           .
+                        </li>
+                        <li>
+                           Realce 2,5 m por IA (SEN2SRLite NonReference_RGBN_x4,
+                           pesos abertos
+                           {srInfo?.model?.weights_sha256 != null &&
+                              `, SHA ${srInfo.model.weights_sha256.slice(0, 12)}…`}
+                           ), validado por trecho (G1 fidelidade, G2 viés-solo).
+                        </li>
+                        {validation != null && (
+                           <li>
+                              Validação independente V1–V6: {validation.verdict}{" "}
+                              ({validation.n_checks} checagens, {validation.n_fail}{" "}
+                              FAIL, {validation.n_warn} WARN). {validation.limits}
+                           </li>
+                        )}
+                        <li>
+                           Leitura da janela pós ’24: após a enchente de
+                           mai/2024, queda de NDVI pode ser soterramento ou
+                           assoreamento — não só desmate. Escore é prospecção,
+                           não diagnóstico (sem verdade de campo).
+                        </li>
+                     </ul>
                      <button
                         onClick={() => setShowMethods(false)}
                         className="mt-5 rounded-full bg-[#2f4538] px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-[#2f4538]/80"

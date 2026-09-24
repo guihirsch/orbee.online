@@ -16,6 +16,14 @@ const TECNICA_POR_BANDA = {
    Baixa: "Monitoramento periódico; manter a cobertura atual.",
 };
 
+/* Janelas Sentinel-2 do build (espelha WINDOWS_DEFAULT do job; as datas
+ * exatas por trecho variam conforme as cenas disponíveis — ver n_cenas). */
+const JANELAS = [
+   { chave: "stats_pre", rotulo: "pré 01–03/24" },
+   { chave: "stats_pos", rotulo: "pós 06–08/24" },
+   { chave: "stats_regen", rotulo: "regen 06–08/25" },
+];
+
 const ROTULOS = {
    severity: "Severidade atual",
    no_regen: "Sem regeneração",
@@ -51,11 +59,11 @@ export default function ReachPanel({ detail, onAdopt, onDownload }) {
       nome: ROTULOS[k] || k,
       valor: v,
    }));
-   const serie = [
-      { janela: "pré ’24", ndvi: p.stats_pre?.ndvi_mean ?? null },
-      { janela: "pós ’24", ndvi: p.stats_pos?.ndvi_mean ?? null },
-      { janela: "regen", ndvi: p.stats_regen?.ndvi_mean ?? null },
-   ];
+   const serie = JANELAS.map((j) => ({
+      janela: j.rotulo,
+      ndvi: p[j.chave]?.ndvi_mean ?? null,
+      n_cenas: p[j.chave]?.n_cenas ?? null,
+   }));
    const color = BAND_COLORS[p.band] || BAND_COLORS.Baixa;
    const lowValid =
       typeof p.valid_fraction === "number" && p.valid_fraction < 0.5;
@@ -65,6 +73,12 @@ export default function ReachPanel({ detail, onAdopt, onDownload }) {
          <div>
             <div className="text-xs uppercase tracking-widest text-gray-400">
                Trecho {(p.id || "").slice(0, 18)} · {p.river || "rio"}
+            </div>
+            <div className="text-xs text-gray-400">
+               Cobertura válida (regen):{" "}
+               {typeof p.valid_fraction === "number"
+                  ? `${Math.round(p.valid_fraction * 100)}% dos pixels`
+                  : "—"}
             </div>
             <div className="mt-2 flex items-end gap-3">
                <span
@@ -148,6 +162,11 @@ export default function ReachPanel({ detail, onAdopt, onDownload }) {
                   {p.delta_regen.toFixed(3)} (mesma estação)
                </p>
             )}
+            <p className="mt-1 text-xs text-gray-400">
+               Cenas por janela (pré/pós/regen):{" "}
+               {serie.map((s) => s.n_cenas ?? "—").join(" / ")} · pós ’24 é
+               pós-enchente: queda pode ser soterramento, não só desmate.
+            </p>
          </section>
 
          {detail.sr && (
@@ -159,7 +178,12 @@ export default function ReachPanel({ detail, onAdopt, onDownload }) {
                {detail.sr.g1 && (
                   <>
                      {" "}· ERGAS {detail.sr.g1.ergas} · SAM {detail.sr.g1.sam}°
+                     {typeof detail.sr.g1.psnr_nir === "number" &&
+                        ` · PSNR ${detail.sr.g1.psnr_nir}`}
                   </>
+               )}
+               {detail.sr.g2 && typeof detail.sr.g2.vies_solo === "number" && (
+                  <> · viés-solo {detail.sr.g2.vies_solo}</>
                )}
                . Ative a camada SR no mapa.
             </section>
