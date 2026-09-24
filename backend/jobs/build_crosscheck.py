@@ -54,28 +54,44 @@ def main(argv=None) -> int:
     tmp = Path(tempfile.mkdtemp(prefix="crosscheck_"))
     records = []
     try:
-        for feat in fc["features"]:
+        import time
+
+        for n, feat in enumerate(fc["features"]):
             p = feat["properties"]
             c = shape(feat["geometry"]).centroid
             bb = (c.x - 0.005, c.y - 0.005, c.x + 0.005, c.y + 0.005)
             print(f"{p['id']} …")
+            comp = None
+            err = None
+            for attempt in range(4):  # STAC INPE limita taxa (429): backoff
+                try:
+                    comp = cb.composite_ndvi_wpm(bb, *REGEN)
+                    err = None
+                    break
+                except Exception as e:  # noqa: BLE001
+                    err = e
+                    wait = 30 * (attempt + 1)
+                    print(f"  tentativa {attempt + 1} falhou ({str(e)[:100]}); retry em {wait}s")
+                    time.sleep(wait)
+            if comp is None:
+                records.append({"id": p["id"], "status": "FAIL",
+                                "reason": f"CBERS indisponível: {str(err)[:150]}"})
+                print(f"  FAIL ({err})")
+                continue
+            # triagem de nuvens/lacunas: só cenas com ≥80% de dados no bbox
+            # (a coleção não informa cloud_cover; documentado em per_scene).
+            # Best-effort: se a recomposição falhar (ex. 429), mantém o comp.
             try:
-                comp = cb.composite_ndvi_wpm(bb, *REGEN)
-                # triagem de nuvens/lacunas: só cenas com ≥80% de dados no bbox
-                # (a coleção não informa cloud_cover; documentado em per_scene)
                 clean = [s["id"] for s in comp.per_scene
                          if s.get("frac_validos", 0) >= 0.8]
-                if len(clean) < len(comp.scene_ids):
+                if clean and len(clean) < len(comp.scene_ids):
                     all_items = cb.search_wpm(bb, *REGEN)
                     comp = cb.composite_ndvi_wpm(
                         bb, *REGEN,
                         items=[i for i in all_items if i.get("id") in clean])
-                    print(f"  triagem: {len(clean)}/{len(comp.scene_ids)} cenas limpas")
+                    print(f"  triagem: {len(clean)} cenas limpas")
             except Exception as e:  # noqa: BLE001
-                records.append({"id": p["id"], "status": "FAIL",
-                                "reason": f"CBERS indisponível: {str(e)[:150]}"})
-                print(f"  FAIL ({e})")
-                continue
+                print(f"  triagem ignorada ({str(e)[:100]})")
             s2 = p.get("stats_regen") or {}
             d_mean = abs(comp.stats["ndvi_mean"] - s2.get("ndvi_mean", 0))
             d_crit = abs(comp.stats["frac_critico"] - s2.get("frac_critico", 0))
@@ -98,6 +114,7 @@ def main(argv=None) -> int:
             })
             print(f"  {st} Δmean={records[-1]['delta_ndvi_mean']} "
                   f"Δcrit={records[-1]['delta_frac_critico']}")
+            time.sleep(15)  # gentileza com o STAC do INPE (evita 429)
         doc = {
             "basin": args.basin, "version": args.version,
             "built_at": dt.datetime.now(dt.timezone.utc).isoformat(),

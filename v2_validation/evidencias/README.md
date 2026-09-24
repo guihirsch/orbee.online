@@ -39,6 +39,19 @@ Pendente (não resgatado): nada — resgate completo em 2026-09-06.
   entre sensores divergem por calibração; a ordenação é inconclusiva com n=6.
   Decisão: campo, não mais pixel.
 
+## Expansão Tier 1 — Taquari v2 (18 trechos, 2026-09-24)
+
+- Piloto ampliado Lajeado–Estrela–Arroio do Meio (`--sample 18` N→S sobre
+  144 trechos OSM; `--river taquari`); 10 Alta + 8 Média, score médio 0,42.
+- `taquari_v2_validacao.json` — bateria V1–V7: **67 checagens, 14 FAIL
+  (todos no V7, acordo absoluto S2×CBERS), 31 WARN**; V1–V6 íntegros
+  (scores reexecutados por id, geometrias, janelas, tiles, SHA).
+- `taquari_v2_crosscheck.json` — CBERS WPM nos 18 trechos (com triagem de
+  nuvens e backoff 429): viés sistemático S2−CBERS ≈ −0,14, **Spearman da
+  ordenação 0,70** (moderado, melhor que v1) — ranking parcialmente robusto,
+  absolutos não comparáveis (DN sem correção atmosférica).
+- `taquari_v2_sr_25m.png` (SR 5/5 PASS G1/G2) e `taquari_v2_cbers_x_s2.png`.
+
 ## Sessão completa do Colab (canônica)
 
 - `fase0_sessao_colab.ipynb` — notebook executado, 28 células (14 de código,

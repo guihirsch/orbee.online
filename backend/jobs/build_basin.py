@@ -54,6 +54,9 @@ def parse_args(argv=None):
                    help="0 = sem limite; N > 0 processa só os N primeiros")
     p.add_argument("--river", type=str, default=None,
                    help="Filtra river_key por substring (ex. taquari)")
+    p.add_argument("--sample", type=int, default=0, metavar="K",
+                   help="0 = sem amostragem; K > 0 escolhe K trechos espaçados "
+                        "uniformemente por latitude (rio N→S) em vez dos N primeiros")
     p.add_argument("--synthetic", type=int, default=0, metavar="N",
                    help="Gera N trechos sintéticos (sem rede/deps geo)")
     p.add_argument("--seed", type=int, default=42)
@@ -73,6 +76,7 @@ def _manifest(basin: str, args: argparse.Namespace, n_reaches: int) -> dict:
         "top_n": args.top_n,
         "pilot_bbox": args.pilot_bbox,
         "river": getattr(args, "river", None),
+        "sample": getattr(args, "sample", 0),
         "n_reaches": n_reaches,
         "synthetic": bool(args.synthetic),
         "files": ["reaches.geojson", "summary.json", "methods.json"],
@@ -155,6 +159,12 @@ def run_real(args: argparse.Namespace) -> list:
     if args.limit_reaches > 0:
         reaches = reaches[: args.limit_reaches]
         print(f"trechos (limit): {len(reaches)}")
+
+    if args.sample > 0 and len(reaches) > args.sample:
+        ordered = sorted(reaches, key=lambda r: r["centroid"][1])
+        step = len(ordered) / args.sample
+        reaches = [ordered[int(i * step)] for i in range(args.sample)]
+        print(f"trechos (sample {args.sample} N→S): {len(reaches)}")
 
     windows = WINDOWS_DEFAULT
     for i, r in enumerate(reaches):

@@ -83,17 +83,20 @@ def main(argv=None) -> int:
     else:
         check("FAIL", f"pesos não somam 1: {methods.get('weights')}", checks, "V1")
 
-    raw = [{"river_key": f["properties"].get("river"), "order": f["properties"].get("order"),
+    # score_all usa vizinhos (ordens adjacentes por rio); ordens podem
+    # repetir entre linhas OSM distintas — reexecuta na lista cheia e
+    # casa por id (nunca por (rio, ordem)).
+    raw = [{"id": f["properties"].get("id"),
+            "river_key": f["properties"].get("river"), "order": f["properties"].get("order"),
             "stats_pre": f["properties"].get("stats_pre") or {},
             "stats_pos": f["properties"].get("stats_pos") or {},
             "stats_regen": f["properties"].get("stats_regen") or {},
             "area_ha": f["properties"].get("area_ha", 5.0)} for f in feats]
-    rescored = {(r.get("river_key"), r.get("order")): s
-                for r in score_all(raw) for s in [r]}
+    rescored = {r["id"]: r for r in score_all(raw)}
     nok = 0
     for f in feats:
         p = f["properties"]
-        s = rescored.get((p.get("river"), p.get("order")))
+        s = rescored.get(p.get("id"))
         if s is None:
             check("FAIL", f"{p.get('id')}: não reexecutado", checks, "V1")
             continue

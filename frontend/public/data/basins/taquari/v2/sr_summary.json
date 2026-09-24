@@ -1,0 +1,158 @@
+{
+  "basin": "taquari",
+  "version": "v2",
+  "built_at": "2026-09-24T20:22:49.172505+00:00",
+  "model": {
+    "variant": "NonReference_RGBN_x4",
+    "weights_sha256": "c895c7da8a8d48882b73a2a1955e4260714b97540eea290229a284d73f129985"
+  },
+  "n_reaches": 5,
+  "n_pass": 5,
+  "reaches": [
+    {
+      "id": "reach_2196fd5e30",
+      "sr_status": "PASS",
+      "reason": null,
+      "g1": {
+        "status": "PASS",
+        "ergas": 0.402,
+        "sam": 0.167,
+        "psnr_nir": 55.12
+      },
+      "g2": {
+        "status": "PASS",
+        "vies_solo": 0.0047,
+        "n_solo": 14455
+      },
+      "ndvi_sr": {
+        "n_validos": 697472,
+        "frac_fora_11": 0.0004,
+        "ndvi_min": -0.348,
+        "ndvi_max": 1.7006,
+        "ndvi_mean": 0.3244
+      },
+      "n_tiles": 189,
+      "files": [
+        "sr_rgbn.tif",
+        "ndvi_sr.tif",
+        "tiles/ndvi_sr/{z}/{x}/{y}.png"
+      ]
+    },
+    {
+      "id": "reach_4d7d157cb1",
+      "sr_status": "PASS",
+      "reason": null,
+      "g1": {
+        "status": "PASS",
+        "ergas": 0.48,
+        "sam": 0.254,
+        "psnr_nir": 53.03
+      },
+      "g2": {
+        "status": "PASS",
+        "vies_solo": 0.0048,
+        "n_solo": 11732
+      },
+      "ndvi_sr": {
+        "n_validos": 682560,
+        "frac_fora_11": 0.0002,
+        "ndvi_min": -0.3266,
+        "ndvi_max": 1.3983,
+        "ndvi_mean": 0.3241
+      },
+      "n_tiles": 189,
+      "files": [
+        "sr_rgbn.tif",
+        "ndvi_sr.tif",
+        "tiles/ndvi_sr/{z}/{x}/{y}.png"
+      ]
+    },
+    {
+      "id": "reach_095469faca",
+      "sr_status": "PASS",
+      "reason": null,
+      "g1": {
+        "status": "PASS",
+        "ergas": 0.402,
+        "sam": 0.2,
+        "psnr_nir": 52.6
+      },
+      "g2": {
+        "status": "PASS",
+        "vies_solo": 0.0112,
+        "n_solo": 4905
+      },
+      "ndvi_sr": {
+        "n_validos": 741120,
+        "frac_fora_11": 0.0002,
+        "ndvi_min": -0.3528,
+        "ndvi_max": 1.3898,
+        "ndvi_mean": 0.4094
+      },
+      "n_tiles": 189,
+      "files": [
+        "sr_rgbn.tif",
+        "ndvi_sr.tif",
+        "tiles/ndvi_sr/{z}/{x}/{y}.png"
+      ]
+    },
+    {
+      "id": "reach_51c3b51631",
+      "sr_status": "PASS",
+      "reason": null,
+      "g1": {
+        "status": "PASS",
+        "ergas": 0.405,
+        "sam": 0.195,
+        "psnr_nir": 54.9
+      },
+      "g2": {
+        "status": "PASS",
+        "vies_solo": 0.0139,
+        "n_solo": 5553
+      },
+      "ndvi_sr": {
+        "n_validos": 704160,
+        "frac_fora_11": 0.0002,
+        "ndvi_min": -0.3718,
+        "ndvi_max": 1.4363,
+        "ndvi_mean": 0.3868
+      },
+      "n_tiles": 188,
+      "files": [
+        "sr_rgbn.tif",
+        "ndvi_sr.tif",
+        "tiles/ndvi_sr/{z}/{x}/{y}.png"
+      ]
+    },
+    {
+      "id": "reach_80f3ee0d69",
+      "sr_status": "PASS",
+      "reason": null,
+      "g1": {
+        "status": "PASS",
+        "ergas": 0.407,
+        "sam": 0.18,
+        "psnr_nir": 55.06
+      },
+      "g2": {
+        "status": "PASS",
+        "vies_solo": 0.0224,
+        "n_solo": 4068
+      },
+      "ndvi_sr": {
+        "n_validos": 706560,
+        "frac_fora_11": 0.0002,
+        "ndvi_min": -0.3607,
+        "ndvi_max": 1.4414,
+        "ndvi_mean": 0.4046
+      },
+      "n_tiles": 189,
+      "files": [
+        "sr_rgbn.tif",
+        "ndvi_sr.tif",
+        "tiles/ndvi_sr/{z}/{x}/{y}.png"
+      ]
+    }
+  ]
+}

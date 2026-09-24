@@ -1,0 +1,215 @@
+{
+  "basin": "taquari",
+  "version": "v1",
+  "built_at": "2026-09-24T19:38:09.294569+00:00",
+  "sensor": "CBERS-4A/WPM L4-DN (8 m, NDVI sobre DN, BAND3/BAND4)",
+  "stac": "https://data.inpe.br/bdc/stac/v1 / CB4A-WPM-L4-DN-1",
+  "window": {
+    "regen": [
+      "2025-06-01",
+      "2025-08-31"
+    ]
+  },
+  "tolerances": {
+    "delta_ndvi_mean": [
+      0.08,
+      0.15
+    ],
+    "delta_frac_critico": [
+      0.1,
+      0.2
+    ]
+  },
+  "n_reaches": 6,
+  "n_pass": 0,
+  "rank_corr_spearman": 0.429,
+  "bias_median_delta": -0.1099,
+  "reaches": [
+    {
+      "id": "reach_ccabf1fe88",
+      "status": "FAIL",
+      "s2_ndvi_mean": 0.3889,
+      "cbers_ndvi_mean": 0.2786,
+      "delta_ndvi_mean": -0.1103,
+      "s2_frac_critico": 0.0899,
+      "cbers_frac_critico": 0.3228,
+      "delta_frac_critico": 0.2328,
+      "scene_ids": [
+        "CBERS_4A_WPM_20250812_207_150_L4",
+        "CBERS_4A_WPM_20250707_208_150_L4"
+      ],
+      "per_scene": [
+        {
+          "id": "CBERS_4A_WPM_20250812_207_150_L4",
+          "ndvi_mean": 0.2552439636382947,
+          "frac_validos": 1.0
+        },
+        {
+          "id": "CBERS_4A_WPM_20250707_208_150_L4",
+          "ndvi_mean": 0.28920718874454804,
+          "frac_validos": 1.0
+        }
+      ]
+    },
+    {
+      "id": "reach_baeab33dbb",
+      "status": "FAIL",
+      "s2_ndvi_mean": 0.4242,
+      "cbers_ndvi_mean": 0.3148,
+      "delta_ndvi_mean": -0.1094,
+      "s2_frac_critico": 0.0956,
+      "cbers_frac_critico": 0.3189,
+      "delta_frac_critico": 0.2233,
+      "scene_ids": [
+        "CBERS_4A_WPM_20250812_207_150_L4",
+        "CBERS_4A_WPM_20250712_207_150_L4",
+        "CBERS_4A_WPM_20250707_208_150_L4"
+      ],
+      "per_scene": [
+        {
+          "id": "CBERS_4A_WPM_20250812_207_150_L4",
+          "ndvi_mean": 0.31220261308120534,
+          "frac_validos": 1.0
+        },
+        {
+          "id": "CBERS_4A_WPM_20250712_207_150_L4",
+          "ndvi_mean": -0.05422367561712694,
+          "frac_validos": 0.8879663264717753
+        },
+        {
+          "id": "CBERS_4A_WPM_20250707_208_150_L4",
+          "ndvi_mean": 0.289249017624416,
+          "frac_validos": 1.0
+        }
+      ]
+    },
+    {
+      "id": "reach_7b419318a2",
+      "status": "WARN",
+      "s2_ndvi_mean": 0.3845,
+      "cbers_ndvi_mean": 0.2931,
+      "delta_ndvi_mean": -0.0914,
+      "s2_frac_critico": 0.1114,
+      "cbers_frac_critico": 0.3064,
+      "delta_frac_critico": 0.195,
+      "scene_ids": [
+        "CBERS_4A_WPM_20250812_207_150_L4",
+        "CBERS_4A_WPM_20250712_207_150_L4",
+        "CBERS_4A_WPM_20250707_208_150_L4"
+      ],
+      "per_scene": [
+        {
+          "id": "CBERS_4A_WPM_20250812_207_150_L4",
+          "ndvi_mean": 0.2991698752679538,
+          "frac_validos": 1.0
+        },
+        {
+          "id": "CBERS_4A_WPM_20250712_207_150_L4",
+          "ndvi_mean": -0.05397641365573466,
+          "frac_validos": 1.0
+        },
+        {
+          "id": "CBERS_4A_WPM_20250707_208_150_L4",
+          "ndvi_mean": 0.23269189587689612,
+          "frac_validos": 1.0
+        }
+      ]
+    },
+    {
+      "id": "reach_3a4dd0a219",
+      "status": "WARN",
+      "s2_ndvi_mean": 0.3832,
+      "cbers_ndvi_mean": 0.3032,
+      "delta_ndvi_mean": -0.08,
+      "s2_frac_critico": 0.0889,
+      "cbers_frac_critico": 0.2754,
+      "delta_frac_critico": 0.1865,
+      "scene_ids": [
+        "CBERS_4A_WPM_20250812_207_150_L4",
+        "CBERS_4A_WPM_20250712_207_150_L4",
+        "CBERS_4A_WPM_20250707_208_150_L4"
+      ],
+      "per_scene": [
+        {
+          "id": "CBERS_4A_WPM_20250812_207_150_L4",
+          "ndvi_mean": 0.30366977000376166,
+          "frac_validos": 1.0
+        },
+        {
+          "id": "CBERS_4A_WPM_20250712_207_150_L4",
+          "ndvi_mean": -0.05569848551307613,
+          "frac_validos": 1.0
+        },
+        {
+          "id": "CBERS_4A_WPM_20250707_208_150_L4",
+          "ndvi_mean": 0.2307843705910743,
+          "frac_validos": 1.0
+        }
+      ]
+    },
+    {
+      "id": "reach_1b14902269",
+      "status": "WARN",
+      "s2_ndvi_mean": 0.4294,
+      "cbers_ndvi_mean": 0.3055,
+      "delta_ndvi_mean": -0.124,
+      "s2_frac_critico": 0.0984,
+      "cbers_frac_critico": 0.2725,
+      "delta_frac_critico": 0.1741,
+      "scene_ids": [
+        "CBERS_4A_WPM_20250812_207_150_L4",
+        "CBERS_4A_WPM_20250712_207_150_L4",
+        "CBERS_4A_WPM_20250707_208_150_L4",
+        "CBERS_4A_WPM_20250611_207_150_L4"
+      ],
+      "per_scene": [
+        {
+          "id": "CBERS_4A_WPM_20250812_207_150_L4",
+          "ndvi_mean": 0.33704752114476333,
+          "frac_validos": 1.0
+        },
+        {
+          "id": "CBERS_4A_WPM_20250712_207_150_L4",
+          "ndvi_mean": -0.05709228915555376,
+          "frac_validos": 1.0
+        },
+        {
+          "id": "CBERS_4A_WPM_20250707_208_150_L4",
+          "ndvi_mean": 0.2566696394659354,
+          "frac_validos": 1.0
+        },
+        {
+          "id": "CBERS_4A_WPM_20250611_207_150_L4",
+          "ndvi_mean": 0.21359900266797854,
+          "frac_validos": 0.9674220146456783
+        }
+      ]
+    },
+    {
+      "id": "reach_1b60e6f8bf",
+      "status": "FAIL",
+      "s2_ndvi_mean": 0.3847,
+      "cbers_ndvi_mean": 0.2619,
+      "delta_ndvi_mean": -0.1228,
+      "s2_frac_critico": 0.057,
+      "cbers_frac_critico": 0.3005,
+      "delta_frac_critico": 0.2435,
+      "scene_ids": [
+        "CBERS_4A_WPM_20250812_207_150_L4",
+        "CBERS_4A_WPM_20250707_208_150_L4"
+      ],
+      "per_scene": [
+        {
+          "id": "CBERS_4A_WPM_20250812_207_150_L4",
+          "ndvi_mean": 0.237060382513509,
+          "frac_validos": 1.0
+        },
+        {
+          "id": "CBERS_4A_WPM_20250707_208_150_L4",
+          "ndvi_mean": 0.27361736930302993,
+          "frac_validos": 1.0
+        }
+      ]
+    }
+  ]
+}
