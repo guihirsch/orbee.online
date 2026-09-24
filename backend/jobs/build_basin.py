@@ -52,6 +52,8 @@ def parse_args(argv=None):
                    help="Restringe a trechos com centroide dentro do bbox (piloto)")
     p.add_argument("--limit-reaches", type=int, default=0,
                    help="0 = sem limite; N > 0 processa só os N primeiros")
+    p.add_argument("--river", type=str, default=None,
+                   help="Filtra river_key por substring (ex. taquari)")
     p.add_argument("--synthetic", type=int, default=0, metavar="N",
                    help="Gera N trechos sintéticos (sem rede/deps geo)")
     p.add_argument("--seed", type=int, default=42)
@@ -70,6 +72,7 @@ def _manifest(basin: str, args: argparse.Namespace, n_reaches: int) -> dict:
         "cloud_max": args.cloud_max,
         "top_n": args.top_n,
         "pilot_bbox": args.pilot_bbox,
+        "river": getattr(args, "river", None),
         "n_reaches": n_reaches,
         "synthetic": bool(args.synthetic),
         "files": ["reaches.geojson", "summary.json", "methods.json"],
@@ -132,7 +135,10 @@ def run_real(args: argparse.Namespace) -> list:
     from app.services.reaches_service import build_reaches
     from app.services.s2_service import S2NoScenes, composite_ndvi
 
-    reaches = build_reaches(args.region, args.buffer_m, args.reach_length_m)
+    reaches = build_reaches(
+        args.region, args.buffer_m, args.reach_length_m,
+        bbox=tuple(args.pilot_bbox) if args.pilot_bbox else None,
+    )
     print(f"trechos OSM: {len(reaches)}")
 
     if args.pilot_bbox:
@@ -140,6 +146,11 @@ def run_real(args: argparse.Namespace) -> list:
         reaches = [r for r in reaches
                    if minx <= r["centroid"][0] <= maxx and miny <= r["centroid"][1] <= maxy]
         print(f"trechos no piloto: {len(reaches)}")
+
+    if args.river:
+        key = args.river.lower()
+        reaches = [r for r in reaches if key in r["river_key"]]
+        print(f"trechos no rio '{args.river}': {len(reaches)}")
 
     if args.limit_reaches > 0:
         reaches = reaches[: args.limit_reaches]

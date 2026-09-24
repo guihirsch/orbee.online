@@ -1,0 +1,54 @@
+# Portal estático /bacias (Taquari) → GitHub Pages
+# Build do frontend com VITE_V2_STATIC=1: JSON + tiles SR servidos de
+# frontend/public/data (sem backend). 404.html = fallback SPA p/ /bacias.
+name: Deploy portal (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/deploy-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install
+        run: npm ci --no-audit --no-fund
+        working-directory: frontend
+      - name: Build (estático, dados Taquari embutidos)
+        run: VITE_V2_STATIC=1 npm run build
+        working-directory: frontend
+      - name: Fallback SPA (/bacias)
+        run: cp dist/index.html dist/404.html
+        working-directory: frontend
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

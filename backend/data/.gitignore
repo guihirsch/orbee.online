@@ -1,0 +1,5 @@
+# Artefatos pesados regeneráveis pelos jobs (não versionar).
+# Versionar só os JSONs de proveniência (*.geojson, summary/methods/manifest/sr_summary).
+*.tif
+models/
+**/tiles/

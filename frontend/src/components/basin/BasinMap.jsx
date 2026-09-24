@@ -198,7 +198,7 @@ export default function BasinMap({
          }
          return;
       }
-      const abs = new URL(srTiles, API_V2_BASE).href;
+      const abs = srTiles.startsWith("/") ? srTiles : new URL(srTiles, API_V2_BASE).href;
       if (has) {
          map.getSource("sr").tiles = [abs];
          try {

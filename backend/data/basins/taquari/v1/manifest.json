@@ -1,0 +1,24 @@
+{
+  "basin": "taquari",
+  "built_at": "2026-09-24T16:42:52.139887+00:00",
+  "methods_version": "f1-2026-09",
+  "region": "Lajeado, Rio Grande do Sul, Brasil",
+  "buffer_m": 200.0,
+  "reach_length_m": 500.0,
+  "cloud_max": 20,
+  "top_n": 3,
+  "pilot_bbox": [
+    -52.05,
+    -29.55,
+    -51.85,
+    -29.35
+  ],
+  "river": "taquari",
+  "n_reaches": 6,
+  "synthetic": false,
+  "files": [
+    "reaches.geojson",
+    "summary.json",
+    "methods.json"
+  ]
+}

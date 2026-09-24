@@ -1,0 +1,18 @@
+{
+  "basin": "pardo",
+  "built_at": "2026-09-06T21:29:31.677946+00:00",
+  "methods_version": "f1-2026-09",
+  "region": "Sinimbu, Rio Grande do Sul, Brasil",
+  "buffer_m": 200.0,
+  "reach_length_m": 500.0,
+  "cloud_max": 20,
+  "top_n": 3,
+  "pilot_bbox": null,
+  "n_reaches": 8,
+  "synthetic": true,
+  "files": [
+    "reaches.geojson",
+    "summary.json",
+    "methods.json"
+  ]
+}

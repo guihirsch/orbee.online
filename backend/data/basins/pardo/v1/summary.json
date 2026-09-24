@@ -1,0 +1,11 @@
+{
+  "basin": "pardo",
+  "n_reaches": 8,
+  "bands": {
+    "Média": 2,
+    "Baixa": 5,
+    "Alta": 1
+  },
+  "score_mean": 0.2223,
+  "frac_critical_reaches": 0.125
+}

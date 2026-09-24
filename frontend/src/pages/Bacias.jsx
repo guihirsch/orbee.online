@@ -5,6 +5,7 @@ import AuthModal from "../components/AuthModal";
 import useAuth from "../hooks/useAuth";
 import {
    BAND_COLORS,
+   V2_STATIC,
    getMethods,
    getReach,
    getReaches,
@@ -136,6 +137,12 @@ export default function Bacias() {
 
    const adopt = useCallback(
       (feature) => {
+         if (V2_STATIC) {
+            setNotice(
+               "Versão demonstrativa (dados abertos, sem login): a adoção de trechos entra no ar com o portal completo."
+            );
+            return;
+         }
          if (!isAuthenticated) {
             pendingAdopt.current = feature;
             setShowAuth(true);
@@ -171,9 +178,9 @@ export default function Bacias() {
          <div className="mx-auto flex max-w-7xl flex-col gap-5 px-6 py-10">
             {/* Cabeçalho editorial */}
             <div className="max-w-3xl">
-               <span className="inline-block rounded-full bg-[#2f4538]/10 px-4 py-1 text-xs font-medium uppercase tracking-widest text-[#2f4538]">
-                  Portal comunitário · Bacia do Pardo
-               </span>
+                <span className="inline-block rounded-full bg-[#2f4538]/10 px-4 py-1 text-xs font-medium uppercase tracking-widest text-[#2f4538]">
+                   Portal comunitário · {basin === "taquari" ? "Vale do Taquari" : `Bacia do ${basin}`}
+                </span>
                <h1
                   className="mt-3 text-4xl leading-tight text-[#2f4538] lg:text-5xl"
                   style={{ fontFamily: '"Fraunces", serif' }}

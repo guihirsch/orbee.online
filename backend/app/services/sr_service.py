@@ -208,7 +208,9 @@ def soil_bias(ndvi_sr, red10, nir10, scl10,
 def models_dir() -> Path:
     from app.core.config import settings
 
-    root = Path(__file__).resolve().parents[3] / settings.JOBS_DATA_DIR
+    # sr_service.py está em backend/app/services/ → parents[2] = backend/
+    # (api.py usa parents[3] porque está um nível acima; não copiar)
+    root = Path(__file__).resolve().parents[2] / settings.JOBS_DATA_DIR
     return root / "models"
 
 
@@ -219,7 +221,7 @@ def ensure_weights(variant: str = VARIANT_RGBN_X4,
     import mlstac
 
     dest = dest or (models_dir() / f"SEN2SRLite_{variant}")
-    if (dest / "mlm.json").is_file() and any(dest.glob("*.safetensors")):
+    if (dest / "mlm.json").is_file() and any(dest.glob("*.safetensor*")):
         return dest
     dest.mkdir(parents=True, exist_ok=True)
     mlstac.download(file=MLM_URL.format(variant=variant), output_dir=str(dest))
@@ -228,7 +230,7 @@ def ensure_weights(variant: str = VARIANT_RGBN_X4,
 
 def weights_sha(variant: str = VARIANT_RGBN_X4) -> str:
     """SHA-256 do maior .safetensors (proveniência p/ manifest)."""
-    cands = sorted((models_dir() / f"SEN2SRLite_{variant}").glob("*.safetensors"),
+    cands = sorted((models_dir() / f"SEN2SRLite_{variant}").glob("*.safetensor*"),
                    key=lambda p: p.stat().st_size, reverse=True)
     if not cands:
         raise SRWeightsMissing(f"sem pesos em {variant}; rode ensure_weights()")

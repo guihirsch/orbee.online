@@ -1,0 +1,100 @@
+{
+  "basin": "taquari",
+  "version": "v1",
+  "built_at": "2026-09-24T16:50:36.660558+00:00",
+  "model": {
+    "variant": "NonReference_RGBN_x4",
+    "weights_sha256": "c895c7da8a8d48882b73a2a1955e4260714b97540eea290229a284d73f129985"
+  },
+  "n_reaches": 3,
+  "n_pass": 3,
+  "reaches": [
+    {
+      "id": "reach_7b419318a2",
+      "sr_status": "PASS",
+      "reason": null,
+      "g1": {
+        "status": "PASS",
+        "ergas": 0.373,
+        "sam": 0.156,
+        "psnr_nir": 55.86
+      },
+      "g2": {
+        "status": "PASS",
+        "vies_solo": 0.0273,
+        "n_solo": 3586
+      },
+      "ndvi_sr": {
+        "n_validos": 721680,
+        "frac_fora_11": 0.0005,
+        "ndvi_min": -0.3796,
+        "ndvi_max": 1.8937,
+        "ndvi_mean": 0.4343
+      },
+      "n_tiles": 189,
+      "files": [
+        "sr_rgbn.tif",
+        "ndvi_sr.tif",
+        "tiles/ndvi_sr/{z}/{x}/{y}.png"
+      ]
+    },
+    {
+      "id": "reach_3a4dd0a219",
+      "sr_status": "PASS",
+      "reason": null,
+      "g1": {
+        "status": "PASS",
+        "ergas": 0.396,
+        "sam": 0.164,
+        "psnr_nir": 55.56
+      },
+      "g2": {
+        "status": "PASS",
+        "vies_solo": 0.0258,
+        "n_solo": 4151
+      },
+      "ndvi_sr": {
+        "n_validos": 722768,
+        "frac_fora_11": 0.0006,
+        "ndvi_min": -0.3796,
+        "ndvi_max": 2.065,
+        "ndvi_mean": 0.4327
+      },
+      "n_tiles": 189,
+      "files": [
+        "sr_rgbn.tif",
+        "ndvi_sr.tif",
+        "tiles/ndvi_sr/{z}/{x}/{y}.png"
+      ]
+    },
+    {
+      "id": "reach_baeab33dbb",
+      "sr_status": "PASS",
+      "reason": null,
+      "g1": {
+        "status": "PASS",
+        "ergas": 0.378,
+        "sam": 0.158,
+        "psnr_nir": 55.64
+      },
+      "g2": {
+        "status": "PASS",
+        "vies_solo": 0.0263,
+        "n_solo": 3477
+      },
+      "ndvi_sr": {
+        "n_validos": 718208,
+        "frac_fora_11": 0.0005,
+        "ndvi_min": -0.3796,
+        "ndvi_max": 1.7799,
+        "ndvi_mean": 0.4284
+      },
+      "n_tiles": 189,
+      "files": [
+        "sr_rgbn.tif",
+        "ndvi_sr.tif",
+        "tiles/ndvi_sr/{z}/{x}/{y}.png"
+      ]
+    }
+  ]
+}

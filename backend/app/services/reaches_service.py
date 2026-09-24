@@ -159,12 +159,18 @@ def build_reaches(
     buffer_m: float = 200.0,
     reach_length_m: float = REACH_LENGTH_M,
     min_inside_pct: float = 10.0,
+    bbox: tuple | None = None,
 ) -> List[Dict[str, Any]]:
     """Rios OSM → buffer não usado aqui; segmenta linhas em trechos ~500 m.
 
     Retorna reaches com geometria EPSG:4326, river_key, order, area_ha
     (área = comprimento × 2×buffer aproximada via bbox do segmento? usa
     comprimento × faixa fixa) e centroides. Stats vêm do job (s2_service).
+
+    Se bbox=(minx,miny,maxx,maxy) for dado, busca rios pelo retângulo
+    (features_from_bbox) em vez do município — necessário quando o rio
+    principal forma a divisa municipal (ex. Taquari em Lajeado) e o
+    features_from_place não o retorna.
     """
     try:
         import osmnx as ox
@@ -178,7 +184,12 @@ def build_reaches(
 
     boundary = ox.geocode_to_gdf(region)
     muni = boundary.geometry.iloc[0]
-    rivers = ox.features_from_place(region, tags={"waterway": "river"})
+    if bbox is not None:
+        rivers = ox.features_from_bbox(tuple(bbox), tags={"waterway": "river"})
+        clip_muni = False  # sem recorte municipal no modo bbox
+    else:
+        rivers = ox.features_from_place(region, tags={"waterway": "river"})
+        clip_muni = True
     linear = rivers[rivers.geometry.type.isin(["LineString", "MultiLineString"])]
     if linear.empty:
         raise ValueError(f"Nenhum rio linear em '{region}'")
@@ -187,6 +198,13 @@ def build_reaches(
     zone = int((c.x + 180) / 6) + 1
     utm = f"EPSG:{32700 + zone}" if c.y < 0 else f"EPSG:{32600 + zone}"
     utm_gdf = linear.to_crs(utm)
+    # muni vem em EPSG:4326; part está em UTM — comparar no mesmo CRS
+    # (no modo bbox não há muni: o filtro de centroides do job restringe)
+    muni_crs = linear.crs or 4326
+    muni_utm = (
+        gpd.GeoDataFrame(geometry=[muni], crs=muni_crs).to_crs(utm).geometry.iloc[0]
+        if clip_muni else None
+    )
 
     reaches: List[Dict[str, Any]] = []
     for idx, row in utm_gdf.iterrows():
@@ -198,7 +216,7 @@ def build_reaches(
         river_key = "".join(ch if ch.isalnum() else "_" for ch in name.lower())[:40]
         order = 0
         for part in parts:
-            if not part.intersects(muni):
+            if clip_muni and not part.intersects(muni_utm):
                 continue
             total = part.length
             d = 0.0
@@ -211,7 +229,8 @@ def build_reaches(
                     .to_crs(4326)
                     .geometry.iloc[0]
                 )
-                mx, my = seg.centroid.x, seg.centroid.y
+                # centroide em lon/lat (seg está em metros UTM)
+                mx, my = seg_wgs.centroid.x, seg_wgs.centroid.y
                 # área aprox: faixa buffer_m×2 ao longo do segmento
                 area_ha = seg.length * buffer_m * 2 / 10000.0
                 reaches.append(
