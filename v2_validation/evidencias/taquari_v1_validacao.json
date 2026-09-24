@@ -1,0 +1,175 @@
+{
+  "basin": "taquari",
+  "version": "v1",
+  "validated_at": "2026-09-24T17:24:59.989989+00:00",
+  "gates": [
+    "V1",
+    "V2",
+    "V3",
+    "V4",
+    "V5",
+    "V6"
+  ],
+  "n_checks": 31,
+  "n_fail": 0,
+  "n_warn": 14,
+  "verdict": "PASS_WITH_WARNS",
+  "checks": [
+    {
+      "gate": "V1",
+      "status": "PASS",
+      "detail": "pesos somam 1"
+    },
+    {
+      "gate": "V1",
+      "status": "PASS",
+      "detail": "score/banda/componentes reexecutados em 6 trechos"
+    },
+    {
+      "gate": "V1",
+      "status": "PASS",
+      "detail": "summary/manifest reconciliam (6 trechos, {'Alta': 5, 'Média': 1})"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_baeab33dbb: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_7b419318a2: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_3a4dd0a219: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_1b14902269: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_1b60e6f8bf: length_m/centroide não publicados (geodésico 295 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "PASS",
+      "detail": "6 geometrias válidas (~500 m, centroides no piloto)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_baeab33dbb/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7b419318a2/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3a4dd0a219/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_1b14902269/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_1b60e6f8bf/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "PASS",
+      "detail": "intervalos S2 íntegros; déficits só como WARN"
+    },
+    {
+      "gate": "V3",
+      "status": "PASS",
+      "detail": "queda pre→pos em 6/6 (dano do evento)"
+    },
+    {
+      "gate": "V3",
+      "status": "PASS",
+      "detail": "recuperação pos→regen em 6/6"
+    },
+    {
+      "gate": "V3",
+      "status": "PASS",
+      "detail": "risk = surgimento de criticidade em todos"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_7b419318a2: pixels SR fora de [-1,1] = 0.0005 (média 0.434, n=721680)"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_7b419318a2: 189 tiles íntegros em disco"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_3a4dd0a219: pixels SR fora de [-1,1] = 0.0006 (média 0.433, n=722768)"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_3a4dd0a219: 189 tiles íntegros em disco"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_baeab33dbb: pixels SR fora de [-1,1] = 0.0005 (média 0.428, n=718208)"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_baeab33dbb: 189 tiles íntegros em disco"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "figura 10m×SR em /tmp/taquari_sr_25m.png"
+    },
+    {
+      "gate": "V5",
+      "status": "PASS",
+      "detail": "todos os trechos no rio_taquari (Lajeado/RS)"
+    },
+    {
+      "gate": "V5",
+      "status": "WARN",
+      "detail": "ordens não-sequenciais (várias linhas OSM): [0, 1, 2, 3, 4, 15]"
+    },
+    {
+      "gate": "V6",
+      "status": "PASS",
+      "detail": "SHA dos pesos confere (c895c7da8a8d…)"
+    },
+    {
+      "gate": "V6",
+      "status": "WARN",
+      "detail": "gap de proveniência: IDs das cenas STAC por trecho/janela (só n_cenas registrado) (registrar no próximo build)"
+    }
+  ],
+  "limits": "sem verdade de campo: veredito máximo = consistente + fisicamente plausível + SR fiel; escore é prospecção, não diagnóstico."
+}

@@ -9,6 +9,21 @@
 
 Pendente (não resgatado): nada — resgate completo em 2026-09-06.
 
+## Validação do build Taquari v1 (Lajeado/RS, 2026-09-24)
+
+- `taquari_v1_validacao.json` — bateria V1–V6 (`backend/jobs/validate_basin.py`, só leitura):
+  **PASS_WITH_WARNS, 31 checagens, 0 FAIL, 14 WARN**. Score/banda/componentes
+  reexecutados nos 6 trechos, summary/manifest reconciliados, geometrias ~500 m
+  com centroides no piloto, IDs estáveis reproduzidos, intervalos S2 íntegros,
+  direção pre→pos→regen coerente com pós-enchente, tiles íntegros em disco,
+  SHA dos pesos confere (`c895c7da…`). WARNs documentados: `pos` com 2 cenas
+  (< top_n=3), `length_m`/centroide não publicados, ordens não-sequenciais
+  (várias linhas OSM), IDs das cenas STAC não registrados, 0,05% dos pixels SR
+  fora de [-1,1]. Limite: sem verdade de campo, veredito máximo = consistente +
+  plausível + fiel (escore é prospecção, não diagnóstico).
+- `taquari_sr_25m.png` — NDVI 10 m (coarsened) vs SR 2,5 m nos 3 trechos PASS
+  (G1/G2): corredor do rio nítido, sem artefato de retalho.
+
 ## Sessão completa do Colab (canônica)
 
 - `fase0_sessao_colab.ipynb` — notebook executado, 28 células (14 de código,
