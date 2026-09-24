@@ -288,10 +288,11 @@ export default function Bacias() {
                         onBaseLayer={setBaseLayer}
                      />
                   )}
-                  {/* Legenda flutuante */}
-                  <div className="absolute bottom-3 right-3 z-10 flex items-center gap-3 rounded-full bg-black/55 px-4 py-2 shadow-lg backdrop-blur-md">
+                  {/* Legenda flutuante (inferior-esquerda: o attribution do
+                      mapa ocupa a direita; antes um cobria o outro) */}
+                  <div className="absolute bottom-3 left-3 z-10 flex items-center gap-2 rounded-full bg-black/55 px-3 py-2 shadow-lg backdrop-blur-md sm:gap-3 sm:px-4">
                      {["Urgente", "Alta", "Média", "Baixa"].map((b) => (
-                        <span key={b} className="flex items-center gap-1.5 text-[11px] font-medium text-white">
+                        <span key={b} className="flex items-center gap-1.5 text-[10px] font-medium text-white sm:text-[11px]">
                            <span
                               className="inline-block h-2.5 w-2.5 rounded-full"
                               style={{

@@ -32,6 +32,8 @@ export default function BasinMap({
       if (mapRef.current) return;
       const map = new maplibregl.Map({
          container: containerRef.current,
+         // Attribution compacto à direita (a legenda vive na esquerda)
+         attributionControl: { compact: true },
          style: {
             version: 8,
             sources: {
