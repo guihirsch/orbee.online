@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "base": "origin/main",
+  "artifacts_root": "docs/pstack",
+  "review_artifacts_paths": ["docs/pstack/"],
+  "stateful_paths": [],
+  "risk_paths": [
+    ".github/workflows/deploy-pages.yml",
+    "backend/app/api/v2/api.py",
+    "backend/jobs/build_basin.py",
+    "frontend/src/lib/apiV2.js",
+    "frontend/src/pages/Bacias.jsx"
+  ],
+  "require": ["proof", "review"],
+  "stateful_require": ["statechart"],
+  "risk_require": ["blast_radius", "decisions"],
+  "min_reviewers": 1,
+  "min_evidence_bytes": 80,
+  "run_test_cmd": false,
+  "allow_empty_paths": false
+}
