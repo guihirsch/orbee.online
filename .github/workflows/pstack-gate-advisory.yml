@@ -1,0 +1,69 @@
+name: pstack advisory
+
+# Advisory: não é required check. O gate roda no domínio de aprovação e
+# publica o resultado; falha não bloqueia o PR.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - pstack-advisory.json
+      - tools/check-consumer.py
+      - tests/test_check_consumer.py
+      - docs/pstack/**
+      - .github/workflows/pstack-gate-advisory.yml
+      - backend/app/api/v2/api.py
+      - backend/jobs/build_basin.py
+      - frontend/src/lib/apiV2.js
+      - frontend/src/pages/Bacias.jsx
+      - .github/workflows/deploy-pages.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pstack-advisory-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  advisory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      BASE_REF: origin/${{ github.base_ref }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Materializar checker da base
+        run: |
+          if git cat-file -e "$BASE_REF:tools/check-consumer.py" 2>/dev/null; then
+            git show "$BASE_REF:tools/check-consumer.py" > "$RUNNER_TEMP/check-consumer.py"
+          else
+            cp tools/check-consumer.py "$RUNNER_TEMP/check-consumer.py"
+          fi
+          test -s "$RUNNER_TEMP/check-consumer.py"
+      - name: Test checker
+        run: python3 tests/test_check_consumer.py
+      - name: pstack advisory
+        id: advisory
+        continue-on-error: true
+        run: |
+          set +e
+          if ! git cat-file -e "$BASE_REF:pstack-advisory.json" 2>/dev/null; then
+            {
+              echo "> Bootstrap: pstack-advisory.json ainda não existe em $BASE_REF."
+              echo "> O checker sai com status 2 por design até a política entrar na base;"
+              echo "> o merge não é bloqueado (gate advisory)."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          python3 "$RUNNER_TEMP/check-consumer.py" --root . --config pstack-advisory.json --base "$BASE_REF" 2>&1 | tee "$RUNNER_TEMP/advisory.out"
+          status=${PIPESTATUS[0]}
+          {
+            echo "## pstack advisory"
+            echo '```'
+            cat "$RUNNER_TEMP/advisory.out"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit "$status"
