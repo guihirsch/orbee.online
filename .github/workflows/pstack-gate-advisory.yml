@@ -11,6 +11,7 @@ on:
       - tests/test_check_consumer.py
       - docs/pstack/**
       - .github/workflows/pstack-gate-advisory.yml
+      # Mantenha esta lista em sincronia com risk_paths de pstack-advisory.json.
       - backend/app/api/v2/api.py
       - backend/jobs/build_basin.py
       - frontend/src/lib/apiV2.js

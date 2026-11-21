@@ -36,8 +36,8 @@ o fluxo estreito de criação de validação (observação existe, autor não va
 própria observação, uma validação por usuário, atualização de contadores).
 
 Por isso `stateful_paths` fica vazio com `allow_empty_paths: false`: a política
-só aceita caminhos não vazios, então reativar o eixo stateful exige editar o
-config de propósito.
+não aceita um config sem nenhum caminho por acidente, e reativar o eixo
+stateful exige editar o config de propósito.
 
 ### Por que estes `risk_paths`
 
