@@ -1,0 +1,1511 @@
+{
+  "basin": "taquari",
+  "version": "v3",
+  "validated_at": "2026-11-27T18:11:06.497187+00:00",
+  "gates": [
+    "V1",
+    "V2",
+    "V3",
+    "V4",
+    "V5",
+    "V6",
+    "V7"
+  ],
+  "n_checks": 298,
+  "n_fail": 68,
+  "n_warn": 210,
+  "verdict": "FAIL",
+  "checks": [
+    {
+      "gate": "V1",
+      "status": "PASS",
+      "detail": "pesos somam 1"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_65b55ce315: score/banda divergente (pub 0.4071/Alta vs calc 0.5217/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_095469faca: score/banda divergente (pub 0.4818/Alta vs calc 0.4862/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_ccabf1fe88: score/banda divergente (pub 0.4565/Alta vs calc 0.416/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_62883adc97: score/banda divergente (pub 0.4386/Alta vs calc 0.4652/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_4d7d157cb1: score/banda divergente (pub 0.3773/Média vs calc 0.3657/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_127841e018: score/banda divergente (pub 0.3978/Média vs calc 0.3491/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_ccabf1fe88: score/banda divergente (pub 0.398/Média vs calc 0.416/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_ccabf1fe88: score/banda divergente (pub 0.3899/Média vs calc 0.416/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_4d7d157cb1: score/banda divergente (pub 0.3628/Média vs calc 0.3657/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_ccabf1fe88: score/banda divergente (pub 0.4361/Alta vs calc 0.416/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_ccabf1fe88: score/banda divergente (pub 0.3951/Média vs calc 0.416/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_ccabf1fe88: score/banda divergente (pub 0.4212/Alta vs calc 0.416/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_ccabf1fe88: score/banda divergente (pub 0.3517/Média vs calc 0.416/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_ccabf1fe88: score/banda divergente (pub 0.4172/Alta vs calc 0.416/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_ccabf1fe88: score/banda divergente (pub 0.419/Alta vs calc 0.416/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_4d7d157cb1: score/banda divergente (pub 0.4552/Alta vs calc 0.3657/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_4d7d157cb1: score/banda divergente (pub 0.2925/Média vs calc 0.3657/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_4d7d157cb1: score/banda divergente (pub 0.3863/Média vs calc 0.3657/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_4d7d157cb1: score/banda divergente (pub 0.3906/Média vs calc 0.3657/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_4d7d157cb1: score/banda divergente (pub 0.3409/Média vs calc 0.3657/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_65b55ce315: score/banda divergente (pub 0.544/Alta vs calc 0.5217/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_65b55ce315: score/banda divergente (pub 0.3815/Média vs calc 0.5217/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_4d7d157cb1: score/banda divergente (pub 0.4777/Alta vs calc 0.3657/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_4d7d157cb1: score/banda divergente (pub 0.3209/Média vs calc 0.3657/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_4d7d157cb1: score/banda divergente (pub 0.5541/Alta vs calc 0.3657/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_b211263586: score/banda divergente (pub 0.4663/Alta vs calc 0.4863/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_baeab33dbb: score/banda divergente (pub 0.4599/Alta vs calc 0.4016/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_89bbd94cf6: score/banda divergente (pub 0.4488/Alta vs calc 0.397/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_afba726dbf: score/banda divergente (pub 0.3615/Média vs calc 0.4007/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_5e56b20bed: score/banda divergente (pub 0.4221/Alta vs calc 0.3705/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_baeab33dbb: score/banda divergente (pub 0.4447/Alta vs calc 0.4016/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_baeab33dbb: score/banda divergente (pub 0.4735/Alta vs calc 0.4016/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_afba726dbf: score/banda divergente (pub 0.3876/Média vs calc 0.4007/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_baeab33dbb: score/banda divergente (pub 0.4012/Alta vs calc 0.4016/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_baeab33dbb: score/banda divergente (pub 0.351/Média vs calc 0.4016/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_baeab33dbb: score/banda divergente (pub 0.3743/Média vs calc 0.4016/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_afba726dbf: score/banda divergente (pub 0.4668/Alta vs calc 0.4007/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_afba726dbf: score/banda divergente (pub 0.354/Média vs calc 0.4007/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_afba726dbf: score/banda divergente (pub 0.4259/Alta vs calc 0.4007/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_afba726dbf: score/banda divergente (pub 0.4223/Alta vs calc 0.4007/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_afba726dbf: score/banda divergente (pub 0.4827/Alta vs calc 0.4007/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_98e628bafa: score/banda divergente (pub 0.4424/Alta vs calc 0.5054/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_7b419318a2: score/banda divergente (pub 0.4931/Alta vs calc 0.3952/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_7b419318a2: score/banda divergente (pub 0.4123/Alta vs calc 0.3952/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_7b419318a2: score/banda divergente (pub 0.5536/Alta vs calc 0.3952/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_a9f2bd4ecf: score/banda divergente (pub 0.4465/Alta vs calc 0.3891/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_7b419318a2: score/banda divergente (pub 0.4125/Alta vs calc 0.3952/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_a9f2bd4ecf: score/banda divergente (pub 0.4417/Alta vs calc 0.3891/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_a9f2bd4ecf: score/banda divergente (pub 0.502/Alta vs calc 0.3891/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_3a4dd0a219: score/banda divergente (pub 0.4615/Alta vs calc 0.4777/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_3a4dd0a219: score/banda divergente (pub 0.3665/Média vs calc 0.4777/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_3a4dd0a219: score/banda divergente (pub 0.4146/Alta vs calc 0.4777/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_f1d35dcbe4: score/banda divergente (pub 0.3932/Média vs calc 0.3838/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_2d5321763d: score/banda divergente (pub 0.3313/Média vs calc 0.5246/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_1b14902269: score/banda divergente (pub 0.4055/Alta vs calc 0.4064/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_1b14902269: score/banda divergente (pub 0.3933/Média vs calc 0.4064/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_a8a3567631: score/banda divergente (pub 0.3641/Média vs calc 0.3888/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_719cc3707e: score/banda divergente (pub 0.3835/Média vs calc 0.5376/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_0982d03137: score/banda divergente (pub 0.3784/Média vs calc 0.4133/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_c194753630: score/banda divergente (pub 0.421/Alta vs calc 0.5303/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_dcd4e3a70b: score/banda divergente (pub 0.3978/Média vs calc 0.418/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_290c605c65: score/banda divergente (pub 0.4257/Alta vs calc 0.4725/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_5aeae82d8a: score/banda divergente (pub 0.417/Alta vs calc 0.3507/Média)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_93ea1dae2e: score/banda divergente (pub 0.4147/Alta vs calc 0.4877/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_34c8e0fec2: score/banda divergente (pub 0.4521/Alta vs calc 0.4145/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_007eb94dc7: score/banda divergente (pub 0.4483/Alta vs calc 0.4596/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_140e09b927: score/banda divergente (pub 0.4565/Alta vs calc 0.4781/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "FAIL",
+      "detail": "reach_1b60e6f8bf: score/banda divergente (pub 0.4017/Alta vs calc 0.4089/Alta)"
+    },
+    {
+      "gate": "V1",
+      "status": "PASS",
+      "detail": "summary/manifest reconciliam (144 trechos, {'Alta': 96, 'Média': 48})"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_65b55ce315: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_095469faca: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_62883adc97: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_4d7d157cb1: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_127841e018: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_4d7d157cb1: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88: length_m/centroide não publicados (geodésico 59 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88: length_m/centroide não publicados (geodésico 255 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88: length_m/centroide não publicados (geodésico 89 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_095469faca: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_4d7d157cb1: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_62883adc97: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_4d7d157cb1: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_4d7d157cb1: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_4d7d157cb1: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_4d7d157cb1: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_65b55ce315: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_65b55ce315: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_65b55ce315: length_m/centroide não publicados (geodésico 448 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_4d7d157cb1: length_m/centroide não publicados (geodésico 121 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_4d7d157cb1: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_4d7d157cb1: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_4d7d157cb1: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_127841e018: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_76fabb3c46: length_m/centroide não publicados (geodésico 257 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_b211263586: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_baeab33dbb: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_89bbd94cf6: length_m/centroide não publicados (geodésico 153 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_afba726dbf: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_5e56b20bed: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_baeab33dbb: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_baeab33dbb: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_afba726dbf: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_baeab33dbb: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_baeab33dbb: length_m/centroide não publicados (geodésico 447 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_baeab33dbb: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_b211263586: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_afba726dbf: length_m/centroide não publicados (geodésico 271 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_89bbd94cf6: length_m/centroide não publicados (geodésico 240 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_afba726dbf: length_m/centroide não publicados (geodésico 253 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_afba726dbf: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_afba726dbf: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_bd2e5d7610: length_m/centroide não publicados (geodésico 126 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_afba726dbf: length_m/centroide não publicados (geodésico 234 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_afba726dbf: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_5e56b20bed: length_m/centroide não publicados (geodésico 470 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_baeab33dbb: length_m/centroide não publicados (geodésico 141 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_98e628bafa: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_7b419318a2: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_e71ebddc3a: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_6c1db305e5: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_7b419318a2: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_7b419318a2: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_a9f2bd4ecf: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_7b419318a2: length_m/centroide não publicados (geodésico 79 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_7b419318a2: length_m/centroide não publicados (geodésico 461 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_98e628bafa: length_m/centroide não publicados (geodésico 304 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_a9f2bd4ecf: length_m/centroide não publicados (geodésico 313 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_a9f2bd4ecf: length_m/centroide não publicados (geodésico 414 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_a9f2bd4ecf: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_95825f80c1: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_3a4dd0a219: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_8a74795840: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_3a4dd0a219: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_3a4dd0a219: length_m/centroide não publicados (geodésico 286 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_3a4dd0a219: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_f1d35dcbe4: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_f1d35dcbe4: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_2d5321763d: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_1b14902269: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_6f1f88a0d2: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_1b14902269: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_1b14902269: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_a8a3567631: length_m/centroide não publicados (geodésico 125 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_2d5321763d: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_a8a3567631: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_719cc3707e: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_0982d03137: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_a95ec61f50: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_d8258acd49: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_0982d03137: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_719cc3707e: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_be4471cebe: length_m/centroide não publicados (geodésico 95 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_c194753630: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_dcd4e3a70b: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_12921309a9: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_93781d046e: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_dcd4e3a70b: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_c194753630: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_290c605c65: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_5aeae82d8a: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_65b98dda87: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_5aeae82d8a: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_290c605c65: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_93ea1dae2e: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_34c8e0fec2: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_ff095810af: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_34c8e0fec2: length_m/centroide não publicados (geodésico 433 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_93ea1dae2e: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_007eb94dc7: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_e19bce378e: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_acb03b7ee5: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_007eb94dc7: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_140e09b927: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_cc5bc8bd08: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_de4af3c585: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_140e09b927: length_m/centroide não publicados (geodésico 209 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_cc3bbe061c: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_12dd7ceea1: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_11c34e67d2: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_2b9775da84: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_51c3b51631: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_e93e01cbb3: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_50d794e27c: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_785bc61649: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_72b39a9739: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_c2dbf609c0: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_038c1624ea: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_0940da8205: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_1b60e6f8bf: length_m/centroide não publicados (geodésico 295 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_1b60e6f8bf: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_5b6315530d: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_211532a83c: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_2cb32642e5: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_9b98bacfe2: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_bbb78fcf84: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_5caa975765: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_24123c0dbc: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_80f3ee0d69: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_2196fd5e30: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_2b4394359b: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_0c12d6c8e8: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_1bca543b20: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_b95ebe6517: length_m/centroide não publicados (geodésico 456 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_44869630b4: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_d0b784ea00: length_m/centroide não publicados (geodésico 500 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "WARN",
+      "detail": "reach_2a37f7b548: length_m/centroide não publicados (geodésico 342 m; recomendo publicar no próximo build)"
+    },
+    {
+      "gate": "V1",
+      "status": "PASS",
+      "detail": "144 geometrias válidas (~500 m, centroides no piloto)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_095469faca/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_127841e018/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_ccabf1fe88/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_095469faca/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b211263586/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_baeab33dbb/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_5e56b20bed/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_baeab33dbb/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_baeab33dbb/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b211263586/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_98e628bafa/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7b419318a2/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7b419318a2/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_98e628bafa/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_95825f80c1/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3a4dd0a219/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2d5321763d/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_1b14902269/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2d5321763d/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_719cc3707e/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_0982d03137/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_719cc3707e/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_c194753630/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_dcd4e3a70b/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_dcd4e3a70b/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_c194753630/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_290c605c65/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_5aeae82d8a/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_5aeae82d8a/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_290c605c65/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_93ea1dae2e/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_34c8e0fec2/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_34c8e0fec2/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_93ea1dae2e/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_007eb94dc7/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_e19bce378e/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_007eb94dc7/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_140e09b927/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_cc5bc8bd08/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_140e09b927/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_cc3bbe061c/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_12dd7ceea1/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2b9775da84/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_51c3b51631/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_50d794e27c/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_785bc61649/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_c2dbf609c0/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_038c1624ea/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_1b60e6f8bf/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_1b60e6f8bf/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_211532a83c/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_9b98bacfe2/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_5caa975765/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_80f3ee0d69/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2b4394359b/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_1bca543b20/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_44869630b4/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_d0b784ea00/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2a37f7b548/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "PASS",
+      "detail": "intervalos S2 íntegros; déficits só como WARN"
+    },
+    {
+      "gate": "V3",
+      "status": "PASS",
+      "detail": "queda pre→pos em 144/144 (dano do evento)"
+    },
+    {
+      "gate": "V3",
+      "status": "PASS",
+      "detail": "recuperação pos→regen em 143/144"
+    },
+    {
+      "gate": "V3",
+      "status": "PASS",
+      "detail": "risk = surgimento de criticidade em todos"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_2196fd5e30: pixels SR fora de [-1,1] = 0.0004 (média 0.324, n=697472)"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_2196fd5e30: 189 tiles íntegros em disco"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_24123c0dbc: pixels SR fora de [-1,1] = 0.0004 (média 0.325, n=699840)"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_24123c0dbc: 188 tiles íntegros em disco"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_0c12d6c8e8: pixels SR fora de [-1,1] = 0.0003 (média 0.347, n=702912)"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_0c12d6c8e8: 189 tiles íntegros em disco"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_4d7d157cb1: pixels SR fora de [-1,1] = 0.0002 (média 0.324, n=682560)"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_4d7d157cb1: 189 tiles íntegros em disco"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_7b419318a2: pixels SR fora de [-1,1] = 0.0002 (média 0.387, n=718208)"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "reach_7b419318a2: 189 tiles íntegros em disco"
+    },
+    {
+      "gate": "V4",
+      "status": "PASS",
+      "detail": "figura 10m×SR em v2_validation/evidencias/taquari_v3_sr_25m.png"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "sem crosscheck.json (Fase A não rodada p/ esta versão)"
+    },
+    {
+      "gate": "V5",
+      "status": "PASS",
+      "detail": "todos os trechos no rio_taquari (Lajeado/RS)"
+    },
+    {
+      "gate": "V5",
+      "status": "WARN",
+      "detail": "ordens não-sequenciais (várias linhas OSM): [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 13, 14, 14, 14, 15, 15, 15, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 23, 24]"
+    },
+    {
+      "gate": "V6",
+      "status": "PASS",
+      "detail": "SHA dos pesos confere (c895c7da8a8d…)"
+    },
+    {
+      "gate": "V6",
+      "status": "WARN",
+      "detail": "gap de proveniência: IDs das cenas STAC por trecho/janela (só n_cenas registrado) (registrar no próximo build)"
+    }
+  ],
+  "limits": "sem verdade de campo: veredito máximo = consistente + fisicamente plausível + SR fiel; escore é prospecção, não diagnóstico."
+}
