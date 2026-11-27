@@ -1,7 +1,7 @@
 {
   "basin": "taquari",
   "version": "v3",
-  "built_at": "2026-11-27T18:10:26.204412+00:00",
+  "built_at": "2026-11-27T18:39:46.157365+00:00",
   "model": {
     "variant": "NonReference_RGBN_x4",
     "weights_sha256": "c895c7da8a8d48882b73a2a1955e4260714b97540eea290229a284d73f129985"
@@ -10,7 +10,7 @@
   "n_pass": 5,
   "reaches": [
     {
-      "id": "reach_2196fd5e30",
+      "id": "reach_b68121f35d",
       "sr_status": "PASS",
       "reason": null,
       "g1": {
@@ -39,7 +39,7 @@
       ]
     },
     {
-      "id": "reach_24123c0dbc",
+      "id": "reach_3029ea2c51",
       "sr_status": "PASS",
       "reason": null,
       "g1": {
@@ -68,7 +68,7 @@
       ]
     },
     {
-      "id": "reach_0c12d6c8e8",
+      "id": "reach_a132218f83",
       "sr_status": "PASS",
       "reason": null,
       "g1": {
@@ -97,7 +97,7 @@
       ]
     },
     {
-      "id": "reach_4d7d157cb1",
+      "id": "reach_23ac72398a",
       "sr_status": "PASS",
       "reason": null,
       "g1": {
@@ -126,7 +126,7 @@
       ]
     },
     {
-      "id": "reach_7b419318a2",
+      "id": "reach_57c30532a5",
       "sr_status": "PASS",
       "reason": null,
       "g1": {
