@@ -16,6 +16,7 @@ class BasinInfo(BaseModel):
     basin: str
     versions: List[str] = Field(default_factory=list)
     latest: Optional[str] = None
+    preview: Optional[str] = None
 
 
 class Manifest(BaseModel):
@@ -25,6 +26,12 @@ class Manifest(BaseModel):
     region: str
     n_reaches: int
     synthetic: bool = False
+    buffer_m: Optional[float] = None
+    buffer_margin_m: Optional[float] = None
+    bbox_method: Optional[str] = None
+    mask_method: Optional[str] = None
+    search_bbox: Optional[List[float]] = None
+    windows: Dict[str, List[str]] = Field(default_factory=dict)
 
 
 class Summary(BaseModel):
@@ -39,6 +46,8 @@ class Methods(BaseModel):
     methods_version: str
     weights: Dict[str, float] = Field(default_factory=dict)
     text: str = ""
+    buffer: Dict[str, Any] = Field(default_factory=dict)
+    windows: Dict[str, List[str]] = Field(default_factory=dict)
 
 
 class ErrorDetail(BaseModel):

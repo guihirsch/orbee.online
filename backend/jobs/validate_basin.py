@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """Validação da qualidade dos dados de uma bacia/versão v2 (só LEITURA).
 
-Bateria V1..V6 sobre os artefatos publicados por build_basin.py/build_sr.py:
+Bateria V1..V8 sobre os artefatos publicados por build_basin.py/build_sr.py:
   V1 consistência interna (score/banda/summary/manifest/methods);
   V2 cobertura das janelas S2 (n_cenas, fração válida, intervalos);
   V3 plausibilidade física (direção pre→pos→regen, componentes);
   V4 SR além dos gates (COGs locais: NaN, intervalo, n_tiles, figura 10m×SR);
   V5 aderência ao terreno conhecido (nomes, bbox, ordem);
-  V6 proveniência (gaps + SHA dos pesos recomputado).
+  V6 proveniência (gaps + SHA dos pesos recomputado);
+  V7 crosscheck inter-sensores (S2 × CBERS-4A);
+  V8 máscara do buffer (v4): buffer_m, método, bbox derivado, cobertura e
+     rejeição de máscara vazia.
 
 Uso:
     /tmp/orbee-jobs/bin/python backend/jobs/validate_basin.py \
@@ -280,6 +283,88 @@ def main(argv=None) -> int:
     else:
         check("WARN", "sem crosscheck.json (Fase A não rodada p/ esta versão)", checks, "V7")
 
+    # ---- V8: máscara do buffer (v4) ----
+    mask_method = str(manifest.get("mask_method") or "")
+    buffer_m = manifest.get("buffer_m")
+    is_buffer_version = ("buffer" in mask_method.lower()
+                         or args.version == "v4")
+    if not is_buffer_version:
+        check("WARN", "versão sem medição no buffer (pré-v4): V8 não se aplica",
+              checks, "V8")
+    else:
+        if buffer_m and buffer_m > 0 and "buffer" in mask_method.lower():
+            check("PASS", f"buffer_m={buffer_m} m, máscara={mask_method}",
+                  checks, "V8")
+        else:
+            check("FAIL", f"manifest sem buffer/máscara: buffer_m={buffer_m}, "
+                  f"mask_method={mask_method!r}", checks, "V8")
+
+        if manifest.get("bbox_method") == "buffer_bounds_plus_margin":
+            check("PASS", "bbox derivado do buffer + margem "
+                  f"({manifest.get('buffer_margin_m')} m)", checks, "V8")
+        else:
+            check("FAIL", "bbox_method ausente/incorreto: "
+                  f"{manifest.get('bbox_method')!r}", checks, "V8")
+
+        sb = manifest.get("search_bbox")
+        if (isinstance(sb, list) and len(sb) == 4
+                and -180 <= sb[0] < sb[2] <= 180
+                and -90 <= sb[1] < sb[3] <= 90):
+            check("PASS", f"search_bbox do build dentro do WGS84: {sb}",
+                  checks, "V8")
+        else:
+            check("FAIL", f"search_bbox inválido: {sb}", checks, "V8")
+
+        n_ok = 0
+        for f in feats:
+            p = f["properties"]
+            rb = p.get("search_bbox")
+            c = shape(f["geometry"]).centroid if f.get("geometry") else None
+            if (not (isinstance(rb, list) and len(rb) == 4)
+                    or c is None
+                    or not (rb[0] <= c.x <= rb[2] and rb[1] <= c.y <= rb[3])):
+                check("FAIL", f"{p.get('id')}: search_bbox ausente ou não contém "
+                      "o centroide", checks, "V8")
+                continue
+            for w in ("stats_pre", "stats_pos", "stats_regen"):
+                s = p.get(w) or {}
+                n = s.get("n_pixels_buffer")
+                if n is None:
+                    check("FAIL", f"{p.get('id')}/{w}: n_pixels_buffer ausente "
+                          "(máscara não rastreada)", checks, "V8")
+                    continue
+                if n <= 0:
+                    check("FAIL", f"{p.get('id')}/{w}: máscara vazia "
+                          f"(n_pixels_buffer={n})", checks, "V8")
+                    continue
+                nv = s.get("n_pixels_validos")
+                fv = s.get("frac_validos")
+                if (nv is None or not isinstance(nv, (int, float))
+                        or not 0 <= nv <= n or fv is None
+                        or abs(float(fv) - float(nv) / n) > 0.01):
+                    check("FAIL", f"{p.get('id')}/{w}: "
+                          f"n_pixels_validos={nv} incompatível com "
+                          f"n_pixels_buffer={n}/frac_validos={fv}",
+                          checks, "V8")
+                    continue
+                if "buffer" not in str(s.get("mask_method", "")).lower():
+                    check("FAIL", f"{p.get('id')}/{w}: mask_method pub "
+                          f"{s.get('mask_method')!r} não é buffer", checks, "V8")
+                    continue
+                expected = ((2 * float(buffer_m) * float(p.get("length_m") or 500)
+                             + 3.141592653589793 * float(buffer_m) ** 2) / 100.0)
+                ratio = float(n) / max(expected, 1.0)
+                if not (0.5 <= ratio <= 2.0):
+                    check("FAIL", f"{p.get('id')}/{w}: cobertura do buffer "
+                          f"atípica ({n} px vs ~{expected:.0f} esperados)",
+                          checks, "V8")
+                    continue
+                n_ok += 1
+        if feats and n_ok == len(feats) * 3:
+            check("PASS", f"máscara do buffer cobriu {n_ok}/{len(feats) * 3} "
+                  "trechos×janelas com contagem de pixels compatível",
+                  checks, "V8")
+
     # ---- V5: terreno conhecido ----
     rivers = {f["properties"].get("river") for f in feats}
     if rivers == {"rio_taquari"}:
@@ -320,7 +405,7 @@ def main(argv=None) -> int:
     report = {
         "basin": args.basin, "version": args.version,
         "validated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
-        "gates": ["V1", "V2", "V3", "V4", "V5", "V6", "V7"],
+        "gates": ["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8"],
         "n_checks": len(checks), "n_fail": fails, "n_warn": warns,
         "verdict": "FAIL" if fails else ("PASS_WITH_WARNS" if warns else "PASS"),
         "checks": checks,
