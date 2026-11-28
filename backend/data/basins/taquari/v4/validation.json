@@ -1,7 +1,7 @@
 {
   "basin": "taquari",
   "version": "v4",
-  "validated_at": "2026-11-28T16:32:03.667082+00:00",
+  "validated_at": "2026-11-28T17:49:11.318120+00:00",
   "gates": [
     "V1",
     "V2",
@@ -10,11 +10,12 @@
     "V5",
     "V6",
     "V7",
-    "V8"
+    "V8",
+    "V9"
   ],
-  "n_checks": 277,
+  "n_checks": 284,
   "n_fail": 0,
-  "n_warn": 264,
+  "n_warn": 267,
   "verdict": "PASS_WITH_WARNS",
   "checks": [
     {
@@ -30,7 +31,7 @@
     {
       "gate": "V1",
       "status": "PASS",
-      "detail": "summary/manifest reconciliam (144 trechos, {'Alta': 131, 'Urgente': 8, 'Média': 5})"
+      "detail": "summary/manifest reconciliam (144 trechos, {'Urgente': 20, 'Alta': 100, 'Média': 24})"
     },
     {
       "gate": "V1",
@@ -555,6 +556,11 @@
     {
       "gate": "V2",
       "status": "WARN",
+      "detail": "reach_5b9fb6787c: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
       "detail": "reach_e809f30561: frac_validos regen baixo"
     },
     {
@@ -626,11 +632,6 @@
       "gate": "V2",
       "status": "WARN",
       "detail": "reach_81d4712500: frac_validos regen baixo"
-    },
-    {
-      "gate": "V2",
-      "status": "WARN",
-      "detail": "reach_5fae6306b2: frac_validos regen baixo"
     },
     {
       "gate": "V2",
@@ -871,6 +872,11 @@
       "gate": "V2",
       "status": "WARN",
       "detail": "reach_8925310867/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_8925310867: frac_validos regen baixo"
     },
     {
       "gate": "V2",
@@ -1210,6 +1216,11 @@
     {
       "gate": "V2",
       "status": "WARN",
+      "detail": "reach_ba47660aed: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
       "detail": "reach_3d9ed468a6: frac_validos regen baixo"
     },
     {
@@ -1236,6 +1247,11 @@
       "gate": "V2",
       "status": "WARN",
       "detail": "reach_147f560a39/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_147f560a39: frac_validos regen baixo"
     },
     {
       "gate": "V2",
@@ -1345,7 +1361,7 @@
     {
       "gate": "V3",
       "status": "PASS",
-      "detail": "recuperação pos→regen em 144/144"
+      "detail": "recuperação pos→regen em 143/144"
     },
     {
       "gate": "V3",
@@ -1380,7 +1396,27 @@
     {
       "gate": "V8",
       "status": "PASS",
-      "detail": "máscara do buffer cobriu 432/432 trechos×janelas com contagem de pixels compatível"
+      "detail": "máscara do buffer cobriu 720/720 trechos×janelas com contagem de pixels compatível"
+    },
+    {
+      "gate": "V9",
+      "status": "PASS",
+      "detail": "baseline=['2023-06-01', '2023-08-31'] declarada no manifest"
+    },
+    {
+      "gate": "V9",
+      "status": "PASS",
+      "detail": "baseline_window reconciliado entre manifest/methods"
+    },
+    {
+      "gate": "V9",
+      "status": "PASS",
+      "detail": "baseline/pos/regen na mesma estação (jun–ago)"
+    },
+    {
+      "gate": "V9",
+      "status": "PASS",
+      "detail": "baseline presente em 144/144 trechos"
     },
     {
       "gate": "V5",

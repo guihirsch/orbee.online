@@ -243,6 +243,31 @@ def test_score_publicado_usa_a_baseline_nao_o_pre(v4_dir):
     )
 
 
+def test_artefato_v4_publicado_tem_baseline_2023_e_regen_2026():
+    """O payload real versionado precisa carregar a v4 do ticket #6."""
+    vdir = BACKEND / "data" / "basins" / "taquari" / "v4"
+    manifest = _load(vdir, "manifest.json")
+    assert manifest["windows"]["baseline"] == ["2023-06-01", "2023-08-31"]
+    assert manifest["windows"]["regen"] == ["2026-06-01", "2026-08-31"]
+    assert manifest["windows"]["regen_2025"] == ["2025-06-01", "2025-08-31"]
+
+    fc = _load(vdir, "reaches.geojson")
+    assert len(fc["features"]) == 144
+    for f in fc["features"]:
+        p = f["properties"]
+        baseline = p["stats_baseline"]
+        assert baseline["n_pixels_buffer"] > 0
+        assert "stats_regen_2025" in p
+        exp_risk = max(0.0, min(1.0,
+            (p["stats_pos"]["frac_critico"] - baseline["frac_critico"]) * 3.0))
+        assert p["components"]["risk"] == pytest.approx(exp_risk, abs=1e-3)
+
+    validation = _load(vdir, "validation.json")
+    assert validation["n_fail"] == 0
+    v9 = [c for c in validation["checks"] if c["gate"] == "V9"]
+    assert v9 and all(c["status"] != "FAIL" for c in v9)
+
+
 def test_basins_json_lista_v4_como_preview_e_mantem_latest_v3():
     doc = json.loads(
         (REPO_ROOT / "frontend" / "public" / "data" / "basins" / "basins.json")
