@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validação da qualidade dos dados de uma bacia/versão v2 (só LEITURA).
 
-Bateria V1..V8 sobre os artefatos publicados por build_basin.py/build_sr.py:
+Bateria V1..V9 sobre os artefatos publicados por build_basin.py/build_sr.py:
   V1 consistência interna (score/banda/summary/manifest/methods);
   V2 cobertura das janelas S2 (n_cenas, fração válida, intervalos);
   V3 plausibilidade física (direção pre→pos→regen, componentes);
@@ -10,7 +10,9 @@ Bateria V1..V8 sobre os artefatos publicados por build_basin.py/build_sr.py:
   V6 proveniência (gaps + SHA dos pesos recomputado);
   V7 crosscheck inter-sensores (S2 × CBERS-4A);
   V8 máscara do buffer (v4): buffer_m, método, bbox derivado, cobertura e
-     rejeição de máscara vazia.
+     rejeição de máscara vazia;
+  V9 baseline same-season (v4): janela jun–ago/2023 presente no
+     manifest/methods e stats_baseline em todos os trechos.
 
 Uso:
     /tmp/orbee-jobs/bin/python backend/jobs/validate_basin.py \
@@ -42,6 +44,8 @@ LEN_TOL = 0.20      # comprimento geodésico vs length_m
 AREA_TOL = 0.05     # area_ha vs comprimento×faixa
 SCORE_TOL = 1e-6
 OUT_OF_RANGE_WARN = 0.01  # fração de pixels SR fora de [-1,1] que vira FAIL
+BASELINE_WINDOW = ["2023-06-01", "2023-08-31"]
+SEASON_MONTHS = (6, 7, 8)  # inverno (jun–ago): baseline, pós e regen
 
 
 def parse_args(argv=None):
@@ -58,6 +62,18 @@ def parse_args(argv=None):
 def check(status, detail, checks, gate):
     checks.append({"gate": gate, "status": status, "detail": detail})
     return status
+
+
+def _same_dry_season(window) -> bool:
+    """True se a janela é jun–ago de um único ano (mesma estação)."""
+    try:
+        ini, fim = (dt.date.fromisoformat(str(x)) for x in window)
+    except (TypeError, ValueError):
+        return False
+    return (ini.year == fim.year
+            and ini.month == SEASON_MONTHS[0]
+            and fim.month == SEASON_MONTHS[-1]
+            and ini < fim)
 
 
 def main(argv=None) -> int:
@@ -80,6 +96,15 @@ def main(argv=None) -> int:
     fc = J("reaches.geojson")
     feats = fc.get("features", [])
 
+    # Janelas declaradas no manifest (v4: baseline/pre/pos/regen_2025/regen;
+    # v1–v3: pre/pos/regen). As stats por trecho são `stats_<janela>`.
+    windows = manifest.get("windows") or methods.get("windows") or {
+        "pre": ["2024-01-01", "2024-03-31"],
+        "pos": ["2024-06-01", "2024-08-31"],
+        "regen": ["2025-06-01", "2025-08-31"],
+    }
+    stats_windows = [f"stats_{w}" for w in windows]
+
     # ---- V1: consistência interna ----
     if abs(sum(methods.get("weights", {}).values()) - 1.0) < 1e-9:
         check("PASS", "pesos somam 1", checks, "V1")
@@ -91,8 +116,10 @@ def main(argv=None) -> int:
     # casa por id (nunca por (rio, ordem)).
     raw = [{"id": f["properties"].get("id"),
             "river_key": f["properties"].get("river"), "order": f["properties"].get("order"),
+            "stats_baseline": f["properties"].get("stats_baseline") or {},
             "stats_pre": f["properties"].get("stats_pre") or {},
             "stats_pos": f["properties"].get("stats_pos") or {},
+            "stats_regen_2025": f["properties"].get("stats_regen_2025") or {},
             "stats_regen": f["properties"].get("stats_regen") or {},
             "area_ha": f["properties"].get("area_ha", 5.0)} for f in feats]
     rescored = {r["id"]: r for r in score_all(raw)}
@@ -169,7 +196,7 @@ def main(argv=None) -> int:
     # ---- V2: cobertura S2 ----
     for f in feats:
         p = f["properties"]
-        for w in ("stats_pre", "stats_pos", "stats_regen"):
+        for w in stats_windows:
             s = p.get(w) or {}
             if s.get("n_cenas", 0) < TOP_N:
                 check("WARN", f"{p['id']}/{w}: n_cenas={s.get('n_cenas')} < top_n={TOP_N} "
@@ -201,8 +228,10 @@ def main(argv=None) -> int:
         check("WARN", f"recuperação pos→regen só em {rc}/{len(feats)}", checks, "V3")
     for f in feats:
         p = f["properties"]
+        # v4: risco contra a baseline same-season; v1–v3: contra o pré (legado).
+        reference = p.get("stats_baseline") or p.get("stats_pre") or {}
         exp_risk = max(0.0, min(1.0, ((p.get("stats_pos") or {}).get("frac_critico", 0)
-                                       - (p.get("stats_pre") or {}).get("frac_critico", 0)) * 3.0))
+                                       - reference.get("frac_critico", 0)) * 3.0))
         if abs(exp_risk - p["components"]["risk"]) > 1e-3:
             check("FAIL", f"{p['id']}: risk inconsistente", checks, "V3")
     check("PASS", "risk = surgimento de criticidade em todos", checks, "V3")
@@ -326,7 +355,7 @@ def main(argv=None) -> int:
                 check("FAIL", f"{p.get('id')}: search_bbox ausente ou não contém "
                       "o centroide", checks, "V8")
                 continue
-            for w in ("stats_pre", "stats_pos", "stats_regen"):
+            for w in stats_windows:
                 s = p.get(w) or {}
                 n = s.get("n_pixels_buffer")
                 if n is None:
@@ -360,10 +389,64 @@ def main(argv=None) -> int:
                           checks, "V8")
                     continue
                 n_ok += 1
-        if feats and n_ok == len(feats) * 3:
-            check("PASS", f"máscara do buffer cobriu {n_ok}/{len(feats) * 3} "
+        if feats and n_ok == len(feats) * len(stats_windows):
+            check("PASS", f"máscara do buffer cobriu {n_ok}/{len(feats) * len(stats_windows)} "
                   "trechos×janelas com contagem de pixels compatível",
                   checks, "V8")
+
+    # ---- V9: baseline same-season (v4) ----
+    if not is_buffer_version:
+        check("WARN", "versão sem baseline same-season (pré-v4): V9 não se aplica",
+              checks, "V9")
+    else:
+        baseline = windows.get("baseline")
+        declared = manifest.get("baseline_window")
+        declared_meth = methods.get("baseline_window")
+        if not baseline:
+            check("FAIL", "manifest sem janela baseline (v4 exige jun–ago/2023)",
+                  checks, "V9")
+        else:
+            if list(baseline) == BASELINE_WINDOW:
+                check("PASS", f"baseline={baseline} declarada no manifest",
+                      checks, "V9")
+            else:
+                check("FAIL", f"baseline inesperada: {baseline} "
+                      f"(esperado {BASELINE_WINDOW})", checks, "V9")
+            if (declared and declared_meth
+                    and list(declared) == list(baseline) == list(declared_meth)):
+                check("PASS", "baseline_window reconciliado entre manifest/methods",
+                      checks, "V9")
+            else:
+                check("FAIL", f"baseline_window ausente/divergente: "
+                      f"manifest={declared}, methods={declared_meth}",
+                      checks, "V9")
+
+        same_season = True
+        for w in ("baseline", "pos", "regen"):
+            win = windows.get(w)
+            if win is None:
+                continue
+            if not _same_dry_season(win):
+                same_season = False
+                check("FAIL", f"{w}={win} fora da mesma estação jun–ago",
+                      checks, "V9")
+        if same_season:
+            check("PASS", "baseline/pos/regen na mesma estação (jun–ago)",
+                  checks, "V9")
+
+        n_ok_base = 0
+        for f in feats:
+            p = f["properties"]
+            s = p.get("stats_baseline") or {}
+            if (not s or s.get("n_pixels_buffer", 0) <= 0
+                    or "ndvi_mean" not in s or "frac_critico" not in s):
+                check("FAIL", f"{p.get('id')}: stats_baseline ausente/vazia",
+                      checks, "V9")
+                continue
+            n_ok_base += 1
+        if feats and n_ok_base == len(feats):
+            check("PASS", f"baseline presente em {n_ok_base}/{len(feats)} trechos",
+                  checks, "V9")
 
     # ---- V5: terreno conhecido ----
     rivers = {f["properties"].get("river") for f in feats}
@@ -405,7 +488,7 @@ def main(argv=None) -> int:
     report = {
         "basin": args.basin, "version": args.version,
         "validated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
-        "gates": ["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8"],
+        "gates": ["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9"],
         "n_checks": len(checks), "n_fail": fails, "n_warn": warns,
         "verdict": "FAIL" if fails else ("PASS_WITH_WARNS" if warns else "PASS"),
         "checks": checks,

@@ -16,8 +16,27 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 BACKEND = REPO_ROOT / "backend"
 sys.path.insert(0, str(BACKEND))
 
-STATS_WINDOWS = ("stats_pre", "stats_pos", "stats_regen")
+STATS_WINDOWS = (
+    "stats_baseline", "stats_pre", "stats_pos",
+    "stats_regen_2025", "stats_regen",
+)
 N_REACHES = 8
+
+
+def _window_keys(manifest: dict) -> dict:
+    return manifest["windows"]
+
+
+def test_manifest_registra_janelas_baseline_e_2026(v4_dir):
+    manifest = _load(v4_dir, "manifest.json")
+    windows = _window_keys(manifest)
+    assert windows["baseline"] == ["2023-06-01", "2023-08-31"]
+    assert windows["regen"] == ["2026-06-01", "2026-08-31"]
+    assert windows["regen_2025"] == ["2025-06-01", "2025-08-31"]
+    assert manifest["baseline_window"] == ["2023-06-01", "2023-08-31"]
+    # A janela de evento (pré/pós 2024) continua publicada para o diff v3.
+    assert windows["pre"] == ["2024-01-01", "2024-03-31"]
+    assert windows["pos"] == ["2024-06-01", "2024-08-31"]
 
 
 def _run_build(out: Path, n: int = N_REACHES) -> subprocess.CompletedProcess:
@@ -112,12 +131,18 @@ def test_stats_v4_tem_contrato_de_buffer(v4_dir):
             assert s["bbox"] == p["search_bbox"]
 
 
-def test_methods_documentam_o_buffer(v4_dir):
+def test_methods_documentam_o_buffer_e_as_janelas(v4_dir):
     methods = _load(v4_dir, "methods.json")
     assert methods["methods_version"] == "f2-2026-11"
     assert methods["buffer"]["buffer_m"] == 200.0
     assert "buffer" in methods["buffer"]["mask_method"]
     assert "buffer" in methods["text"].lower()
+    assert methods["windows"]["baseline"] == ["2023-06-01", "2023-08-31"]
+    assert methods["windows"]["regen"] == ["2026-06-01", "2026-08-31"]
+    assert methods["baseline_window"] == ["2023-06-01", "2023-08-31"]
+    texto = methods["text"].lower()
+    assert "baseline" in texto and "2023" in texto and "2026" in texto
+    assert "regen_2025" in texto
 
 
 def test_gate_v8_passa_no_v4_sintetico_e_rejeita_mascara_vazia(v4_dir, tmp_path):
@@ -143,6 +168,104 @@ def test_gate_v8_passa_no_v4_sintetico_e_rejeita_mascara_vazia(v4_dir, tmp_path)
     v8_bad = [c for c in bad_report["checks"] if c["gate"] == "V8"]
     assert [c for c in v8_bad if c["status"] == "FAIL"], v8_bad
     assert bad_report["verdict"] == "FAIL"
+
+
+def test_gate_v9_passa_com_baseline_e_rejeita_ausente_ou_fora_da_estacao(
+    v4_dir, tmp_path
+):
+    report = _validate(v4_dir, tmp_path / "validation.json")
+    v9 = [c for c in report["checks"] if c["gate"] == "V9"]
+    assert v9, "gate V9 ausente"
+    assert not [c for c in v9 if c["status"] == "FAIL"], v9
+    assert any("mesma esta" in c["detail"].lower() for c in v9)
+
+    # Baseline ausente no manifest e nos trechos → FAIL.
+    bad = tmp_path / "bad" / "taquari" / "v4"
+    bad.parent.mkdir(parents=True)
+    bad.mkdir()
+    for name in ("reaches.geojson", "summary.json", "methods.json",
+                 "manifest.json"):
+        (bad / name).write_text((v4_dir / name).read_text())
+    manifest = json.loads((bad / "manifest.json").read_text())
+    manifest.pop("baseline_window")
+    manifest["windows"].pop("baseline")
+    (bad / "manifest.json").write_text(json.dumps(manifest))
+    fc = json.loads((bad / "reaches.geojson").read_text())
+    for f in fc["features"]:
+        f["properties"].pop("stats_baseline", None)
+    (bad / "reaches.geojson").write_text(json.dumps(fc))
+
+    bad_report = _validate(bad, tmp_path / "bad9_validation.json")
+    v9_bad = [c for c in bad_report["checks"] if c["gate"] == "V9"]
+    assert [c for c in v9_bad if c["status"] == "FAIL"], v9_bad
+
+    # Baseline em estação errada (verão) → FAIL mesmo presente.
+    (bad / "manifest.json").write_text((v4_dir / "manifest.json").read_text())
+    manifest = json.loads((bad / "manifest.json").read_text())
+    manifest["windows"]["baseline"] = ["2023-01-01", "2023-03-31"]
+    manifest["baseline_window"] = ["2023-01-01", "2023-03-31"]
+    (bad / "manifest.json").write_text(json.dumps(manifest))
+    (bad / "reaches.geojson").write_text((v4_dir / "reaches.geojson").read_text())
+
+    bad_report2 = _validate(bad, tmp_path / "bad9b_validation.json")
+    v9_bad2 = [c for c in bad_report2["checks"] if c["gate"] == "V9"]
+    assert [c for c in v9_bad2 if c["status"] == "FAIL"], v9_bad2
+
+
+def test_score_publicado_usa_a_baseline_nao_o_pre(v4_dir):
+    from app.services.reaches_service import score_all
+
+    fc = _load(v4_dir, "reaches.geojson")
+    raw = [{
+        "id": f["properties"]["id"],
+        "river_key": f["properties"]["river"],
+        "order": f["properties"]["order"],
+        "stats_baseline": f["properties"]["stats_baseline"],
+        "stats_pre": f["properties"]["stats_pre"],
+        "stats_pos": f["properties"]["stats_pos"],
+        "stats_regen": f["properties"]["stats_regen"],
+        "area_ha": f["properties"]["area_ha"],
+    } for f in fc["features"]]
+    com = {r["id"]: r for r in score_all(raw)}
+    sem = {r["id"]: r for r in score_all(
+        [{k: v for k, v in r.items() if k != "stats_baseline"} for r in raw]
+    )}
+
+    diferencia = None
+    for f in fc["features"]:
+        p = f["properties"]
+        assert com[p["id"]]["score"] == pytest.approx(p["score"]), p["id"]
+        if com[p["id"]]["score"] != sem[p["id"]]["score"]:
+            diferencia = p["id"]
+    assert diferencia, (
+        "o build sintético precisa de baseline diferente do pré para o teste "
+        "provar que o score publicado usa a baseline"
+    )
+
+
+def test_artefato_v4_publicado_tem_baseline_2023_e_regen_2026():
+    """O payload real versionado precisa carregar a v4 do ticket #6."""
+    vdir = BACKEND / "data" / "basins" / "taquari" / "v4"
+    manifest = _load(vdir, "manifest.json")
+    assert manifest["windows"]["baseline"] == ["2023-06-01", "2023-08-31"]
+    assert manifest["windows"]["regen"] == ["2026-06-01", "2026-08-31"]
+    assert manifest["windows"]["regen_2025"] == ["2025-06-01", "2025-08-31"]
+
+    fc = _load(vdir, "reaches.geojson")
+    assert len(fc["features"]) == 144
+    for f in fc["features"]:
+        p = f["properties"]
+        baseline = p["stats_baseline"]
+        assert baseline["n_pixels_buffer"] > 0
+        assert "stats_regen_2025" in p
+        exp_risk = max(0.0, min(1.0,
+            (p["stats_pos"]["frac_critico"] - baseline["frac_critico"]) * 3.0))
+        assert p["components"]["risk"] == pytest.approx(exp_risk, abs=1e-3)
+
+    validation = _load(vdir, "validation.json")
+    assert validation["n_fail"] == 0
+    v9 = [c for c in validation["checks"] if c["gate"] == "V9"]
+    assert v9 and all(c["status"] != "FAIL" for c in v9)
 
 
 def test_basins_json_lista_v4_como_preview_e_mantem_latest_v3():

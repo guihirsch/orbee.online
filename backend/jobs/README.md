@@ -40,8 +40,23 @@ quadrado de ~1 km ao redor do centroide:
 - o build falha rápido (`S2BufferOutside`) se a máscara vier vazia ou se o
   buffer cair fora/truncado no raster;
 - `manifest.json`/`methods.json` registram `buffer_m`, margem, método da
-  máscara e bbox derivado; cada trecho publica `search_bbox` e
-  `n_pixels_buffer`/`n_pixels_validos` por janela.
+  máscara, bbox derivado e as janelas; cada trecho publica `search_bbox`,
+  `n_pixels_buffer`/`n_pixels_validos` e as stats por janela.
+
+### v4 — baseline jun–ago/2023 e janela 2026
+
+A v4 compara a estação certa (ticket #6):
+
+- `baseline`: 2023-06-01..2023-08-31 (referência same-season, antes da enchente);
+- `regen`: 2026-06-01..2026-08-31 (janela atual, usada na severidade);
+- `regen_2025`: 2025-06-01..2025-08-31 (comparação de um ano);
+- `pre`/`pos` (2024) continuam para o evento e o diff com a v3.
+
+`risk` compara `frac_critico_pos` com `frac_critico_baseline`; o déficit do
+`no_regen` é `ndvi_mean_baseline - ndvi_mean_pos`. As cinco janelas elevam o
+tempo de STAC/composite em ~2/3 sobre a v3. O manifest/methods publicam
+`baseline_window` e `windows`; o payload por trecho ganha `stats_baseline` e
+`stats_regen_2025`.
 
 ```bash
 python backend/jobs/build_basin.py --basin taquari \
@@ -58,7 +73,8 @@ anterior com `--reaches-from backend/data/basins/taquari/v3/reaches.geojson`.
 As geometrias/ids são preservados e o build recalcula bbox do buffer e stats.
 
 O gate V8 do `validate_basin.py` verifica buffer/máscara/bbox e rejeita
-`n_pixels_buffer=0`.
+`n_pixels_buffer=0`. O gate V9 exige a baseline jun–ago/2023 declarada no
+manifest/methods e `stats_baseline` em todos os trechos (mesma estação).
 
 ## build_sr.py
 

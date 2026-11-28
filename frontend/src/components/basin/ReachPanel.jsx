@@ -16,12 +16,14 @@ const TECNICA_POR_BANDA = {
    Baixa: "Monitoramento periódico; manter a cobertura atual.",
 };
 
-/* Janelas Sentinel-2 do build (espelha WINDOWS_DEFAULT do job; as datas
- * exatas por trecho variam conforme as cenas disponíveis — ver n_cenas). */
+/* Janelas Sentinel-2 do build v4 (espelha WINDOWS_DEFAULT do job; as datas
+ * exatas por trecho variam conforme as cenas disponíveis — ver n_cenas).
+ * `stats_regen_2025` fica fora do gráfico e aparece como comparação. */
 const JANELAS = [
+   { chave: "stats_baseline", rotulo: "baseline 06–08/23" },
    { chave: "stats_pre", rotulo: "pré 01–03/24" },
    { chave: "stats_pos", rotulo: "pós 06–08/24" },
-   { chave: "stats_regen", rotulo: "regen 06–08/25" },
+   { chave: "stats_regen", rotulo: "regen 06–08/26" },
 ];
 
 const ROTULOS = {
@@ -162,8 +164,14 @@ export default function ReachPanel({ detail, onAdopt, onDownload }) {
                   {p.delta_regen.toFixed(3)} (mesma estação)
                </p>
             )}
+            {typeof p.stats_regen_2025?.ndvi_mean === "number" && (
+               <p className="text-xs text-gray-500">
+                  Regen 2025 (comparação):{" "}
+                  {p.stats_regen_2025.ndvi_mean.toFixed(3)}
+               </p>
+            )}
             <p className="mt-1 text-xs text-gray-400">
-               Cenas por janela (pré/pós/regen):{" "}
+               Cenas por janela (baseline/pré/pós/regen):{" "}
                {serie.map((s) => s.n_cenas ?? "—").join(" / ")} · pós ’24 é
                pós-enchente: queda pode ser soterramento, não só desmate.
             </p>

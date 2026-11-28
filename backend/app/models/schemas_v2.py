@@ -31,6 +31,7 @@ class Manifest(BaseModel):
     bbox_method: Optional[str] = None
     mask_method: Optional[str] = None
     search_bbox: Optional[List[float]] = None
+    baseline_window: Optional[List[str]] = None
     windows: Dict[str, List[str]] = Field(default_factory=dict)
 
 
@@ -47,6 +48,7 @@ class Methods(BaseModel):
     weights: Dict[str, float] = Field(default_factory=dict)
     text: str = ""
     buffer: Dict[str, Any] = Field(default_factory=dict)
+    baseline_window: Optional[List[str]] = None
     windows: Dict[str, List[str]] = Field(default_factory=dict)
 
 
