@@ -23,6 +23,37 @@ const SEGMENTOS = [
    { value: "Urgente", label: "Urgente" },
 ];
 
+const WINDOW_LABELS = {
+   baseline: "baseline",
+   pre: "pré",
+   pos: "pós",
+   regen_2025: "regen 2025",
+   regen: "regen",
+};
+
+function windowLabel([ini, fim]) {
+   const month = (d) => String(d || "").slice(5, 7);
+   const year = (d) => String(d || "").slice(2, 4);
+   return `${month(ini)}–${month(fim)}/${year(fim)}`;
+}
+
+/* Janelas do manifest na ordem metodológica (fallback: v4 documentada). */
+function formatWindows(windows) {
+   const fallback = {
+      baseline: ["2023-06-01", "2023-08-31"],
+      pre: ["2024-01-01", "2024-03-31"],
+      pos: ["2024-06-01", "2024-08-31"],
+      regen_2025: ["2025-06-01", "2025-08-31"],
+      regen: ["2026-06-01", "2026-08-31"],
+   };
+   const doc = windows && Object.keys(windows).length ? windows : fallback;
+   const order = ["baseline", "pre", "pos", "regen_2025", "regen"];
+   return order
+      .filter((k) => Array.isArray(doc[k]) && doc[k].length === 2)
+      .map((k) => `${WINDOW_LABELS[k]} ${windowLabel(doc[k])}`)
+      .join(" · ");
+}
+
 /* Separa o veredito V1–V6 do V7 (crosscheck CBERS) quando o payload traz
  * `validation.checks`. Sem checks (payload antigo), o modal mantém o texto
  * único de antes. */
@@ -79,6 +110,7 @@ export default function Bacias() {
    const [basin, setBasin] = useState("pardo");
    const [version, setVersion] = useState("");
    const [versions, setVersions] = useState([]);
+   const [preview, setPreview] = useState("");
    const [bandFilter, setBandFilter] = useState("");
    const [reaches, setReaches] = useState(null);
    const [selectedId, setSelectedId] = useState(null);
@@ -106,6 +138,7 @@ export default function Bacias() {
             if (b) {
                setBasin(b.basin);
                setVersions(b.versions || []);
+               setPreview(b.preview || "");
                setVersion(b.latest || "");
             }
             setLoading(false);
@@ -304,6 +337,7 @@ export default function Bacias() {
                      {versions.map((v) => (
                         <option key={v} value={v}>
                            {v}
+                           {v === preview ? " (preview)" : ""}
                         </option>
                      ))}
                   </select>
@@ -408,9 +442,14 @@ export default function Bacias() {
                      <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed text-gray-700">
                         <li>
                            Vegetação: NDVI de Sentinel-2 L2A (10 m, bandas
-                           B04/B08, máscara SCL) via Planetary Computer, janelas
-                           pré 01–03/24 · pós 06–08/24 · regen 06–08/25
-                           (mediana top-3, nuvens &lt; 20%).
+                           B04/B08, máscara SCL) via Planetary Computer, janelas{" "}
+                           {formatWindows(manifest?.windows)} (mediana top-3,
+                           nuvens &lt; 20%).
+                        </li>
+                        <li>
+                           Risco e déficit do “sem regeneração” comparam a
+                           janela pós-enchente com a baseline de mesma estação
+                           (jun–ago/2023); a v3 usava o pré de verão/2024.
                         </li>
                         <li>
                            Rios do OpenStreetMap, trechos de ~500 m

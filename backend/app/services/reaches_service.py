@@ -45,8 +45,14 @@ def score_reach(
     neighbor_regen_mean: float = 0.5,
     reach_area_ha: float = 5.0,
     ndvi_critical: float = 0.2,
+    stats_baseline: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
-    """Escore 0..1 + breakdown. Entradas: dicts `stats` do s2_service."""
+    """Escore 0..1 + breakdown. Entradas: dicts `stats` do s2_service.
+
+    A baseline de mesma estação (jun–ago/2023) é a referência do `risk` e do
+    déficit do `no_regen`. Sem ela (payloads v1–v3), usa o pré-evento — o
+    comportamento legado, para a reexecução dos artefatos antigos não mudar.
+    """
 
     def g(s: Dict[str, Any], k: str, default: float = 0.0) -> float:
         try:
@@ -57,9 +63,16 @@ def score_reach(
 
     severity = _clamp01(g(stats_regen, "frac_critico"))
 
+    # Baseline só é referência se tiver cenas/pixels; S2NoScenes publica zeros.
+    usable_baseline = bool(stats_baseline) and (
+        g(stats_baseline, "n_cenas", 1.0) > 0
+        and g(stats_baseline, "n_pixels_buffer", 1.0) > 0
+    )
+    reference = stats_baseline if usable_baseline else stats_pre
+
     # no_regen só conta se houve déficit a recuperar (evita punir mata estável):
-    # fração do déficit (pre→pos) NÃO recuperada em pos→regen.
-    deficit = max(0.0, g(stats_pre, "ndvi_mean") - g(stats_pos, "ndvi_mean"))
+    # fração do déficit (baseline→pos) NÃO recuperada em pos→regen.
+    deficit = max(0.0, g(reference, "ndvi_mean") - g(stats_pos, "ndvi_mean"))
     regen_gain = g(stats_regen, "ndvi_mean") - g(stats_pos, "ndvi_mean")
     if deficit <= 1e-9:
         no_regen = 0.0
@@ -69,7 +82,7 @@ def score_reach(
 
     connectivity = 1.0 - _clamp01(neighbor_regen_mean)
 
-    emergence = g(stats_pos, "frac_critico") - g(stats_pre, "frac_critico")
+    emergence = g(stats_pos, "frac_critico") - g(reference, "frac_critico")
     risk = _clamp01(emergence * 3.0)
 
     restore_ha = severity * max(reach_area_ha, 0.0)
@@ -122,6 +135,7 @@ def score_all(reaches: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
                 r.get("stats_regen") or {},
                 neighbor_regen_mean=nmean,
                 reach_area_ha=float(r.get("area_ha", 5.0)),
+                stats_baseline=r.get("stats_baseline"),
             )
             out.append({**r, **scored, "methods_version": METHODS_VERSION})
     return out
@@ -145,8 +159,12 @@ def to_geojson(reaches: List[Dict[str, Any]]) -> Dict[str, Any]:
             "valid_fraction": r.get("valid_fraction"),
             "area_ha": r.get("area_ha"),
             "length_m": r.get("length_m"),
+            "search_bbox": r.get("search_bbox"),
+            "mask_method": r.get("mask_method"),
+            "stats_baseline": r.get("stats_baseline"),
             "stats_pre": r.get("stats_pre"),
             "stats_pos": r.get("stats_pos"),
+            "stats_regen_2025": r.get("stats_regen_2025"),
             "stats_regen": r.get("stats_regen"),
             "methods_version": r.get("methods_version", METHODS_VERSION),
         }

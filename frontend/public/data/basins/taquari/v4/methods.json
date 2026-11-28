@@ -1,0 +1,45 @@
+{
+  "methods_version": "f2-2026-11",
+  "weights": {
+    "severity": 0.35,
+    "no_regen": 0.25,
+    "connectivity": 0.2,
+    "risk": 0.15,
+    "cost": 0.05
+  },
+  "text": "Índice de prioridade por trecho de APP (v4 F1).\n\nJanelas Sentinel-2 (mesma estação, jun–ago; mediana top-3, nuvens < 20%):\n- baseline: 2023-06-01..2023-08-31 (referência same-season, antes da enchente);\n- regen: 2026-06-01..2026-08-31 (janela atual, usada na severidade);\n- regen_2025: 2025-06-01..2025-08-31 (comparação de um ano de recuperação);\n- pre: 2024-01-01..2024-03-31 e pos: 2024-06-01..2024-08-31\n  (evento de mai/2024 e diff com a v3).\n\nComponentes (todos 0..1, maior = mais prioritário):\n- severity: fração de pixels críticos (NDVI<0,2) na janela atual (regen 2026).\n- no_regen: déficit de NDVI baseline→pos não recuperado em pos→regen\n  (mesma estação; evita confundir sazonalidade com dano).\n- connectivity: 1 - NDVI médio dos trechos vizinhos (fragmento isolado = pior).\n- risk: surgimento de criticidade versus a baseline\n  (frac_critico_pos - frac_critico_baseline), i.e. dano criado pelo evento.\n- cost: heurística F1 (1 - área_a_restaurar_ha/25); será calibrada com\n  tabelas de custo de campo (ex.: programa MUDA) na F2.\n\nLimitações declaradas: sem validação de campo o escore é prospecção, não\ndiagnóstico; trechos com baixa fração válida carregam incerteza (ver campo\n`valid_fraction` por trecho); pesos são ajustáveis e versionados.\n\nMedição no buffer (v4): as estatísticas de NDVI passam a ser calculadas dentro\ndo buffer ripário de 200 m, rasterizado na grade de 10 m do composite. O bbox\nde busca STAC é derivado dos limites do buffer + 30 m de margem. `frac_critico`\ne `frac_moderado` são relativas aos pixels válidos do buffer; `frac_validos` é\nrelativa aos pixels do buffer. As janelas e o método da máscara ficam no\n`manifest.json`/`methods.json` de cada versão.\n",
+  "buffer": {
+    "buffer_m": 200.0,
+    "bbox_margin_m": 30.0,
+    "bbox_method": "buffer_bounds_plus_margin",
+    "mask_method": "rasterized_buffer_polygon",
+    "stats_relative_to": "buffer_pixels",
+    "resolution_m": 10.0
+  },
+  "baseline_window": [
+    "2023-06-01",
+    "2023-08-31"
+  ],
+  "windows": {
+    "baseline": [
+      "2023-06-01",
+      "2023-08-31"
+    ],
+    "pre": [
+      "2024-01-01",
+      "2024-03-31"
+    ],
+    "pos": [
+      "2024-06-01",
+      "2024-08-31"
+    ],
+    "regen_2025": [
+      "2025-06-01",
+      "2025-08-31"
+    ],
+    "regen": [
+      "2026-06-01",
+      "2026-08-31"
+    ]
+  }
+}

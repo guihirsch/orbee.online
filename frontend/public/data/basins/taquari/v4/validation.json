@@ -1,0 +1,1443 @@
+{
+  "basin": "taquari",
+  "version": "v4",
+  "validated_at": "2026-11-28T17:49:11.318120+00:00",
+  "gates": [
+    "V1",
+    "V2",
+    "V3",
+    "V4",
+    "V5",
+    "V6",
+    "V7",
+    "V8",
+    "V9"
+  ],
+  "n_checks": 284,
+  "n_fail": 0,
+  "n_warn": 267,
+  "verdict": "PASS_WITH_WARNS",
+  "checks": [
+    {
+      "gate": "V1",
+      "status": "PASS",
+      "detail": "pesos somam 1"
+    },
+    {
+      "gate": "V1",
+      "status": "PASS",
+      "detail": "score/banda/componentes reexecutados em 144 trechos"
+    },
+    {
+      "gate": "V1",
+      "status": "PASS",
+      "detail": "summary/manifest reconciliam (144 trechos, {'Urgente': 20, 'Alta': 100, 'Média': 24})"
+    },
+    {
+      "gate": "V1",
+      "status": "PASS",
+      "detail": "144 geometrias válidas (~500 m, centroides no piloto)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_0b74ff2e45: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7ea0d536ea/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_673973be9c/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_673973be9c: frac_validos pos baixo (0.3462484624846248)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_673973be9c: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7007419362: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2222101815: frac_validos pos baixo (0.23357888275015345)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2222101815: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_d0e36e653b/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_d0e36e653b: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f4cf439b00/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f4cf439b00: frac_validos pos baixo (0.39551321450522436)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f4cf439b00: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_21e13af9c2: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f754dc427f: frac_validos pos baixo (0.31900521952717226)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f754dc427f: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_a0282c3bc4/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_a0282c3bc4: frac_validos pos baixo (0.3022162525184688)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_a0282c3bc4: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2a6f304e2c/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2a6f304e2c: frac_validos pos baixo (0.3340669014084507)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2a6f304e2c: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_94c367631d/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_94c367631d: frac_validos pos baixo (0.3356944872189714)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_94c367631d: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f6290d4143: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_aeabd0fb78/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_aeabd0fb78: frac_validos pos baixo (0.36098310291858676)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_aeabd0fb78: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_738aaf8d40: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_bb6c8c8545: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_e7f59001fc: frac_validos pos baixo (0.3490304709141274)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_e7f59001fc: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2754c8b25c: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_55fadacff1: frac_validos pos baixo (0.37165693206271133)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_55fadacff1: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3608b9ed33: frac_validos pos baixo (0.3757687576875769)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3608b9ed33: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_537bb6c9c4: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_ea26882f77: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3a3b2bcd2b: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7236d02ed8: frac_validos pos baixo (0.3715437788018433)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7236d02ed8: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_37a64273c7: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_23ac72398a: frac_validos pos baixo (0.2861973562865048)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_23ac72398a: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_26526c0878: frac_validos pos baixo (0.34848019649984646)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_26526c0878: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_78a5db4203: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_e283ca3c6e: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_ba0e389a44/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_ba0e389a44: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_1dcf823fcf/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_1dcf823fcf: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_a5869f03e9: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b4554713bd: frac_validos pos baixo (0.20331695331695332)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b4554713bd: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_0834718841/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_0834718841: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_ffa4144255/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_ffa4144255: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_66dc5458ba: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_4fb4ba8b33: frac_validos pos baixo (0.37776412776412777)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_4fb4ba8b33: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7098e29005/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7098e29005: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_27bc71c7e3: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_ded1d3a7b2: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7667eab8e8/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7667eab8e8: frac_validos pos baixo (0.3781874039938556)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7667eab8e8: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_9645e89df0: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_000a816f46: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_96c6a4a75e: frac_validos pos baixo (0.3842429577464789)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_96c6a4a75e: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_837a3ec528: frac_validos pos baixo (0.35382723639717184)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_837a3ec528: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2e24961877: frac_validos pos baixo (0.3695050722410083)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2e24961877: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_708296b249: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_a7c38345eb: frac_validos pos baixo (0.23733455043359197)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_a7c38345eb: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_0da8662155: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_d02b504996: frac_validos pos baixo (0.3897223108841366)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_d02b504996: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_aa483f428c: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_0245df56f0/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_0245df56f0: frac_validos pos baixo (0.3515673017824216)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_0245df56f0: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_674173c944/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_674173c944: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_4708abf208: frac_validos pos baixo (0.15826674861708667)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_4708abf208: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_fc1c926add: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_1a01fad12c: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_57c30532a5: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_dd3bd22a93: frac_validos pos baixo (0.367240319606638)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_dd3bd22a93: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_c268c6a85e/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_c268c6a85e: frac_validos pos baixo (0.34035759897828866)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_c268c6a85e: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_4481a356c7: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_5b9fb6787c/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_5b9fb6787c: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_e809f30561: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b56d767a0c: frac_validos pos baixo (0.22164770768700448)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b56d767a0c: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_d435b4fe98: frac_validos pos baixo (0.3726574500768049)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_d435b4fe98: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3afc15807d/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3afc15807d: frac_validos pos baixo (0.3857977251767599)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3afc15807d: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_73a3280bde/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_73a3280bde: frac_validos pos baixo (0.3883256528417819)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_73a3280bde: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_6a888cfc28: frac_validos pos baixo (0.23840245775729646)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_6a888cfc28: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_81d4712500: frac_validos pos baixo (0.3424279583077866)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_81d4712500: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_9f5a30283a: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_8ab56afa30: frac_validos pos baixo (0.3794903285231808)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_8ab56afa30: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_e216c82955: frac_validos pos baixo (0.38629379225568533)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_e216c82955: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_981bb924c0/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_981bb924c0: frac_validos pos baixo (0.33599263577784594)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_981bb924c0: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3d3b752a3f/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3d3b752a3f: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_42e089c6ad: frac_validos pos baixo (0.20651505838967424)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_42e089c6ad: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2103625ca8: frac_validos pos baixo (0.3741140215716487)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2103625ca8: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_411f2221fb: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_404ad193b3: frac_validos pos baixo (0.2554038680318544)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_404ad193b3: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_5a440d984d/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_5a440d984d: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_5edc89858d: frac_validos pos baixo (0.3156923076923077)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_5edc89858d: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_54ebf03b0d/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_54ebf03b0d: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f4f74928d9/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f4f74928d9: frac_validos pos baixo (0.3104294478527607)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f4f74928d9: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_04cce42693: frac_validos pos baixo (0.2842234499693063)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_04cce42693: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_79adcc6ec6: frac_validos pos baixo (0.3515505066011667)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_79adcc6ec6: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_d51e2efc02/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_d51e2efc02: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_6a37f35764/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_6a37f35764: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f2be8a0290: frac_validos pos baixo (0.15314215985356924)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f2be8a0290: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f76e3bb968/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f76e3bb968: frac_validos pos baixo (0.31643625192012287)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f76e3bb968: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_eebf90fa5e/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_eebf90fa5e: frac_validos pos baixo (0.25751995089011664)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_eebf90fa5e: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f556bac258: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_646f666c04: frac_validos pos baixo (0.3603437691835482)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_646f666c04: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_a9bb0c7794/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_a9bb0c7794: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_8925310867/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_8925310867: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_5e88240e65/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_5e88240e65: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_8e7dbccc17/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_8e7dbccc17: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b7e3ebe1ca: frac_validos pos baixo (0.36575636698373737)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b7e3ebe1ca: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7995312810/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7995312810: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_803709f74a/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_803709f74a: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_68c933a9cd/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_68c933a9cd: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_9fe5ab970a/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_9fe5ab970a: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_4cb6659f1e: frac_validos pos baixo (0.38992938286766965)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_4cb6659f1e: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_45eb8999a8/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_45eb8999a8: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_c42cf1d407/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_c42cf1d407: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7bd1f1b0e4/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7bd1f1b0e4: frac_validos pos baixo (0.3838352796558082)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7bd1f1b0e4: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_f3224ab100/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_cf54aaffd5: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2b66c9170a/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2b66c9170a: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_e3b6e0f79b/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_e3b6e0f79b: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_344a2809b6/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_344a2809b6: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3a4be1d7f5: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_92fc318495/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_92fc318495: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_cdb416edf3/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_aa5efa600c/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_aa5efa600c: frac_validos pos baixo (0.3046153846153846)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_aa5efa600c: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7a0cc84808: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7dd3628634/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_7dd3628634: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2a1fd99551/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2a1fd99551: frac_validos pos baixo (0.3769987699876999)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2a1fd99551: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b379027f86: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b7bb7040c3/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b7bb7040c3: frac_validos pos baixo (0.322679778733866)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b7bb7040c3: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_fd60a15ed1/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_fd60a15ed1: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_159bd0f90f: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b5f68a9621/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b5f68a9621: frac_validos pos baixo (0.2885266071977853)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b5f68a9621: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_aad630c563/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_aad630c563: frac_validos pos baixo (0.3880688806888069)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_aad630c563: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_21ca990c85: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_c920fff593/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_c920fff593: frac_validos pos baixo (0.32211735740664754)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_c920fff593: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_56b3354dea/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_56b3354dea: frac_validos pos baixo (0.3631336405529954)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_56b3354dea: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_1523791a4d: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_ba47660aed/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_ba47660aed: frac_validos pos baixo (0.37841992007377806)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_ba47660aed: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3d9ed468a6: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b451f9b9c2/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b451f9b9c2: frac_validos pos baixo (0.30703101013202333)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b451f9b9c2: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_dd1b1cc34e: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_147f560a39/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_147f560a39: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3029ea2c51: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_86a9f19751/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_86a9f19751: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b68121f35d: frac_validos pos baixo (0.37915129151291516)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_b68121f35d: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_debb591845/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_debb591845: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_a132218f83: frac_validos pos baixo (0.21641561635413464)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_a132218f83: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_2f45ccd3c3/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3c5d2c4873: frac_validos pos baixo (0.3193768257059396)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3c5d2c4873: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3a140cb0c3/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_3a140cb0c3: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_d701a49d04/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_d701a49d04: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_797e17a534/stats_pos: n_cenas=2 < top_n=3 (janela apertada; déficit de cobertura)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_797e17a534: frac_validos pos baixo (0.337151584574265)"
+    },
+    {
+      "gate": "V2",
+      "status": "WARN",
+      "detail": "reach_797e17a534: frac_validos regen baixo"
+    },
+    {
+      "gate": "V2",
+      "status": "PASS",
+      "detail": "intervalos S2 íntegros; déficits só como WARN"
+    },
+    {
+      "gate": "V3",
+      "status": "PASS",
+      "detail": "queda pre→pos em 144/144 (dano do evento)"
+    },
+    {
+      "gate": "V3",
+      "status": "PASS",
+      "detail": "recuperação pos→regen em 143/144"
+    },
+    {
+      "gate": "V3",
+      "status": "PASS",
+      "detail": "risk = surgimento de criticidade em todos"
+    },
+    {
+      "gate": "V4",
+      "status": "WARN",
+      "detail": "sem sr_summary (versão sem SR)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "sem crosscheck.json (Fase A não rodada p/ esta versão)"
+    },
+    {
+      "gate": "V8",
+      "status": "PASS",
+      "detail": "buffer_m=200.0 m, máscara=rasterized_buffer_polygon"
+    },
+    {
+      "gate": "V8",
+      "status": "PASS",
+      "detail": "bbox derivado do buffer + margem (30.0 m)"
+    },
+    {
+      "gate": "V8",
+      "status": "PASS",
+      "detail": "search_bbox do build dentro do WGS84: [-52.002533, -29.623761, -51.865877, -29.277972]"
+    },
+    {
+      "gate": "V8",
+      "status": "PASS",
+      "detail": "máscara do buffer cobriu 720/720 trechos×janelas com contagem de pixels compatível"
+    },
+    {
+      "gate": "V9",
+      "status": "PASS",
+      "detail": "baseline=['2023-06-01', '2023-08-31'] declarada no manifest"
+    },
+    {
+      "gate": "V9",
+      "status": "PASS",
+      "detail": "baseline_window reconciliado entre manifest/methods"
+    },
+    {
+      "gate": "V9",
+      "status": "PASS",
+      "detail": "baseline/pos/regen na mesma estação (jun–ago)"
+    },
+    {
+      "gate": "V9",
+      "status": "PASS",
+      "detail": "baseline presente em 144/144 trechos"
+    },
+    {
+      "gate": "V5",
+      "status": "PASS",
+      "detail": "todos os trechos no rio_taquari (Lajeado/RS)"
+    },
+    {
+      "gate": "V5",
+      "status": "WARN",
+      "detail": "ordens não-sequenciais (várias linhas OSM): [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 13, 14, 14, 14, 15, 15, 15, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 23, 24]"
+    },
+    {
+      "gate": "V6",
+      "status": "WARN",
+      "detail": "pesos SR fora do alcance (não recomputado)"
+    },
+    {
+      "gate": "V6",
+      "status": "WARN",
+      "detail": "gap de proveniência: IDs das cenas STAC por trecho/janela (só n_cenas registrado) (registrar no próximo build)"
+    }
+  ],
+  "limits": "sem verdade de campo: veredito máximo = consistente + fisicamente plausível + SR fiel; escore é prospecção, não diagnóstico."
+}
