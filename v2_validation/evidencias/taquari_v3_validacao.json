@@ -1,7 +1,7 @@
 {
   "basin": "taquari",
   "version": "v3",
-  "validated_at": "2026-11-27T18:40:20.993093+00:00",
+  "validated_at": "2026-11-28T13:10:57.696323+00:00",
   "gates": [
     "V1",
     "V2",
@@ -11,10 +11,10 @@
     "V6",
     "V7"
   ],
-  "n_checks": 87,
-  "n_fail": 0,
-  "n_warn": 66,
-  "verdict": "PASS_WITH_WARNS",
+  "n_checks": 231,
+  "n_fail": 92,
+  "n_warn": 115,
+  "verdict": "FAIL",
   "checks": [
     {
       "gate": "V1",
@@ -428,8 +428,728 @@
     },
     {
       "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_0b74ff2e45: S2×CBERS Δmean=-0.2934 Δcrit=0.7651 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
       "status": "WARN",
-      "detail": "sem crosscheck.json (Fase A não rodada p/ esta versão)"
+      "detail": "reach_7ea0d536ea: S2×CBERS Δmean=-0.0785 Δcrit=0.1871 (cenas: 1)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_673973be9c: S2×CBERS Δmean=-0.1103 Δcrit=0.2328 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_7007419362: S2×CBERS Δmean=-0.1783 Δcrit=0.2655 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_2222101815: S2×CBERS Δmean=-0.2376 Δcrit=0.3102 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_d0e36e653b: S2×CBERS Δmean=-0.0837 Δcrit=0.1965 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_f4cf439b00: S2×CBERS Δmean=-0.094 Δcrit=0.1583 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_21e13af9c2: S2×CBERS Δmean=-0.153 Δcrit=0.2315 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_f754dc427f: S2×CBERS Δmean=-0.2447 Δcrit=0.3668 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_a0282c3bc4: S2×CBERS Δmean=-0.1201 Δcrit=0.2406 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_2a6f304e2c: S2×CBERS Δmean=-0.1085 Δcrit=0.1972 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_94c367631d: S2×CBERS Δmean=-0.1113 Δcrit=0.213 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_f6290d4143: S2×CBERS Δmean=-0.1636 Δcrit=0.239 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_f2ba2f5a84: S2×CBERS Δmean=-0.1501 Δcrit=0.2584 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_ecc0ad7bbc: S2×CBERS Δmean=-0.1258 Δcrit=0.1969 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_aeabd0fb78: S2×CBERS Δmean=-0.1264 Δcrit=0.2321 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_738aaf8d40: S2×CBERS Δmean=-0.1298 Δcrit=0.224 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_bb6c8c8545: S2×CBERS Δmean=-0.1631 Δcrit=0.2453 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_e7f59001fc: S2×CBERS Δmean=-0.194 Δcrit=0.2624 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_2754c8b25c: S2×CBERS Δmean=-0.1698 Δcrit=0.255 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_55fadacff1: S2×CBERS Δmean=-0.1372 Δcrit=0.2409 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_3608b9ed33: S2×CBERS Δmean=-0.1893 Δcrit=0.2903 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_537bb6c9c4: S2×CBERS Δmean=-0.1813 Δcrit=0.5091 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_ea26882f77: S2×CBERS Δmean=-0.2786 Δcrit=0.6823 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_3a3b2bcd2b: S2×CBERS Δmean=-0.1892 Δcrit=0.4375 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_7236d02ed8: S2×CBERS Δmean=-0.1223 Δcrit=0.2205 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_37a64273c7: S2×CBERS Δmean=-0.1899 Δcrit=0.2618 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_23ac72398a: S2×CBERS Δmean=-0.1976 Δcrit=0.4003 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_26526c0878: S2×CBERS Δmean=-0.2057 Δcrit=0.2681 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_78a5db4203: S2×CBERS Δmean=-0.1825 Δcrit=0.2826 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_e283ca3c6e: S2×CBERS Δmean=-0.1759 Δcrit=0.3617 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_d16b0df888: S2×CBERS Δmean=-0.1745 Δcrit=0.2868 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_ba0e389a44: S2×CBERS Δmean=-0.1067 Δcrit=0.19 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_1dcf823fcf: S2×CBERS Δmean=-0.1094 Δcrit=0.2233 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_a5869f03e9: S2×CBERS Δmean=-0.1927 Δcrit=0.2884 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_b4554713bd: S2×CBERS Δmean=-0.2326 Δcrit=0.3325 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_0834718841: S2×CBERS Δmean=-0.1077 Δcrit=0.2308 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_ffa4144255: S2×CBERS Δmean=-0.0863 Δcrit=0.1441 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_66dc5458ba: S2×CBERS Δmean=-0.1101 Δcrit=0.1066 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_4fb4ba8b33: S2×CBERS Δmean=-0.2222 Δcrit=0.3275 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_7098e29005: S2×CBERS Δmean=-0.1106 Δcrit=0.2266 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_27bc71c7e3: S2×CBERS Δmean=-0.1725 Δcrit=0.2288 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_ded1d3a7b2: S2×CBERS Δmean=-0.1425 Δcrit=0.2275 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_7667eab8e8: S2×CBERS Δmean=-0.1106 Δcrit=0.2012 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_9645e89df0: S2×CBERS Δmean=-0.1175 Δcrit=0.2081 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_000a816f46: S2×CBERS Δmean=-0.1692 Δcrit=0.2402 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_96c6a4a75e: S2×CBERS Δmean=-0.1694 Δcrit=0.2555 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_837a3ec528: S2×CBERS Δmean=-0.1397 Δcrit=0.2478 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_2e24961877: S2×CBERS Δmean=-0.199 Δcrit=0.3162 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_708296b249: S2×CBERS Δmean=-0.2362 Δcrit=0.5805 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_a7c38345eb: S2×CBERS Δmean=-0.2005 Δcrit=0.3519 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_0da8662155: S2×CBERS Δmean=-0.1855 Δcrit=0.2184 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_d02b504996: S2×CBERS Δmean=-0.1636 Δcrit=0.2602 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_aa483f428c: S2×CBERS Δmean=-0.1528 Δcrit=0.2426 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_0245df56f0: S2×CBERS Δmean=-0.1056 Δcrit=0.1832 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_674173c944: S2×CBERS Δmean=-0.0914 Δcrit=0.195 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_4708abf208: S2×CBERS Δmean=-0.2291 Δcrit=0.3218 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_fc1c926add: S2×CBERS Δmean=-0.1673 Δcrit=0.2236 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_1a01fad12c: S2×CBERS Δmean=-0.1397 Δcrit=0.2285 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_57c30532a5: S2×CBERS Δmean=-0.0807 Δcrit=0.0479 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_dd3bd22a93: S2×CBERS Δmean=-0.1714 Δcrit=0.3025 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_c268c6a85e: S2×CBERS Δmean=-0.0956 Δcrit=0.1834 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_4481a356c7: S2×CBERS Δmean=-0.1287 Δcrit=0.2043 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_5b9fb6787c: S2×CBERS Δmean=-0.0858 Δcrit=0.1661 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_e809f30561: S2×CBERS Δmean=-0.1474 Δcrit=0.253 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_b56d767a0c: S2×CBERS Δmean=-0.2078 Δcrit=0.3576 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_d435b4fe98: S2×CBERS Δmean=-0.1762 Δcrit=0.2099 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_3afc15807d: S2×CBERS Δmean=-0.1015 Δcrit=0.2043 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_73a3280bde: S2×CBERS Δmean=-0.08 Δcrit=0.1865 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_6a888cfc28: S2×CBERS Δmean=-0.2252 Δcrit=0.3033 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_81d4712500: S2×CBERS Δmean=-0.1802 Δcrit=0.2467 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_5fae6306b2: S2×CBERS Δmean=-0.1377 Δcrit=0.2168 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_9f5a30283a: S2×CBERS Δmean=-0.1076 Δcrit=0.1372 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_8ab56afa30: S2×CBERS Δmean=-0.1786 Δcrit=0.294 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_e216c82955: S2×CBERS Δmean=-0.1797 Δcrit=0.2426 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_981bb924c0: S2×CBERS Δmean=-0.1298 Δcrit=0.2223 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_3d3b752a3f: S2×CBERS Δmean=-0.124 Δcrit=0.1741 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_42e089c6ad: S2×CBERS Δmean=-0.241 Δcrit=0.3016 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_2103625ca8: S2×CBERS Δmean=-0.1861 Δcrit=0.2784 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_411f2221fb: S2×CBERS Δmean=-0.1185 Δcrit=0.181 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_404ad193b3: S2×CBERS Δmean=-0.1881 Δcrit=0.2778 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_5a440d984d: S2×CBERS Δmean=-0.1139 Δcrit=0.3271 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_5edc89858d: S2×CBERS Δmean=-0.2125 Δcrit=0.2749 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_54ebf03b0d: S2×CBERS Δmean=-0.1202 Δcrit=0.2127 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_f4f74928d9: S2×CBERS Δmean=-0.1313 Δcrit=0.2026 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_04cce42693: S2×CBERS Δmean=-0.23 Δcrit=0.2806 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_79adcc6ec6: S2×CBERS Δmean=-0.1999 Δcrit=0.2994 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_d51e2efc02: S2×CBERS Δmean=-0.137 Δcrit=0.1951 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_6a37f35764: S2×CBERS Δmean=-0.096 Δcrit=0.197 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_f2be8a0290: S2×CBERS Δmean=-0.2275 Δcrit=0.2964 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_f76e3bb968: S2×CBERS Δmean=-0.0968 Δcrit=0.1901 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_eebf90fa5e: S2×CBERS Δmean=-0.1108 Δcrit=0.2069 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_f556bac258: S2×CBERS Δmean=-0.2117 Δcrit=0.2898 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_646f666c04: S2×CBERS Δmean=-0.2042 Δcrit=0.2996 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_a9bb0c7794: S2×CBERS Δmean=-0.1026 Δcrit=0.1977 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_8925310867: S2×CBERS Δmean=-0.0861 Δcrit=0.1667 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_5e88240e65: S2×CBERS Δmean=-0.0697 Δcrit=0.1751 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_8e7dbccc17: S2×CBERS Δmean=-0.1072 Δcrit=0.1906 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_b7e3ebe1ca: S2×CBERS Δmean=-0.1995 Δcrit=0.3019 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_7995312810: S2×CBERS Δmean=-0.0994 Δcrit=0.1931 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_803709f74a: S2×CBERS Δmean=-0.1026 Δcrit=0.1922 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_68c933a9cd: S2×CBERS Δmean=-0.0672 Δcrit=0.1871 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_9fe5ab970a: S2×CBERS Δmean=-0.0946 Δcrit=0.1413 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_4cb6659f1e: S2×CBERS Δmean=-0.1678 Δcrit=0.2423 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_45eb8999a8: S2×CBERS Δmean=-0.1182 Δcrit=0.236 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_c42cf1d407: S2×CBERS Δmean=-0.1032 Δcrit=0.1941 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_7bd1f1b0e4: S2×CBERS Δmean=-0.0884 Δcrit=0.1941 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "PASS",
+      "detail": "reach_f3224ab100: S2×CBERS Δmean=-0.0531 Δcrit=0.0555 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_cf54aaffd5: S2×CBERS Δmean=-0.1837 Δcrit=0.2158 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_2b66c9170a: S2×CBERS Δmean=-0.126 Δcrit=0.1966 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_e3b6e0f79b: S2×CBERS Δmean=-0.0797 Δcrit=0.165 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_344a2809b6: S2×CBERS Δmean=-0.0931 Δcrit=0.1266 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_3a4be1d7f5: S2×CBERS Δmean=-0.1869 Δcrit=0.1859 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_92fc318495: S2×CBERS Δmean=-0.139 Δcrit=0.2472 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_cdb416edf3: S2×CBERS Δmean=-0.0748 Δcrit=0.1518 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_aa5efa600c: S2×CBERS Δmean=-0.1306 Δcrit=0.2037 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_7a0cc84808: S2×CBERS Δmean=-0.1785 Δcrit=0.1871 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_7dd3628634: S2×CBERS Δmean=-0.0803 Δcrit=0.1635 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_2a1fd99551: S2×CBERS Δmean=-0.0929 Δcrit=0.1624 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_b379027f86: S2×CBERS Δmean=-0.172 Δcrit=0.1865 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_b7bb7040c3: S2×CBERS Δmean=-0.109 Δcrit=0.2112 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_fd60a15ed1: S2×CBERS Δmean=-0.0949 Δcrit=0.1653 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_159bd0f90f: S2×CBERS Δmean=-0.1881 Δcrit=0.2027 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_b5f68a9621: S2×CBERS Δmean=-0.1259 Δcrit=0.2353 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_aad630c563: S2×CBERS Δmean=-0.0955 Δcrit=0.1733 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_21ca990c85: S2×CBERS Δmean=-0.1357 Δcrit=0.1841 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_c920fff593: S2×CBERS Δmean=-0.1228 Δcrit=0.2435 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_56b3354dea: S2×CBERS Δmean=-0.1086 Δcrit=0.1524 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_1523791a4d: S2×CBERS Δmean=-0.1059 Δcrit=0.1769 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_ba47660aed: S2×CBERS Δmean=-0.1196 Δcrit=0.1412 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_3d9ed468a6: S2×CBERS Δmean=-0.1311 Δcrit=0.1986 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_b451f9b9c2: S2×CBERS Δmean=-0.1012 Δcrit=0.1026 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_dd1b1cc34e: S2×CBERS Δmean=-0.1398 Δcrit=0.2267 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_147f560a39: S2×CBERS Δmean=-0.101 Δcrit=0.1651 (cenas: 4)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_3029ea2c51: S2×CBERS Δmean=-0.1344 Δcrit=0.2687 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_86a9f19751: S2×CBERS Δmean=-0.0898 Δcrit=0.1615 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_b68121f35d: S2×CBERS Δmean=-0.1376 Δcrit=0.2453 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_debb591845: S2×CBERS Δmean=-0.0749 Δcrit=0.1492 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_a132218f83: S2×CBERS Δmean=-0.1048 Δcrit=0.1578 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_2f45ccd3c3: S2×CBERS Δmean=-0.0567 Δcrit=0.1529 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "PASS",
+      "detail": "reach_3c5d2c4873: S2×CBERS Δmean=-0.0732 Δcrit=0.096 (cenas: 3)"
+    },
+    {
+      "gate": "V7",
+      "status": "WARN",
+      "detail": "reach_3a140cb0c3: S2×CBERS Δmean=-0.0899 Δcrit=0.1958 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_d701a49d04: S2×CBERS Δmean=-0.13 Δcrit=0.2582 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "FAIL",
+      "detail": "reach_797e17a534: S2×CBERS Δmean=-0.1386 Δcrit=0.2325 (cenas: 2)"
+    },
+    {
+      "gate": "V7",
+      "status": "PASS",
+      "detail": "ordenação S2×CBERS preservada (Spearman 0.546)"
     },
     {
       "gate": "V5",
