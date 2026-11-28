@@ -65,7 +65,7 @@ export const getTilejson = (params) =>
    V2_STATIC ? staticTilejson(params) : get("/tilejson", params);
 export const getManifest = (params) =>
    V2_STATIC ? sget(staticPath(params, "manifest.json")) : get("/manifest", params);
-/* Relatório de validação V1–V6 (só existe no payload estático; null se ausente). */
+/* Relatório de validação V1–V7 (só existe no payload estático; null se ausente). */
 export const getValidation = async (params) => {
    if (!V2_STATIC) return null;
    try {

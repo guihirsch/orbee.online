@@ -1,0 +1,11 @@
+{
+  "methods_version": "f1-2026-09",
+  "weights": {
+    "severity": 0.35,
+    "no_regen": 0.25,
+    "connectivity": 0.2,
+    "risk": 0.15,
+    "cost": 0.05
+  },
+  "text": "Índice de prioridade por trecho de APP (v2 F1).\n\nComponentes (todos 0..1, maior = mais prioritário):\n- severity: fração de pixels críticos (NDVI<0,2) na janela mais recente.\n- no_regen: 1 - regeneração pos→regen normalizada (janelas de mesma estação;\n  trata a ressalva sazonal da Fase 0: pre vs pos mistura estação+enchente).\n- connectivity: 1 - NDVI médio dos trechos vizinhos (fragmento isolado = pior).\n- risk: surgimento de criticidade (frac_critico_pos - frac_critico_pre), i.e.\n  dano criado pelo evento = urgência de intervenção.\n- cost: heurística F1 (1 - área_a_restaurar_ha/25); será calibrada com\n  tabelas de custo de campo (ex.: programa MUDA) na F2.\n\nLimitações declaradas: sem validação de campo o escore é prospecção, não\ndiagnóstico; trechos com baixa fração válida carregam incerteza (ver campo\n`valid_fraction` por trecho); pesos são ajustáveis e versionados.\n"
+}

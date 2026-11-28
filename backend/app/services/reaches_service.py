@@ -5,7 +5,8 @@
   testáveis em qualquer ambiente. É aqui que vive a metodologia.
 
 Convenção de ID estável por trecho: `{river_key}:{order:04d}` + hash de
-coordenadas (mesma filosofia dos `hls_point_*` da v1).
+coordenadas com 6 casas (~0,1 m) — precisão suficiente para não colidir
+entre trechos vizinhos do mesmo rio (mesma filosofia dos `hls_point_*` da v1).
 """
 
 from __future__ import annotations
@@ -30,7 +31,9 @@ def _clamp01(x: float) -> float:
 
 
 def stable_reach_id(river_key: str, order: int, mx: float, my: float) -> str:
-    base = f"{river_key}:{order:04d}:{mx:.1f}:{my:.1f}"
+    # 6 casas (~0,1 m) evita colisão entre trechos vizinhos; 0,1° (~11 km)
+    # colapsava dezenas de trechos do Taquari no mesmo id.
+    base = f"{river_key}:{order:04d}:{mx:.6f}:{my:.6f}"
     h = hashlib.sha256(base.encode()).hexdigest()[:10]
     return f"reach_{h}"
 
@@ -141,6 +144,7 @@ def to_geojson(reaches: List[Dict[str, Any]]) -> Dict[str, Any]:
             "delta_regen": r.get("delta_regen"),
             "valid_fraction": r.get("valid_fraction"),
             "area_ha": r.get("area_ha"),
+            "length_m": r.get("length_m"),
             "stats_pre": r.get("stats_pre"),
             "stats_pos": r.get("stats_pos"),
             "stats_regen": r.get("stats_regen"),

@@ -1,0 +1,10 @@
+{
+  "basin": "taquari",
+  "n_reaches": 144,
+  "bands": {
+    "Alta": 96,
+    "Média": 48
+  },
+  "score_mean": 0.4266,
+  "frac_critical_reaches": 0.6667
+}
