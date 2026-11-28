@@ -23,6 +23,53 @@ const SEGMENTOS = [
    { value: "Urgente", label: "Urgente" },
 ];
 
+/* Separa o veredito V1–V6 do V7 (crosscheck CBERS) quando o payload traz
+ * `validation.checks`. Sem checks (payload antigo), o modal mantém o texto
+ * único de antes. */
+function splitValidation(validation) {
+   const checks = Array.isArray(validation?.checks) ? validation.checks : null;
+   if (!checks) return null;
+   const count = (list, status) =>
+      list.filter((c) => c.status === status).length;
+
+   const v16 = checks.filter((c) => c.gate !== "V7");
+   const v16Fail = count(v16, "FAIL");
+   const v16Warn = count(v16, "WARN");
+   const v16Verdict =
+      v16Fail > 0 ? "FAIL" : v16Warn > 0 ? "PASS_WITH_WARNS" : "PASS";
+
+   const v7 = checks.filter((c) => c.gate === "V7");
+   const v7Reach = v7.filter((c) =>
+      String(c.detail || "").startsWith("reach_")
+   );
+   const spearmanDetail = v7.find((c) =>
+      /Spearman/i.test(String(c.detail || ""))
+   );
+   const spearmanMatch = String(spearmanDetail?.detail || "").match(
+      /Spearman\s+([\d.,]+)/i
+   );
+   const spearman = spearmanMatch
+      ? Number(spearmanMatch[1].replace(",", "."))
+      : null;
+
+   return {
+      v16: {
+         n: v16.length,
+         fail: v16Fail,
+         warn: v16Warn,
+         verdict: v16Verdict,
+      },
+      v7: {
+         n: v7.length,
+         reach: v7Reach.length,
+         fail: count(v7Reach, "FAIL"),
+         warn: count(v7Reach, "WARN"),
+         pass: count(v7Reach, "PASS"),
+         spearman,
+      },
+   };
+}
+
 /* Portal comunitário de bacias — revisão R4 (identidade orbee).
  * Leitura PÚBLICA (sem login); login só ao "adotar um trecho".
  */
@@ -192,6 +239,8 @@ export default function Bacias() {
       }
       setShowMethods(true);
    }, [methods, manifest, srInfo, validation, basin, version]);
+
+   const validationSplit = splitValidation(validation);
 
    return (
       <div className="bg-gradient-to-b from-white via-[#f4f7f2] to-white">
@@ -377,13 +426,44 @@ export default function Bacias() {
                               `, SHA ${srInfo.model.weights_sha256.slice(0, 12)}…`}
                            ), validado por trecho (G1 fidelidade, G2 viés-solo).
                         </li>
-                        {validation != null && (
-                           <li>
-                              Validação independente V1–V6: {validation.verdict}{" "}
-                              ({validation.n_checks} checagens, {validation.n_fail}{" "}
-                              FAIL, {validation.n_warn} WARN). {validation.limits}
-                           </li>
-                        )}
+                        {validation != null &&
+                           (validationSplit ? (
+                              <>
+                                 <li>
+                                    Validação independente V1–V6:{" "}
+                                    {validationSplit.v16.verdict} (
+                                    {validationSplit.v16.n} checagens,{" "}
+                                    {validationSplit.v16.fail} FAIL,{" "}
+                                    {validationSplit.v16.warn} WARN).{" "}
+                                    {validation.limits}
+                                 </li>
+                                 {validationSplit.v7.reach > 0 && (
+                                    <li>
+                                       V7 — segunda opinião CBERS:{" "}
+                                       {validationSplit.v7.fail} FAIL /{" "}
+                                       {validationSplit.v7.warn} WARN /{" "}
+                                       {validationSplit.v7.pass} PASS por trecho
+                                       {validationSplit.v7.spearman != null &&
+                                          `; Spearman ${validationSplit.v7.spearman.toLocaleString(
+                                             "pt-BR",
+                                             {
+                                                minimumFractionDigits: 3,
+                                                maximumFractionDigits: 3,
+                                             }
+                                          )}`}{" "}
+                                       — divergência absoluta DN vs reflectância
+                                       é esperada e não invalida V1–V6.
+                                    </li>
+                                 )}
+                              </>
+                           ) : (
+                              <li>
+                                 Validação independente V1–V6:{" "}
+                                 {validation.verdict} ({validation.n_checks}{" "}
+                                 checagens, {validation.n_fail} FAIL,{" "}
+                                 {validation.n_warn} WARN). {validation.limits}
+                              </li>
+                           ))}
                         <li>
                            Leitura da janela pós ’24: após a enchente de
                            mai/2024, queda de NDVI pode ser soterramento ou
