@@ -27,6 +27,39 @@ Build atômico: escreve em diretório temporário e renomeia no fim; nunca
 publica artefato parcial. Reprocessar = nova pasta de versão (`v2/`, …).
 Janelas padrão (`pre/pos/regen`) espelham a Fase 0 (`v2_validation/`).
 
+### v4 — medição no buffer de 200 m
+
+A partir da pasta `v4`, o job mede o NDVI **dentro do buffer ripário**, não no
+quadrado de ~1 km ao redor do centroide:
+
+- o bbox de busca STAC é derivado dos limites do buffer + `--buffer-margin-m`
+  (padrão 30 m), em vez de `centroide ± 0.005°`;
+- o buffer é rasterizado na grade do NDVI (10 m) e as estatísticas usam
+  `app/services/buffer_stats.py` (`frac_critico` relativa aos pixels válidos do
+  buffer; `frac_validos` relativa aos pixels do buffer);
+- o build falha rápido (`S2BufferOutside`) se a máscara vier vazia ou se o
+  buffer cair fora/truncado no raster;
+- `manifest.json`/`methods.json` registram `buffer_m`, margem, método da
+  máscara e bbox derivado; cada trecho publica `search_bbox` e
+  `n_pixels_buffer`/`n_pixels_validos` por janela.
+
+```bash
+python backend/jobs/build_basin.py --basin taquari \
+  --region "Lajeado, Rio Grande do Sul, Brasil" \
+  --pilot-bbox -52.15 -29.62 -51.75 -29.28 \
+  --river taquari --out backend/data/basins/taquari/v4
+
+python backend/jobs/validate_basin.py --basin taquari --version v4 \
+  --out v2_validation/evidencias/taquari_v4_validacao.json
+```
+
+Para refazer só o composite (sem OSM), reuse os trechos de uma versão
+anterior com `--reaches-from backend/data/basins/taquari/v3/reaches.geojson`.
+As geometrias/ids são preservados e o build recalcula bbox do buffer e stats.
+
+O gate V8 do `validate_basin.py` verifica buffer/máscara/bbox e rejeita
+`n_pixels_buffer=0`.
+
 ## build_sr.py
 
 SR 2,5 m (SEN2SRLite `NonReference_RGBN_x4`) nos top-N trechos por score:

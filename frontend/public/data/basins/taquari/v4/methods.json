@@ -1,0 +1,33 @@
+{
+  "methods_version": "f2-2026-11",
+  "weights": {
+    "severity": 0.35,
+    "no_regen": 0.25,
+    "connectivity": 0.2,
+    "risk": 0.15,
+    "cost": 0.05
+  },
+  "text": "Índice de prioridade por trecho de APP (v2 F1).\n\nComponentes (todos 0..1, maior = mais prioritário):\n- severity: fração de pixels críticos (NDVI<0,2) na janela mais recente.\n- no_regen: 1 - regeneração pos→regen normalizada (janelas de mesma estação;\n  trata a ressalva sazonal da Fase 0: pre vs pos mistura estação+enchente).\n- connectivity: 1 - NDVI médio dos trechos vizinhos (fragmento isolado = pior).\n- risk: surgimento de criticidade (frac_critico_pos - frac_critico_pre), i.e.\n  dano criado pelo evento = urgência de intervenção.\n- cost: heurística F1 (1 - área_a_restaurar_ha/25); será calibrada com\n  tabelas de custo de campo (ex.: programa MUDA) na F2.\n\nLimitações declaradas: sem validação de campo o escore é prospecção, não\ndiagnóstico; trechos com baixa fração válida carregam incerteza (ver campo\n`valid_fraction` por trecho); pesos são ajustáveis e versionados.\n\nMedição no buffer (v4): as estatísticas de NDVI passam a ser calculadas dentro\ndo buffer ripário de 200 m, rasterizado na grade de 10 m do composite. O bbox\nde busca STAC é derivado dos limites do buffer + 30 m de margem. `frac_critico`\ne `frac_moderado` são relativas aos pixels válidos do buffer; `frac_validos` é\nrelativa aos pixels do buffer. As janelas e o método da máscara ficam no\n`manifest.json`/`methods.json` de cada versão.\n",
+  "buffer": {
+    "buffer_m": 200.0,
+    "bbox_margin_m": 30.0,
+    "bbox_method": "buffer_bounds_plus_margin",
+    "mask_method": "rasterized_buffer_polygon",
+    "stats_relative_to": "buffer_pixels",
+    "resolution_m": 10.0
+  },
+  "windows": {
+    "pre": [
+      "2024-01-01",
+      "2024-03-31"
+    ],
+    "pos": [
+      "2024-06-01",
+      "2024-08-31"
+    ],
+    "regen": [
+      "2025-06-01",
+      "2025-08-31"
+    ]
+  }
+}

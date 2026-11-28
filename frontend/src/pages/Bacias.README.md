@@ -9,6 +9,8 @@ gera fixture válida) e `VITE_API_V2_URL=http://localhost:8000/api/v2`.
 1. Abra `/bacias` **deslogado** → mapa carrega, trechos coloridos por banda,
    sem tela branca; com API fora → banner de erro legível.
 2. Troque bacia/versão e filtre "Alta ou maior" → só trechos Alta/Urgente.
+   Com `basins.json` da v4, a versão `v4 (preview)` abre os artefatos da v4 e
+   `latest` continua v3 até a promoção.
 3. Clique num trecho → painel com score, barras dos 5 componentes, série
    pré/pós/regen, técnica sugerida e versão da metodologia.
 4. Com build SR: toggle "SR 2,5 m" habilita após selecionar trecho com SR;

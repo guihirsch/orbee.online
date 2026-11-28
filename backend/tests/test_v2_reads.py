@@ -75,7 +75,7 @@ def test_reach_detail_and_404(client):
 
 def test_methods_summary_manifest(client):
     m = client.get("/api/v2/methods").json()
-    assert m["methods_version"] == "f1-2026-09"
+    assert m["methods_version"] == "f2-2026-11"
     assert abs(sum(m["weights"].values()) - 1.0) < 1e-9
     assert "limita" in m["text"] or "Limita" in m["text"]
     s = client.get("/api/v2/summary").json()

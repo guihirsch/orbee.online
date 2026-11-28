@@ -10,7 +10,7 @@ servido em GET /api/v2/methods. Muda sem deploy de lógica.
 
 from __future__ import annotations
 
-METHODS_VERSION = "f1-2026-09"
+METHODS_VERSION = "f2-2026-11"
 
 # Ordem aprovada: severidade > sem-regeneração > conectividade > risco > custo
 WEIGHTS = {
@@ -54,4 +54,11 @@ Componentes (todos 0..1, maior = mais prioritário):
 Limitações declaradas: sem validação de campo o escore é prospecção, não
 diagnóstico; trechos com baixa fração válida carregam incerteza (ver campo
 `valid_fraction` por trecho); pesos são ajustáveis e versionados.
+
+Medição no buffer (v4): as estatísticas de NDVI passam a ser calculadas dentro
+do buffer ripário de 200 m, rasterizado na grade de 10 m do composite. O bbox
+de busca STAC é derivado dos limites do buffer + 30 m de margem. `frac_critico`
+e `frac_moderado` são relativas aos pixels válidos do buffer; `frac_validos` é
+relativa aos pixels do buffer. As janelas e o método da máscara ficam no
+`manifest.json`/`methods.json` de cada versão.
 """

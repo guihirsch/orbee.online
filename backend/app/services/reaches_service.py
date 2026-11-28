@@ -145,6 +145,8 @@ def to_geojson(reaches: List[Dict[str, Any]]) -> Dict[str, Any]:
             "valid_fraction": r.get("valid_fraction"),
             "area_ha": r.get("area_ha"),
             "length_m": r.get("length_m"),
+            "search_bbox": r.get("search_bbox"),
+            "mask_method": r.get("mask_method"),
             "stats_pre": r.get("stats_pre"),
             "stats_pos": r.get("stats_pos"),
             "stats_regen": r.get("stats_regen"),

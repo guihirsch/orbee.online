@@ -31,6 +31,10 @@ class S2NoScenes(S2Error):
     """Nenhuma cena dentro do filtro de nuvens/período."""
 
 
+class S2BufferOutside(S2Error):
+    """Máscara do buffer vazia ou buffer fora/truncado pelo raster do NDVI."""
+
+
 @dataclass
 class CompositeResult:
     """Composite mediano + NDVI + estatísticas (chaves idênticas às do notebook)."""
@@ -39,6 +43,9 @@ class CompositeResult:
     stats: Dict[str, Any] = field(default_factory=dict)
     epsg: int = 0
     n_scenes: int = 0
+    mask: Any = None  # máscara booleana do buffer na grade (None = bbox inteiro)
+    bbox: Optional[Bbox] = None
+    mask_method: str = ""
 
 
 def epsg_from_bbox(bbox: Bbox) -> int:
@@ -148,6 +155,62 @@ def composite_rgbn(
                          epsg=epsg, n_scenes=len(signed))
 
 
+def buffer_stats_for_ndvi(
+    ndvi: Any,
+    valid: Any,
+    polygon: Any,
+    epsg: int,
+    ndvi_critical: float = 0.2,
+    ndvi_moderate: float = 0.5,
+) -> Tuple[Dict[str, Any], Any]:
+    """Rasteriza o buffer na grade do NDVI e calcula stats só dentro dele.
+
+    Falha alto (`S2BufferOutside`) se a máscara vier vazia ou se o buffer
+    estiver truncado pelo raster — nunca publica zero silencioso.
+    """
+    import numpy as np
+
+    from app.services.buffer_geometry import rasterize_buffer_mask
+    from app.services.buffer_stats import buffer_stats
+
+    mask = rasterize_buffer_mask(ndvi, polygon, epsg=epsg)
+    n_buffer = int(mask.sum())
+    if n_buffer == 0:
+        raise S2BufferOutside(
+            "máscara do buffer vazia: o buffer caiu fora do raster do NDVI"
+        )
+
+    # Sanidade de cobertura: a máscara deve ter ~área do buffer / área do pixel.
+    xs = np.asarray(ndvi["x"].values, dtype="float64")
+    ys = np.asarray(ndvi["y"].values, dtype="float64")
+    px_area = abs(float(xs[1] - xs[0]) * float(ys[1] - ys[0]))
+    expected = _polygon_area_m2(polygon, epsg) / px_area
+    if expected > 0 and n_buffer < 0.5 * expected:
+        raise S2BufferOutside(
+            f"buffer truncado pelo raster: {n_buffer} pixels de "
+            f"~{expected:.0f} esperados (buffer fora do raster?)"
+        )
+
+    valid_arr = np.asarray(valid).astype(bool)
+    finite = np.isfinite(np.asarray(ndvi, dtype="float64"))
+    stats = buffer_stats(
+        ndvi, valid, mask,
+        ndvi_critical=ndvi_critical, ndvi_moderate=ndvi_moderate,
+    )
+    stats["n_pixels_buffer"] = n_buffer
+    stats["n_pixels_validos"] = int((mask & valid_arr & finite).sum())
+    return stats, mask
+
+
+def _polygon_area_m2(polygon: Any, epsg: int) -> float:
+    """Área do polígono (EPSG:4326) no UTM, em m²."""
+    from pyproj import Transformer
+    from shapely.ops import transform as shp_transform
+
+    fwd = Transformer.from_crs("EPSG:4326", f"EPSG:{epsg}", always_xy=True)
+    return float(shp_transform(fwd.transform, polygon).area)
+
+
 def composite_ndvi(
     bbox: Bbox,
     start: str,
@@ -158,28 +221,66 @@ def composite_ndvi(
     ndvi_moderate: float = 0.5,
     catalog_url: Optional[str] = None,
     collection: str = "sentinel-2-l2a",
+    buffer_geometry: Optional[Dict[str, Any]] = None,
+    buffer_m: float = 200.0,
+    buffer_margin_m: float = 30.0,
 ) -> CompositeResult:
-    """Composite mediano + NDVI-10m + stats (port da Célula 3 do notebook)."""
-    comp = composite_rgbn(bbox, start, end, cloud_max, top_n,
+    """Composite mediano + NDVI-10m + stats (port da Célula 3 do notebook).
+
+    Com `buffer_geometry` (GeoJSON do trecho), o bbox de busca é derivado do
+    buffer + margem e as estatísticas são recortadas pela máscara rasterizada
+    do buffer. Sem ele, mantém o comportamento v3 (bbox inteiro) usando a
+    função pura `buffer_stats` com máscara toda verdadeira.
+    """
+    search_bbox_used = bbox
+    if buffer_geometry is not None:
+        from app.services.buffer_geometry import search_bbox as _search_bbox
+
+        search_bbox_used = _search_bbox(
+            buffer_geometry, buffer_m, buffer_margin_m
+        )
+
+    comp = composite_rgbn(search_bbox_used, start, end, cloud_max, top_n,
                           catalog_url, collection)
     valid = comp.valid
     red = comp.bands["B04"].where(valid) / SCALE_FACTOR
     nir = comp.bands["B08"].where(valid) / SCALE_FACTOR
     ndvi = ((nir - red) / (nir + red)).where((nir + red) != 0)
 
-    stats = {
-        "n_cenas": comp.n_scenes,
-        "frac_validos": float(valid.mean()),
-        "ndvi_min": float(ndvi.min()),
-        "ndvi_max": float(ndvi.max()),
-        "ndvi_mean": float(ndvi.mean()),
-        "frac_critico": float((ndvi < ndvi_critical).mean()),
-        "frac_moderado": float(
-            ((ndvi >= ndvi_critical) & (ndvi < ndvi_moderate)).mean()
-        ),
-    }
-    return CompositeResult(ndvi=ndvi, stats=stats, epsg=comp.epsg,
-                           n_scenes=comp.n_scenes)
+    mask = None
+    mask_method = "bbox_all_true"
+    if buffer_geometry is not None:
+        from app.services.buffer_geometry import buffer_polygon
+
+        polygon = buffer_polygon(buffer_geometry, buffer_m, epsg=comp.epsg)
+        stats, mask = buffer_stats_for_ndvi(
+            ndvi, valid, polygon, epsg=comp.epsg,
+            ndvi_critical=ndvi_critical, ndvi_moderate=ndvi_moderate,
+        )
+        mask_method = "rasterized_buffer_polygon"
+        stats["bbox"] = list(search_bbox_used)
+        stats["mask_method"] = mask_method
+    else:
+        import numpy as np
+
+        from app.services.buffer_stats import buffer_stats
+
+        ones = np.ones(np.asarray(ndvi).shape, dtype=bool)
+        stats = buffer_stats(
+            ndvi, valid, ones,
+            ndvi_critical=ndvi_critical, ndvi_moderate=ndvi_moderate,
+        )
+        finite = np.isfinite(np.asarray(ndvi, dtype="float64"))
+        stats["n_pixels_buffer"] = int(ones.sum())
+        stats["n_pixels_validos"] = int(
+            (ones & np.asarray(valid).astype(bool) & finite).sum()
+        )
+
+    stats["n_cenas"] = comp.n_scenes
+    return CompositeResult(
+        ndvi=ndvi, stats=stats, epsg=comp.epsg, n_scenes=comp.n_scenes,
+        mask=mask, bbox=search_bbox_used, mask_method=mask_method,
+    )
 
 
 async def composite_ndvi_async(*args: Any, **kwargs: Any) -> CompositeResult:

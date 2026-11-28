@@ -79,6 +79,7 @@ export default function Bacias() {
    const [basin, setBasin] = useState("pardo");
    const [version, setVersion] = useState("");
    const [versions, setVersions] = useState([]);
+   const [preview, setPreview] = useState("");
    const [bandFilter, setBandFilter] = useState("");
    const [reaches, setReaches] = useState(null);
    const [selectedId, setSelectedId] = useState(null);
@@ -106,6 +107,7 @@ export default function Bacias() {
             if (b) {
                setBasin(b.basin);
                setVersions(b.versions || []);
+               setPreview(b.preview || "");
                setVersion(b.latest || "");
             }
             setLoading(false);
@@ -304,6 +306,7 @@ export default function Bacias() {
                      {versions.map((v) => (
                         <option key={v} value={v}>
                            {v}
+                           {v === preview ? " (preview)" : ""}
                         </option>
                      ))}
                   </select>
