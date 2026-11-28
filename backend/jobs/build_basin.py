@@ -34,10 +34,15 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "backend"))
 
 WINDOWS_DEFAULT = {
+    # v4: baseline de mesma estação (inverno/2023) e janela atual (2026);
+    # 2025 fica como regen_2025 para comparação de um vs dois anos.
+    "baseline": ("2023-06-01", "2023-08-31"),
     "pre": ("2024-01-01", "2024-03-31"),
     "pos": ("2024-06-01", "2024-08-31"),
-    "regen": ("2025-06-01", "2025-08-31"),
+    "regen_2025": ("2025-06-01", "2025-08-31"),
+    "regen": ("2026-06-01", "2026-08-31"),
 }
+BASELINE_WINDOW = "baseline"
 
 
 def parse_args(argv=None):
@@ -100,6 +105,7 @@ def _manifest(basin: str, args: argparse.Namespace, n_reaches: int,
             else "rasterized_buffer_polygon"
         ),
         "stats_relative_to": "buffer_pixels",
+        "baseline_window": list(WINDOWS_DEFAULT[BASELINE_WINDOW]),
         "windows": {w: list(v) for w, v in WINDOWS_DEFAULT.items()},
         "search_bbox": _union_bbox(reaches or []),
         "reach_length_m": args.reach_length_m,
@@ -179,8 +185,10 @@ def run_synthetic(args: argparse.Namespace, out: Path) -> dict:
         ]
         degraded = rng.random() < 0.4
         pre_m = 0.55 + rng.random() * 0.2
+        baseline_m = pre_m + 0.01 + rng.random() * 0.02
         pos_m = pre_m - (rng.random() * 0.15 if degraded else rng.random() * 0.03)
-        regen_m = pos_m + (rng.random() * 0.02 if degraded else rng.random() * 0.03)
+        regen25_m = pos_m + (rng.random() * 0.02 if degraded else rng.random() * 0.03)
+        regen_m = regen25_m + rng.random() * 0.02
         reaches.append(
             {
                 "id": stable_reach_id("pardinho", order, c_lon, c_lat),
@@ -192,11 +200,14 @@ def run_synthetic(args: argparse.Namespace, out: Path) -> dict:
                 "geometry": {"type": "LineString", "coordinates": coords},
                 "search_bbox": bbox,
                 "mask_method": "synthetic_rasterized_buffer_polygon",
-                "stats_pre": stats(pre_m, 0.005, 0.97, bbox),
+                "stats_baseline": stats(baseline_m, 0.0, 0.97, bbox),
+                "stats_pre": stats(pre_m, 0.01, 0.97, bbox),
                 "stats_pos": stats(
-                    pos_m, 0.04 if degraded else 0.005, 0.94, bbox),
+                    pos_m, 0.04 if degraded else 0.01, 0.94, bbox),
+                "stats_regen_2025": stats(
+                    regen25_m, 0.035 if degraded else 0.01, 0.95, bbox),
                 "stats_regen": stats(
-                    regen_m, 0.035 if degraded else 0.005, 0.95, bbox),
+                    regen_m, 0.035 if degraded else 0.01, 0.96, bbox),
             }
         )
     return reaches
@@ -328,8 +339,10 @@ def run_real(args: argparse.Namespace) -> list:
                           f"({e}); retry {attempt}/{args.retries} em {wait}s",
                           flush=True)
                     time.sleep(wait)
+        r["stats_baseline"] = stats["baseline"]
         r["stats_pre"] = stats["pre"]
         r["stats_pos"] = stats["pos"]
+        r["stats_regen_2025"] = stats["regen_2025"]
         r["stats_regen"] = stats["regen"]
         r["mask_method"] = "rasterized_buffer_polygon"
         if (i + 1) % 5 == 0 or i + 1 == len(reaches):
@@ -380,6 +393,7 @@ def main(argv=None) -> int:
             "weights": WEIGHTS,
             "text": METHODS_TEXT,
             "buffer": buffer_metadata(args.buffer_m, args.buffer_margin_m),
+            "baseline_window": list(WINDOWS_DEFAULT[BASELINE_WINDOW]),
             "windows": {w: list(v) for w, v in WINDOWS_DEFAULT.items()},
         })
         _write_json(tmp / "manifest.json",
